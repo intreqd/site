@@ -1,571 +1,328 @@
 <!doctype html>
 <html lang="en">
-  
-<head>
-
-    <title> baseNUBE - We Manage Workloads on Public Clouds </title>
-
-    <meta name="description" content="Its your data, run it your way or let us do it for you. We have service offerings for deployment, development, and managed services to help you land data securely in an interoperable world">
-
-    <meta name="keywords" content="BaseNUBE, hitrust, GDPR, spark, bunsen, google cloud, managed workload, hitrust certification, hitrust csf, hitrust requirements, How to transfer Intersystems Data, How to use InterSystems IRIS, iris data, intersystems iris
-    InterSystems IRIS Data, InterSystems IRIS integrates, interoperability, on perm, transaction processing, application deployment, iris dataset, interoperability in healthcare, iris dataset python, app deployment, deploy app, system interoperability, python iris dataset, iris data python, fisher iris dataset, iris intersystems, iris dataset machine learning, fisher's iris data, intersystems iris for health, health interoperability, machine learning iris dataset, the iris dataset, interoperability is
-    python iris data, cloud application deployment, intersystems iris data platform, iris dataset description, iris data platform, iris setosa dataset, intersystem iris, iris species dataset, iris dataset example, fisher's iris data set, machine learning iris dataset python, interoperability health, cloud app deployment, iris machine learning dataset, fisher iris data set, setosa dataset, interoperability in healthcare technology, iris data machine learning, dataset iris python">
-    
+  <head>
     @@include("partials/head.html", {
-    "pageTitle": "baseNUBE"
+      "pageTitle": "Landkit"
     })
-
-  
   </head>
   <body>
- 
+
     <!-- MODALS
     ================================================== -->
     @@include("partials/modals.html")
-
+    
     <!-- NAVBAR
     ================================================== -->
     @@include("partials/navbar.html", {
-    "classList": "navbar-light bg-white",
-    "type": "boxed"
+      "classList": "navbar-dark navbar-togglable fixed-top",
+      "type": "boxed"
     })
 
     <!-- WELCOME
     ================================================== -->
-    <section class="pt-4 pt-md-11">
+    <section data-jarallax data-speed=".8" class="pt-12 pb-10 pt-md-15 pb-md-14" style="background-image: url(assets/img/covers/cover-3.jpg)">
       <div class="container">
         <div class="row align-items-center">
-          <div class="col-12 col-md-5 col-lg-6 order-md-2">
-
-            <!-- Image -->
-            <img src="assets/img/parachute.png" class="img-fluid mw-md-150 mw-lg-130 mb-6 mb-md-0" alt="..." data-aos="fade-up" data-aos-delay="100">
-
-          </div>
-          <div class="col-12 col-md-7 col-lg-6 order-md-1" data-aos="fade-up">
-
+          <div class="col-12 col-md-8 col-lg-6">
+            
             <!-- Heading -->
-            <h1 class="display-3 text-center text-md-left">
-              We're <span class="text-primary">baseNUBE</span>. <br>
-              We Manage Workloads on Public Cloud
+            <h1 class="display-3 font-weight-bold text-white" id="welcomeHeadingSource">
+              Remote positions for <br />
+              <span class="text-warning" data-toggle="typed" data-options='{"strings": ["UX Designers", "Ruby Developers", "Data Analysts", "Copywriters"]}'></span>
             </h1>
+            
 
             <!-- Text -->
-            <p class="lead text-center text-md-left text-muted mb-6 mb-lg-8">
-              <span data-toggle="typed" data-options='{"strings": ["Managed Workloads for InterSystems IRIS", "Managed Spark Workloads", "InterSystems IRIS Automation", "InterSystems IRIS Workload Development"]}'></span>
+            <p class="font-size-lg text-white-80 mb-6">
+              We help place the world's top tech talent at the some of the greatest companies in the world.
             </p>
 
-            <!-- Buttons -->
-            <div class="text-center text-md-left">
-              <a href="#MSP" class="btn btn-primary shadow lift mr-1">
-                Managed Workload Estimate <i class="fe fe-arrow-right d-none d-md-inline ml-3"></i>
-              </a>
-              <a href="https://slack.basenube.com/" class="btn btn-primary lift">
-                Connect
-              </a>
-            </div>
+            <!-- Form -->
+            <form>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text pr-0 border-right-0">
+                    <i class="fe fe-search" id="searchAddon"></i>
+                  </span>
+                </div>
+                <input type="search" class="form-control pl-2 border-left-0" placeholder="Search for a job" aria-label="Search for a job" aria-describedby="searchAddon">
+              </div>
+            </form>
 
           </div>
         </div> <!-- / .row -->
       </div> <!-- / .container -->
     </section>
 
-<!-- BRANDS
+    <!-- BRANDS
     ================================================== -->
-    <section class="py-6 py-md-8 border-bottom">
+    <section class="py-6 py-md-8 bg-warning">
       <div class="container">
-        <div class="row align-items-center justify-content-center">
-          <div class="col-6 col-sm-4 col-md-3 mb-2 mb-md-0">
-          
-
+        <div class="flickity-viewport-visible" data-flickity='{"imagesLoaded": true, "initialIndex": 6, "pageDots": false, "prevNextButtons": false, "contain": true}'>
+          <div class="col-4 col-md-3 col-lg-2">
+            
             <!-- Brand -->
-            <div class="img-fluid text-gray-600 mb-3 mb-md-0 svg-shim">
-              @@include("assets/img/brands/logotype/InterSystems.svg")
+            <div class="img-fluid svg-shim text-dark">
+              @@include("assets/img/brands/logotype/airbnb.svg")
             </div>
 
           </div>
-          <div class="col-6 col-sm-4 col-md-3 mb-2 mb-md-0">
-
+          <div class="col-4 col-md-3 col-lg-2">
+            
             <!-- Brand -->
-            <div class="img-fluid text-gray-600 mb-2 mb-md-0 svg-shim">
-              @@include("assets/img/brands/logotype/reqd.svg")
+            <div class="img-fluid svg-shim text-dark">
+              @@include("assets/img/brands/logotype/coinbase.svg")
             </div>
 
           </div>
-          <div class="col-6 col-sm-4 col-md-3 mb-2 mb-md-0">
-
+          <div class="col-4 col-md-3 col-lg-2">
+            
             <!-- Brand -->
-            <div class="img-fluid text-gray-600 mb-2 mb-md-0 svg-shim">
-              @@include("assets/img/brands/logotype/grayGCP.svg")
+            <div class="img-fluid svg-shim text-dark">
+              @@include("assets/img/brands/logotype/dribbble.svg")
             </div>
 
           </div>
-          <div class="col-6 col-sm-4 col-md-3 mb-3 mb-md-0">
-
+          <div class="col-4 col-md-3 col-lg-2">
+            
             <!-- Brand -->
-            <div class="img-fluid text-gray-600 mb-2 mb-md-0 svg-shim">
-              @@include("assets/img/brands/logotype/native2.svg")
+            <div class="img-fluid svg-shim text-dark">
+              @@include("assets/img/brands/logotype/instagram.svg")
             </div>
 
           </div>
-        </div> <!-- / .row -->
+          <div class="col-4 col-md-3 col-lg-2">
+            
+            <!-- Brand -->
+            <div class="img-fluid svg-shim text-dark">
+              @@include("assets/img/brands/logotype/netflix.svg")
+            </div>
+
+          </div>
+          <div class="col-4 col-md-3 col-lg-2">
+            
+            <!-- Brand -->
+            <div class="img-fluid svg-shim text-dark">
+              @@include("assets/img/brands/logotype/pinterest.svg")
+            </div>
+
+          </div>
+          <div class="col-4 col-md-3 col-lg-2">
+            
+            <!-- Brand -->
+            <div class="img-fluid svg-shim text-dark">
+              @@include("assets/img/brands/logotype/airbnb.svg")
+            </div>
+
+          </div>
+          <div class="col-4 col-md-3 col-lg-2">
+            
+            <!-- Brand -->
+            <div class="img-fluid svg-shim text-dark">
+              @@include("assets/img/brands/logotype/coinbase.svg")
+            </div>
+
+          </div>
+          <div class="col-4 col-md-3 col-lg-2">
+            
+            <!-- Brand -->
+            <div class="img-fluid svg-shim text-dark">
+              @@include("assets/img/brands/logotype/dribbble.svg")
+            </div>
+
+          </div>
+          <div class="col-4 col-md-3 col-lg-2">
+            
+            <!-- Brand -->
+            <div class="img-fluid svg-shim text-dark">
+              @@include("assets/img/brands/logotype/instagram.svg")
+            </div>
+
+          </div>
+          <div class="col-4 col-md-3 col-lg-2">
+            
+            <!-- Brand -->
+            <div class="img-fluid svg-shim text-dark">
+              @@include("assets/img/brands/logotype/netflix.svg")
+            </div>
+
+          </div>
+          <div class="col-4 col-md-3 col-lg-2">
+            
+            <!-- Brand -->
+            <div class="img-fluid svg-shim text-dark">
+              @@include("assets/img/brands/logotype/pinterest.svg")
+            </div>
+
+          </div>
+        </div>
       </div> <!-- / .container -->
     </section>
-    
-       
 
-<!-- BENEFITS
+    <!-- PROCESS
     ================================================== -->
-    <section class="py-8 py-md-11">
+    <section class="pt-8 pt-md-11">
       <div class="container">
         <div class="row align-items-center justify-content-between">
-          <div class="col-12 col-md-8 order-md-1">
+          <div class="col-12 col-md-6">
             
-            <!-- Badge -->
-            <span class="badge badge-primary badge-pill mb-3">
-              <span class="h6 text-uppercase">
-                Managed Workload
-              </span>
-            </span>
+            <!-- Preheading -->
+            <h6 class="text-uppercase text-primary font-weight-bold">
+              Process
+            </h6>
 
             <!-- Heading -->
             <h2>
-              What exactly is a 
-              <span class="text-primary">Managed Workload</span>?
+              Our process to find you a new job is fast and you can do it from home.
             </h2>
 
             <!-- Text -->
-            <p class="font-size-lg text-muted mb-6 mb-md-0">
-              Our customers typically come to us to ease the onboarding of workloads that are outside of their current solutions, require cloud based horse power to achieve, and typically require some subject expertise to get data onboarded, where not necessarily operationalizing the entire solution is top of mind.
-            </br></br>
-            We have customers comfortable on their own infrastructure, that need a data processing competency that is taxes their compute footprint just for the sake of normalizing vast amounts of source data either on-demand, or on a schedule and need immutability to the stack.
-            </br></br>
-            We have customers that are masters of their own tech stack, that are sometimes confronted with a commercial third party off the shelf product that makes more sense than custom development, and do not want to distract their development staff with implementing it.
-            </br></br>
-            We have customers that need workloads remediated for compliance attestation, and operational alignment with audit and Data Request Fulfilment for the continual adherence to privacy practices for their customers.
+            <p class="lead text-muted mb-6 mb-md-0">
+              We keep everything as simple as possible by standardizing the application process for all jobs.
             </p>
-            <br/>
-                        <!-- List -->
-                        <div class="d-flex">
-
-                          <!-- Icon -->
-                          <div class="icon text-primary">
-                            @@include("assets/img/icons/duotone-icons/BaseNube.svg")
-                          </div>
-            
-                          <div class="ml-5">
-            
-                            <!-- Heading -->
-                            <h4 class="mb-1">
-                              We Got You
-                            </h4>
-            
-                            <!-- Text -->
-                            <p class="text-muted mb-5">
-                              We manage the things that distract you from your core business, your way; securely, compliant and automated.
-                            </p>
-                            
-                          </div>
-            
-                        </div>
-                        
 
           </div>
-          
-          <div class="col-12 col-md-4 order-md-2">
-            
-            <!-- Card -->
-            <div class="card card-border border-primary shadow-lg">
-              <div class="card-body">
+          <div class="col-12 col-md-6 col-xl-5">
+
+            <div class="row no-gutters">
+              <div class="col-4">
                 
-                <!-- List group -->
-                <div class="list-group list-group-flush">
-                  <div class="list-group-item d-flex align-items-center">
-                    
-                    <!-- Text -->
-                    <div class="mr-auto">
-                      
-                      <!-- Heading -->
-                      <p class="font-weight-bold mb-1">
-                        Provision
-                      </p>
-
-                      <!-- Text -->
-                      <p class="font-size-sm text-muted mb-0">
-                        We will work with your vendors and get you setup, as code, with multiple environments as you would expect.
-                      </p>
-
-                    </div>
-                      
-                    <!-- Check -->
-                    <div class="badge badge-rounded-circle badge-primary ml-4">
-                      <i class="fe fe-check"></i>
-                    </div>
-
-                  </div>
-                  <div class="list-group-item d-flex align-items-center">
-                      
-                    <!-- Text -->                
-                    <div class="mr-auto">
-                      
-                      <!-- Heading -->
-                      <p class="font-weight-bold mb-1">
-                        Run
-                      </p>
-
-                      <!-- Text -->
-                      <p class="font-size-sm text-muted mb-0">
-                        On a schedule or ad-hoc, we'll run your workload to your expected outcome.
-                      </p>
-
-                    </div>
-                      
-                    <!-- Check -->
-                    <div class="badge badge-rounded-circle badge-primary ml-4">
-                      <i class="fe fe-check"></i>
-                    </div>
-
-                  </div>
-                  <div class="list-group-item d-flex align-items-center">
-                      
-                    <!-- Text -->
-                    <div class="mr-auto">
-                      
-                      <!-- Heading -->
-                      <p class="font-weight-bold mb-1">
-                        Maintain
-                      </p>
-
-                      <!-- Text -->
-                      <p class="font-size-sm text-muted mb-0">
-                        Operational modifications, upgrades, and staying in step with patches. 
-                      </p>
-
-                    </div>
-                      
-                    <!-- Check -->
-                    <div class="badge badge-rounded-circle badge-primary ml-4">
-                      <i class="fe fe-check"></i>
-                    </div>
-
-                  </div>
-                  <div class="list-group-item d-flex align-items-center">
-                      
-                    <!-- Text -->
-                    <div class="mr-auto">
-                      
-                      <!-- Heading -->
-                      <p class="font-weight-bold mb-1">
-                        Support
-                      </p>
-
-                      <!-- Text -->
-                      <p class="font-size-sm text-muted mb-0">
-                        There when you need us, just like the workload.
-                      </p>
-
-                    </div>
-                      
-                    <!-- Check -->
-                    <div class="badge badge-rounded-circle badge-primary ml-4">
-                      <i class="fe fe-check"></i>
-                    </div>
-
-                  </div>
+                <!-- Image -->
+                <div class="w-150 mt-9 p-1 bg-white shadow-lg" data-aos="fade-up" data-aos-delay="100">
+                  <img src="assets/img/photos/photo-13.jpg" class="img-fluid" alt="...">
                 </div>
 
               </div>
-            </div>
+              <div class="col-4">
+                
+                <!-- Image -->
+                <div class="w-150 p-1 bg-white shadow-lg" data-aos="fade-up">
+                  <img src="assets/img/photos/photo-14.jpg" class="img-fluid" alt="...">
+                </div>
+
+              </div>
+              <div class="col-4 position-relative">
+                
+                <!-- Image -->
+                <div class="w-150 mt-11 float-right p-1 bg-white shadow-lg" data-aos="fade-up" data-aos-delay="150">
+                  <img src="assets/img/photos/photo-15.jpg" class="img-fluid" alt="...">
+                </div>
+
+              </div>
+            </div> <!-- / .row -->
 
           </div>
         </div> <!-- / .row -->
       </div> <!-- / .container -->
     </section>
 
-    <section class="pt-8 pt-md-11 bg-gradient-light">
-      <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-12 col-md-10 col-lg-8 text-center">
-            
-            <!-- Badge -->
-            <span class="badge badge-pill badge-primary mb-3">
-              <span class="h6 text-uppercase">Our Forte</span>
-            </span>
-
-            <!-- Heading -->
-            <h1>
-              We are most likely running one of the below, right now.
-            </h1>
-
-            <!-- Text -->
-            <p class="font-size-lg text-gray-700 mb-7 mb-md-9">
-              Spark Workloads such as IBM Flexible Analytics and Bunsen, Interoperability Workloads with IRIS and Data Pipelines on Google Cloud Platform.
-            </p>
-
-          </div>
-        </div> <!-- / .row -->
-        <div class="row">
-          <div class="col-12 col-md-4" data-aos="fade-up">
-            
-            <!-- Card -->
-            <div class="card shadow-light-lg mb-6 mb-md-0 lift lift-lg">
-              
-              <!-- Image -->
-              <img src="assets/img/iris_gray.png" alt="..." class="card-img-top">
-
-              <!-- Shape -->
-              <div class="position-relative">
-                <div class="shape shape-bottom shape-fluid-x svg-shim text-white">
-                  @@include("assets/img/shapes/curves/curve-1.svg")
-                </div>
-              </div>
-
-              <!-- Body -->
-              <div class="card-body position-relative">
-
-                <!-- Badge -->
-                <div class="position-relative text-right mt-n8 mr-n4 mb-3">
-                  <span class="badge badge-pill badge-primary">
-                    <span class="h6 text-uppercase">Managed</span>
-                  </span>
-                </div>
-                
-                <!-- Heading -->
-                <h3>
-                  InterSystems IRIS
-                </h3>
-
-                <!-- Text -->
-                <p class="text-muted">
-                  Intuitive, Reliable, Interoperable, and Scalable for things that Matter.
-                </p>
-
-                <!-- Link -->
-                <a href="#!" class="font-weight-bold text-decoration-none">
-                  Our Managed Story <i class="fe fe-arrow-right ml-3"></i>
-                </a>
-
-              </div>
-
-            </div>
-
-          </div>
-          <div class="col-12 col-md-4" data-aos="fade-up" data-aos-delay="100">
-            
-            <!-- Card -->
-            <div class="card shadow-light-lg mb-6 mb-md-0 lift lift-lg">
-              
-              <!-- Image -->
-              <img src="assets/img/spark_gray.png" alt="..." class="card-img-top">
-
-              <!-- Shape -->
-              <div class="position-relative">
-                <div class="shape shape-bottom shape-fluid-x svg-shim text-white">
-                  @@include("assets/img/shapes/curves/curve-1.svg")
-                </div>
-              </div>
-
-              <!-- Body -->
-              <div class="card-body position-relative">
-
-                <!-- Badge -->
-                <div class="position-relative text-right mt-n8 mr-n4 mb-3">
-                  <span class="badge badge-pill badge-primary">
-                    <span class="h6 text-uppercase">Managed</span>
-                  </span>
-                </div>
-                
-                <!-- Heading -->
-                <h3>
-                  Spark
-                </h3>
-
-                <!-- Text -->
-                <p class="text-muted">
-                  Distributed, General-purpose cluster-computing framework for massive data marshalling. 
-                </p>
-
-                <!-- Link -->
-                <a href="#!" class="font-weight-bold text-decoration-none">
-                  Our Managed Story <i class="fe fe-arrow-right ml-3"></i>
-                </a>
-
-              </div>
-
-            </div>
-
-          </div>
-          <div class="col-12 col-md-4" data-aos="fade-up" data-aos-delay="200">
-            
-            <!-- Card -->
-            <div class="card shadow-light-lg lift lift-lg">
-              
-              <!-- Image -->
-              <img src="assets/img/dataflow_gray.png" alt="..." class="card-img-top">
-
-              <!-- Shape -->
-              <div class="position-relative">
-                <div class="shape shape-bottom shape-fluid-x svg-shim text-white">
-                  @@include("assets/img/shapes/curves/curve-1.svg")
-                </div>
-              </div>
-
-              <!-- Body -->
-              <div class="card-body position-relative">
-
-                <!-- Badge -->
-                <div class="position-relative text-right mt-n8 mr-n4 mb-3">
-                  <span class="badge badge-pill badge-primary">
-                    <span class="h6 text-uppercase">MANAGED</span>
-                  </span>
-                </div>
-                
-                <!-- Heading -->
-                <h3>
-                  GCP Data Analytics
-                </h3>
-
-                <!-- Text -->
-                <p class="text-muted">
-                  Fast, unified stream and batch data processing to durable persisted store and back.
-                </p>
-
-                <!-- Link -->
-                <a href="#!" class="font-weight-bold text-decoration-none">
-                  Our Managed Story <i class="fe fe-arrow-right ml-3"></i>
-                </a>
-
-              </div>
-
-            </div>
-
-          </div>
-        </div> <!-- / .row -->
-      </div> <!-- / .container -->
-    </section>
-
-    <!-- TESTIMONIALS
+    <!-- STEPS
     ================================================== -->
-    <section class="pt-4 pt-md-11">
+    <section class="pt-8 pb-9 pt-md-11 pb-md-13">
       <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-12 col-md-10 col-lg-8 text-center">
-
-            <!-- Heading -->
-            <h2>
-              Partnerships that work you (and us).
-            </h2>
-
-            <!-- Text -->
-            <p class="font-size-lg text-muted mb-7 mb-md-9">
-              We benefit from our strong partnerhips and approach their programs with rigor.  Continually developing against and challenging best practice across an implementation base that moves the bar forward.
-            </p>
-
-          </div>
-        </div> <!-- / .row -->
         <div class="row">
-          <div class="col-12">
-
-            <!-- Card -->
-            <div class="card card-row shadow-light-lg mb-6">
-              <div class="row no-gutters">
-                <div class="col-12 col-md-6">
-
-                  <!-- Slider -->
-                  <div class="card-img-slider" data-flickity='{"fade": true, "imagesLoaded": true, "pageDots": false, "prevNextButtons": false, "asNavFor": "#blogSlider", "draggable": false}'>
-                    <a class="card-img-left bg-cover" style="background-image: url(assets/img/photos/doc35.jpg);" href="#!">
-
-                      <!-- Image (placeholder) -->
-                      <img src="assets/img/photos/doc.jpg" alt="..." class="img-fluid d-md-none invisible">
-
+          <div class="col-12 col-md-4">
+            <div class="row">
+              <div class="col-auto col-md-12">
+                
+                <!-- Step -->
+                <div class="row no-gutters align-items-center mb-md-5">
+                  <div class="col-auto">
+                    
+                    <a href="#!" class="btn btn-sm btn-rounded-circle btn-gray-400 disabled opacity-1">
+                      <span>1</span>
                     </a>
-                    <a class="card-img-left bg-cover" style="background-image: url(assets/img/photos/google.jpg);" href="#!">
 
-                      <!-- Image (placeholder) -->
-                      <img src="assets/img/photos/google.jpg" alt="..." class="img-fluid d-md-none invisible">
+                  </div>
+                  <div class="col">
+                    
+                    <hr class="d-none d-md-block w-130">
 
+                  </div>
+                </div> <!-- / .row -->
+
+              </div>
+              <div class="col col-md-12 ml-n5 ml-md-0">
+                
+                <!-- Heading -->
+                <h3>
+                  Complete your application.
+                </h3>
+
+                <!-- Text -->
+                <p class="text-muted mb-6 mb-md-0">
+                  Fill out our standardized application on our platform. Most applicants finish in under an hour.
+                </p>
+
+              </div>
+            </div> <!-- / .row -->
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="row">
+              <div class="col-auto col-md-12">
+                
+                <!-- Step -->
+                <div class="row no-gutters align-items-center mb-md-5">
+                  <div class="col-auto">
+                    
+                    <a href="#!" class="btn btn-sm btn-rounded-circle btn-gray-400 disabled opacity-1">
+                      <span>2</span>
                     </a>
+
                   </div>
+                  <div class="col">
+                    
+                    <hr class="d-none d-md-block w-130">
 
-                  <!-- Shape -->
-                  <div class="shape shape-right shape-fluid-y svg-shim text-white d-none d-md-block">
-                    @@include("assets/img/shapes/curves/curve-4.svg")
                   </div>
+                </div> <!-- / .row -->
 
-                </div>
-                <div class="col-12 col-md-6 position-md-static">
+              </div>
+              <div class="col col-md-12 ml-n5 ml-md-0">
+                
+                <!-- Heading -->
+                <h3>
+                  Select companies.
+                </h3>
 
-                  <!-- Slider -->
-                  <div class="position-md-static" data-flickity='{"wrapAround": true, "pageDots": false, "adaptiveHeight": true}' id="blogSlider">
-                    <div class="w-100">
+                <!-- Text -->
+                <p class="text-muted mb-6 mb-md-0">
+                  We'll immediately match you with any relevant openings and you get to pick which ones you're interested in.
+                </p>
 
-                      <!-- Body -->
-                      <div class="card-body">
-                        <blockquote class="blockquote text-center mb-0">
+              </div>
+            </div> <!-- / .row -->
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="row">
+              <div class="col-auto col-md-12">
+                
+                <!-- Step -->
+                <div class="row no-gutters align-items-center mb-md-5">
+                  <div class="col-auto">
+                    
+                    <a href="#!" class="btn btn-sm btn-rounded-circle btn-gray-400 disabled opacity-1">
+                      <span>3</span>
+                    </a>
 
-                          <!-- Brand -->
-                          <div class="row justify-content-center mb-5 mb-md-7">
-                            <div class="col-6 col-sm-4 col-md-7 col-lg-5">
-
-                              <!-- Logo -->
-                              <div class="img-fluid svg-shim">
-                                @@include("assets/img/brands/logotype/finalintersystems.svg")
-                              </div>
-
-                            </div>
-                          </div> <!-- / .row -->
-
-                          <!-- Text -->
-                          <p class="mb-5 mb-md-7">
-                            Some applications are too important to fail. They support our healthcare systems, businesses, and governments. Health. Prosperity. Society. These are things that matter. What our clients strive to enable every day. And what our software helps make possible.
-                          </p>
-
-                          <!-- Footer -->
-                          <footer class="blockquote-footer">
-                            <span class="h5"><a href="https://www.intersystems.com">InterSystems</a></span>
-                          </footer>
-
-                        </blockquote>
-                      </div>
-
-                    </div>
-                    <div class="w-100">
-
-                      <!-- Body -->
-                      <div class="card-body">
-                        <blockquote class="blockquote text-center mb-0">
-
-                          <!-- Brand -->
-                          <div class="row justify-content-center mb-5 mb-md-7">
-                            <div class="col-6 col-sm-4 col-md-9 col-lg-7">
-
-                              <!-- Logo -->
-                              <div class="img-fluid svg-shim">
-                                @@include("assets/img/brands/logotype/FinalGCP.svg")
-                              </div>
-
-                            </div>
-                          </div> <!-- / .row -->
-
-                          <!-- Text -->
-                          <p class="mb-5 mb-md-7">
-                            Tap into Google's world-class infrastructure and robust set of solutions to build, operate, and grow your business in today's complex, multi-cloud environment.
-                          </p>
-
-                          <!-- Footer -->
-                          <footer class="blockquote-footer">
-                            <span class="h5"><a href="https://cloud.google.com">Google Cloud Platform</a></span>
-                          </footer>
-
-                        </blockquote>
-                      </div>
-
-                    </div>
                   </div>
+                </div> <!-- / .row -->
 
-                </div>
-              </div> <!-- / .row -->
-            </div>
+              </div>
+              <div class="col col-md-12 ml-n5 ml-md-0">
+                
+                <!-- Heading -->
+                <h3>
+                  Choose your offer.
+                </h3>
 
+                <!-- Text -->
+                <p class="text-muted mb-0">
+                  After 3 days all of your offers will arrive and you will have another 7 days to select your new company.
+                </p>
+
+              </div>
+            </div> <!-- / .row -->
           </div>
         </div> <!-- / .row -->
       </div> <!-- / .container -->
@@ -573,170 +330,475 @@
 
     <!-- SHAPE
     ================================================== -->
-    <div class="position-relative mt-n8">
-      <div class="shape shape-bottom shape-fluid-x svg-shim text-gray-200">
-        @@include("assets/img/shapes/curves/curve-3.svg")
+    <div class="position-relative">
+      <div class="shape shape-bottom shape-fluid-x svg-shim text-light">
+        @@include("assets/img/shapes/curves/curve-2.svg")
       </div>
     </div>
 
-    <!-- ABOUT
+    <!-- LATEST POSTS
     ================================================== -->
-    <section class="pt-8 pt-md-10" id="about">
+    <section class="py-8 py-md-11 bg-gradient-light">
       <div class="container">
-        <div class="row">
-          <div class="col-12 text-center">
+        <div class="row align-items-center">
+          <div class="col-12 col-md-6">
+
+            <!-- Preheading -->
+            <h6 class="text-uppercase text-primary font-weight-bold">
+              Latest posts
+            </h6>
             
-            <!-- Button -->
-            <a href="#about" class="btn btn-white btn-rounded-circle shadow mt-n12 mt-md-n14" data-toggle="smooth-scroll">
-              <i class="fe fe-arrow-down"></i>
-            </a>
+            <!-- Heading -->
+            <h2>
+              Check out some recent postings.
+            </h2>
+
+            <!-- Text -->
+            <p class="text-muted mb-6 mb-md-8">
+              We get thousands of job postings weekly, but only accept the openings at the top companies.
+            </p>
+
+          </div>
+          <div class="col-12 col-md-6">
+            
+            <!-- Image -->
+            <img src="assets/img/illustrations/illustration-3.png" class="img-fluid" alt="...">
+
+          </div>
+        </div> <!-- / .row -->
+        <div class="row">
+          <div class="col-12 col-md-6">
+            
+            <!-- Card -->
+            <div class="card card-border border-primary shadow-light-lg mb-6 mb-md-8" data-aos="fade-up">
+              <div class="card-body">
+                
+                <!-- Heading -->
+                <h6 class="text-uppercase text-primary d-inline-block mb-5 mr-1">
+                  Design 
+                </h6>
+                
+                <!-- Badge -->
+                <span class="badge badge-rounded-circle badge-primary-soft">
+                  <span>3</span>
+                </span>
+
+                <!-- List group -->
+                <div>
+                  <div class="list-group list-group-flush">
+                    <a class="list-group-item text-reset text-decoration-none" href="#!">
+
+                      <p class="font-weight-bold mb-1">
+                        Senior Visual Designer
+                      </p>
+                      <p class="font-size-sm text-muted mb-0">
+                        5+ years experience · San Francisco
+                      </p>
+
+                    </a>
+                    <a class="list-group-item text-reset text-decoration-none" href="#!">
+
+                      <p class="font-weight-bold mb-1">
+                        Motion Graphics Designer
+                      </p>
+                      <p class="font-size-sm text-muted mb-0">
+                        2+ years experience · Paris
+                      </p>
+
+                    </a>
+                    <a class="list-group-item text-reset text-decoration-none" href="#!">
+
+                      <p class="font-weight-bold mb-1">
+                        Product Designer
+                      </p>
+                      <p class="font-size-sm text-muted mb-0">
+                        4+ years experience · Los Angeles
+                      </p>
+
+                    </a>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Card -->
+            <div class="card card-border border-danger shadow-light-lg mb-6 mb-md-8" data-aos="fade-up">
+              <div class="card-body">
+                
+                <!-- Heading -->
+                <h6 class="text-uppercase text-danger d-inline-block mb-5 mr-1">
+                  Engineering 
+                </h6>
+                
+                <!-- Badge -->
+                <span class="badge badge-rounded-circle badge-danger-soft">
+                  <span>3</span>
+                </span>
+
+                <!-- List group -->
+                <div>
+                  <div class="list-group list-group-flush">
+                    <a class="list-group-item text-reset text-decoration-none" href="#!">
+
+                      <p class="font-weight-bold mb-1">
+                        Ruby Engineer
+                      </p>
+                      <p class="font-size-sm text-muted mb-0">
+                        4+ years experience · New York
+                      </p>
+
+                    </a>
+                    <a class="list-group-item text-reset text-decoration-none" href="#!">
+
+                      <p class="font-weight-bold mb-1">
+                        Senior Reliability Developer
+                      </p>
+                      <p class="font-size-sm text-muted mb-0">
+                        8+ years experience · Pasadena
+                      </p>
+
+                    </a>
+                    <a class="list-group-item text-reset text-decoration-none" href="#!">
+
+                      <p class="font-weight-bold mb-1">
+                        QA Engineer
+                      </p>
+                      <p class="font-size-sm text-muted mb-0">
+                        2+ years experience · Oakland
+                      </p>
+
+                    </a>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+          <div class="col-12 col-md-6">
+            
+            <!-- Card -->
+            <div class="card card-border border-success shadow-light-lg mb-6 mb-md-8" data-aos="fade-up" data-aos-delay="100">
+              <div class="card-body">
+                
+                <!-- Heading -->
+                <h6 class="text-uppercase text-success d-inline-block mb-5 mr-1">
+                  Product 
+                </h6>
+                
+                <!-- Badge -->
+                <span class="badge badge-rounded-circle badge-success-soft">
+                  <span>5</span>
+                </span>
+
+                <!-- List group -->
+                <div>
+                  <div class="list-group list-group-flush">
+                    <a class="list-group-item text-reset text-decoration-none" href="#!">
+
+                      <p class="font-weight-bold mb-1">
+                        Project Manager
+                      </p>
+                      <p class="font-size-sm text-muted mb-0">
+                        3+ years experience · London
+                      </p>
+
+                    </a>
+                    <a class="list-group-item text-reset text-decoration-none" href="#!">
+
+                      <p class="font-weight-bold mb-1">
+                        Head of Product
+                      </p>
+                      <p class="font-size-sm text-muted mb-0">
+                        10+ years experience · San Francisco
+                      </p>
+
+                    </a>
+                    <a class="list-group-item text-reset text-decoration-none" href="#!">
+
+                      <p class="font-weight-bold mb-1">
+                        Senior Product Manager
+                      </p>
+                      <p class="font-size-sm text-muted mb-0">
+                        5+ years experience · Los Angeles
+                      </p>
+
+                    </a>
+                    <a class="list-group-item text-reset text-decoration-none" href="#!">
+
+                      <p class="font-weight-bold mb-1">
+                        Junior Project Manager
+                      </p>
+                      <p class="font-size-sm text-muted mb-0">
+                        No experience required · Paris
+                      </p>
+
+                    </a>
+                    <a class="list-group-item text-reset text-decoration-none" href="#!">
+
+                      <p class="font-weight-bold mb-1">
+                        Application Coordinator
+                      </p>
+                      <p class="font-size-sm text-muted mb-0">
+                        6+ years experience · Seattle
+                      </p>
+
+                    </a>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Card -->
+            <div class="card card-border border-gray-800 shadow-light-lg mb-6 mb-md-8" data-aos="fade-up">
+              <div class="card-body">
+                
+                <!-- Heading -->
+                <h6 class="text-uppercase text-gray-500 d-inline-block mb-5 mr-1">
+                  Support 
+                </h6>
+                
+                <!-- Badge -->
+                <span class="badge badge-rounded-circle badge-dark-soft">
+                  <span>1</span>
+                </span>
+
+                <!-- List group -->
+                <div>
+                  <div class="list-group list-group-flush">
+                    <a class="list-group-item text-reset text-decoration-none" href="#!">
+
+                      <p class="font-weight-bold mb-1">
+                        Customer Support Specialist
+                      </p>
+                      <p class="font-size-sm text-muted mb-0">
+                        4+ years experience · Anywhere
+                      </p>
+
+                    </a>
+                  </div>
+                </div>
+
+              </div>
+            </div>
 
           </div>
         </div> <!-- / .row -->
         <div class="row justify-content-center">
-          <div class="col-12 col-md-10 col-lg-8 text-center">
+          <div class="col-12 col-md-6" data-aos="fade-up">
             
-            <!-- Heading -->
-            <h2 class="font-weight-bold">
-              Projects we <span class="text-primary">contribute </span>to and use.
-            </h2>
-
-            <!-- Text -->
-            <p class="font-size-lg text-muted mb-9">
-              Technical Arguments As Code (TAAC).
-            </p>
-
-          </div>
-        </div> <!-- / .row -->
-        <div class="row">
-          <div class="col-12 col-lg-6">
-            
-            <!-- Item -->
-            <div class="row align-items-center mb-8"data-aos="fade-up">
-              <div class="col-4 col-lg-5">
-                
-                <!-- Image -->
-                <img src="assets/img/iris2bq_gray.png" alt="..." class="img-fluid">
-
-              </div>
-              <div class="col-8 col-lg-7">
-                
-                <!-- Heading -->
-                <h3 class="font-weight-bold mb-2">
-                  IRIS Data to Big Query
-                </h3>
-
-                <!-- Text -->
-                <p class="text-gray-700 mb-0">
-                  A lightweight Spark utility that magically moves any IRIS Class/Table to Google Big Query.  Run it from cron, then JOIN like a boss Big Query.
-                </p>
-
-              </div>
-            </div> <!-- / .row -->
-
-            <!-- Item -->
-            <div class="row align-items-center mb-8" data-aos="fade-up">
-              <div class="col-4 col-lg-5">
-                
-                <!-- Image -->
-                <img src="assets/img/aws_datalake_gray.png" alt="..." class="img-fluid">
-
-              </div>
-              <div class="col-8 col-lg-7">
-                
-                <!-- Heading -->
-                <h3 class="font-weight-bold mb-2">
-                  IRIS Powered AWS Datalake 
-                </h3>
-
-                <!-- Text -->
-                <p class="text-gray-700 mb-0">
-                  Got a Datalakes?  This IRIS production and Cloudformation template duo will move all your transactional data to it.
-                </p>
-
-              </div>
-            </div> <!-- / .row -->
-
-
-          </div>
-          <div class="col-12 col-lg-6">
-            <!-- Item -->
-            <div class="row align-items-center mb-8" data-aos="fade-up">
-              <div class="col-4 col-lg-5">
-                
-                <!-- Image -->
-                <img src="assets/img/packer_gray.png" alt="..." class="img-fluid">
-
-              </div>
-              <div class="col-8 col-lg-7">
-                
-                <!-- Heading -->
-                <h3 class="font-weight-bold mb-2">
-                  IRIS Packer Builder
-                </h3>
-
-                <!-- Text -->
-                <p class="text-gray-700 mb-0">
-                  IRIS state machines right off the back of release engineering and ready for service.
-                </p>
-
-              </div>
-            </div> <!-- / .row -->
-
-            <!-- Item -->
-            <div class="row align-items-center mb-8" data-aos="fade-up">
-              <div class="col-4 col-lg-5">
-                
-                <!-- Image -->
-                <img src="assets/img/statefulset_gray.png" alt="..." class="img-fluid">
-
-              </div>
-              <div class="col-8 col-lg-7">
-                
-                <!-- Heading -->
-                <h3 class="font-weight-bold mb-2">
-                  IRIS Stateful Set
-                </h3>
-
-                <!-- Text -->
-                <p class="text-gray-700 mb-0">
-                  Run Kubernetes and still have your IRIS/Healthshare instance running as an instance?  Take IRIS as a Stateful Set for a spin.
-                </p>
-
-              </div>
-            </div> <!-- / .row -->
+            <!-- Button -->
+            <a href="#!" class="btn btn-block btn-primary d-flex align-items-center lift">
+              View over 10,000 other postings <i class="fe fe-arrow-right ml-auto"></i>
+            </a>
 
           </div>
         </div> <!-- / .row -->
       </div> <!-- / .container -->
     </section>
 
+    <!-- PLACEMENT RATES
+    ================================================== -->
+    <section>
+      <div class="container py-8 pt-md-11 pb-md-9 border-top">
+        <div class="row">
+          <div class="col-12 col-md-10 col-lg-8">
+            
+            <!-- Preheading -->
+            <h6 class="text-uppercase text-primary">
+              Placement rates
+            </h6>
 
+            <!-- Heading -->
+            <h2 class="mb-6 mb-md-8">
+              Landkit is the leading job placement site with the highest rate of success of any tech job board.
+            </h2>
+
+            <!-- Stats -->
+            <div class="d-flex">
+              <div class="pr-5">
+                <h3 class="mb-0">
+                  <span data-toggle="countup" data-from="0" data-to="74" data-aos data-aos-id="countup:in">0</span>k
+                </h3>
+                <p class="text-gray-700 mb-0">
+                  Placements
+                </p>
+              </div>
+              <div class="px-5">
+                <h3 class="mb-0">
+                  <span data-toggle="countup" data-from="0" data-to="124" data-aos data-aos-id="countup:in">0</span>k
+                </h3>
+                <p class="text-gray-700 mb-0">
+                  Positions
+                </p>
+              </div>
+              <div class="pl-5">
+                <h3 class="mb-0">
+                  <span data-toggle="countup" data-from="0.0" data-to="1.9" data-decimals="1" data-aos data-aos-id="countup:in">0.0</span>k
+                </h3>
+                <p class="text-gray-700 mb-0">
+                  Partnerships
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div> <!-- / .row -->
+      </div> <!-- / .container -->
+    </section>
+
+    <!-- IMAGE
+    ================================================== -->
+    <section data-jarallax data-speed=".8" class="py-14 py-lg-16 jarallax" style="background-image: url(assets/img/covers/cover-7.jpg);">
+
+      <!-- Shape -->
+      <div class="shape shape-top shape-fluid-x svg-shim text-white">
+        @@include("assets/img/shapes/angles/angle-top.svg")
+      </div>
+
+      <!-- Shape -->
+      <div class="shape shape-bottom shape-fluid-x svg-shim text-light">
+        @@include("assets/img/shapes/angles/angle-bottom.svg")
+      </div>
+
+    </section>
+
+    <!-- ABOUT
+    ================================================== -->
+    <section class="py-8 py-md-11 bg-light">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-12 col-md-5 col-lg-6 order-md-2">
+            
+            <!-- iPhone + Macbook -->
+            <div class="w-md-150 w-lg-130 mb-6 mb-md-0">
+              <div class="device-combo device-combo-iphonex-macbook">
+
+                <!-- iPhone -->
+                <div class="device device-iphonex">
+                  <img src="assets/img/screenshots/mobile/jobs.jpg" class="device-screen" alt="...">
+                  <img src="assets/img/devices/iphonex.svg" class="img-fluid" alt="...">
+                </div>
+
+                <!-- Macbook -->
+                <div class="device device-macbook">
+                  <img src="assets/img/screenshots/desktop/jobs.jpg" class="device-screen" alt="...">
+                  <img src="assets/img/devices/macbook.svg" class="img-fluid" alt="...">
+                </div>
+                
+              </div>
+            </div>
+
+          </div>
+          <div class="col-12 col-md-7 col-lg-6 order-md-1">
+            
+            <!-- Heading -->
+            <h2>
+              Keep your job applications <br>
+              <span class="text-primary">organized and up to date</span>.
+            </h2>
+
+            <!-- Text -->
+            <p class="font-size-lg text-muted mb-6">
+              Landkit centralizes all your job applications, resumes, and work, whether they're from our platform or through another site or service.
+            </p>
+
+            <!-- List -->
+            <div class="d-flex">
+                
+              <!-- Icon -->
+              <div class="icon text-primary">
+                @@include("assets/img/icons/duotone-icons/General/Clipboard.svg")
+              </div>
+
+              <div class="ml-5">
+                
+                <!-- Heading -->
+                <h4 class="mb-1">
+                  Magic Resume
+                </h4>
+
+                <!-- Text -->
+                <p class="text-muted mb-5">
+                  Magic Resume will adapt based on what positions the employer has available when it's shared.
+                </p>
+
+              </div>
+
+            </div>
+            <div class="d-flex">
+                
+              <!-- Icon -->
+              <div class="icon text-primary">
+                @@include("assets/img/icons/duotone-icons/Files/Folder-star.svg")
+              </div>
+
+              <div class="ml-5">
+                
+                <!-- Heading -->
+                <h4 class="mb-1">
+                  Employer Insights
+                </h4>
+
+                <!-- Text -->
+                <p class="text-muted mb-0">
+                  Learn about who's looking at your profile and what experience they're most interested in.
+                </p>
+
+              </div>
+              
+            </div>
+
+          </div>
+        </div> <!-- / .row -->
+      </div> <!-- / .container -->
+    </section>
+
+    <!-- CTA
+    ================================================== -->
+    <section class="pt-6 pt-md-8">
+      <div class="container pb-6 pb-md-8 border-bottom">
+        <div class="row align-items-center">
+          <div class="col-12 col-md">
+            
+            <!-- Heading -->
+            <h3 class="mb-1">
+              Apply in 15 minutes
+            </h3>
+
+            <!-- Text -->
+            <p class="font-size-lg text-muted mb-6 mb-md-0">
+              Get your dream job without the hassle.
+            </p>
+
+          </div>
+          <div class="col-12 col-md-auto">
+                
+            <!-- Button -->
+            <a href="#!" class="btn btn-primary-soft mr-1 lift">
+              Learn more
+            </a>
+            
+            <a href="#!" class="btn btn-primary lift">
+              Get started
+            </a>
+
+          </div>
+        </div> <!-- / .row -->
+      </div> <!-- / .container -->
+    </section>
 
     <!-- FOOTER
     ================================================== -->
     @@include("partials/footer.html", {
-    "classList": "bg-gray-200"
+      "classList": "bg-white"
     })
 
     <!-- JAVASCRIPT
     ================================================== -->
     @@include("partials/scripts.html")
-
-    <script>
-
-        window.intercomSettings = {
-          app_id: "z7ga1ua3"
-        };
-      </script>
       
-      <script>(function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',w.intercomSettings);}else{var d=document;var i=function(){i.c(arguments);};i.q=[];i.c=function(args){i.q.push(args);};w.Intercom=i;var l=function(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/z7ga1ua3';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);};if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();</script>
-      
-      <script>$("#intercom").click(function(){
-
-        Intercom('showNewMessage', "Thank you for exploring interest in running your workload through our services. If you have any questions about our pricing, shoot us a message here or join our slack channel and we'll get the conversation going.");
-        });</script>
-
-
   </body>
-  </html>
+</html>
