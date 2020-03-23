@@ -48,107 +48,172 @@
 
     <!-- BRANDS
     ================================================== -->
-    <section class="py-2 py-md-4 bg-primary-desat">
-      <div class="container">
-        <div class="flickity-viewport-visible" data-flickity='{"imagesLoaded": true, "initialIndex": 6, "pageDots": false, "prevNextButtons": false, "contain": true}'>
-          <div class="col-4 col-md-3 col-lg-3">
-            
-            <!-- Brand -->
-            <div class="img-fluid svg-shim text-dark">
-              @@include("assets/img/brands/logotype/intersystems2.svg")
-            </div>
+    <section class="py-6 py-md-4 bg-primary-desat">
+      <!--Carousel Wrapper-->
+<div id="multi-item-example" class="carousel slide carousel-multi-item" data-ride="carousel">
 
-          </div>
-          <div class="col-4 col-md-3 col-lg-3">
-            
-            <!-- Brand -->
-            <div class="img-fluid svg-shim text-dark">
-              @@include("assets/img/brands/logotype/Mirth2.svg")
-            </div>
+  <!--Controls-->
+  <div class="controls-top">
+    <a class="btn-floating" href="#multi-item-example" data-slide="prev"><i class="fas fa-chevron-left"></i></a>
+    <a class="btn-floating" href="#multi-item-example" data-slide="next"><i
+        class="fas fa-chevron-right"></i></a>
+  </div>
+  <!--/.Controls-->
 
-          </div>
-          <div class="col-4 col-md-2 col-lg-3">
-            
-            <!-- Brand -->
-            <div class="img-fluid svg-shim text-dark">
-              @@include("assets/img/brands/logotype/open.svg")
-            </div>
+  <!--Indicators-->
+  <ol class="carousel-indicators">
+    <li data-target="#multi-item-example" data-slide-to="0" class="active"></li>
+    <li data-target="#multi-item-example" data-slide-to="1"></li>
+    <li data-target="#multi-item-example" data-slide-to="2"></li>
+  </ol>
+  <!--/.Indicators-->
 
-          </div>
-          <div class="col-4 col-md-2 col-lg-3">
-            
-            <!-- Brand -->
-            <div class="img-fluid svg-shim text-dark">
-              @@include("assets/img/brands/logotype/talend.svg")
-            </div>
+  <!--Slides-->
+  <div class="carousel-inner" role="listbox">
 
-          </div>
-          <div class="col-4 col-md-3 col-lg-3">
-            
-            <!-- Brand -->
-            <div class="img-fluid svg-shim text-dark">
-              @@include("assets/img/brands/logotype/intersystems2.svg")
-            </div>
+    <!--First slide-->
+    <div class="carousel-item active">
 
-          </div>
-          <div class="col-4 col-md-3 col-lg-2">
-            
-            <!-- Brand -->
-            <div class="img-fluid svg-shim text-dark">
-              @@include("assets/img/brands/logotype/Mirth2.svg")
-            </div>
-
-          </div>
-          <div class="col-4 col-md-3 col-lg-2">
-            
-            <!-- Brand -->
-            <div class="img-fluid svg-shim text-dark">
-              @@include("assets/img/brands/logotype/open.svg")
-            </div>
-
-          </div>
-          <div class="col-4 col-md-3 col-lg-2">
-            
-            <!-- Brand -->
-            <div class="img-fluid svg-shim text-dark">
-              @@include("assets/img/brands/logotype/talend.svg")
-            </div>
-
-          </div>
-          <div class="col-4 col-md-3 col-lg-2">
-            
-            <!-- Brand -->
-            <div class="img-fluid svg-shim text-dark">
-              @@include("assets/img/brands/logotype/intersystems2.svg")
-            </div>
-
-          </div>
-          <div class="col-4 col-md-3 col-lg-2">
-            
-            <!-- Brand -->
-            <div class="img-fluid svg-shim text-dark">
-              @@include("assets/img/brands/logotype/netflix.svg")
-            </div>
-
-          </div>
-          <div class="col-4 col-md-3 col-lg-2">
-            
-            <!-- Brand -->
-            <div class="img-fluid svg-shim text-dark">
-              @@include("assets/img/brands/logotype/netflix.svg")
-            </div>
-
-          </div>
-          <div class="col-4 col-md-3 col-lg-2">
-            
-            <!-- Brand -->
-            <div class="img-fluid svg-shim text-dark">
-              @@include("assets/img/brands/logotype/pinterest.svg")
-            </div>
-
+      <div class="col-md-4">
+        <div class="card mb-2">
+          <img class="card-img-top"
+            src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(34).jpg"
+            alt="Card image cap">
+          <div class="card-body">
+            <h4 class="card-title">Card title</h4>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+              card's content.</p>
+            <a class="btn btn-primary">Button</a>
           </div>
         </div>
-      </div> <!-- / .container -->
+      </div>
+
+      <div class="col-md-4">
+        <div class="card mb-2">
+          <img class="card-img-top"
+            src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(18).jpg"
+            alt="Card image cap">
+          <div class="card-body">
+            <h4 class="card-title">Card title</h4>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+              card's content.</p>
+            <a class="btn btn-primary">Button</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card mb-2">
+          <img class="card-img-top"
+            src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(35).jpg"
+            alt="Card image cap">
+          <div class="card-body">
+            <h4 class="card-title">Card title</h4>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+              card's content.</p>
+            <a class="btn btn-primary">Button</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!--/.First slide-->
+
+    <!--Second slide-->
+    <div class="carousel-item">
+
+      <div class="col-md-4">
+        <div class="card mb-2">
+          <img class="card-img-top"
+            src="https://mdbootstrap.com/img/Photos/Horizontal/City/4-col/img%20(60).jpg" alt="Card image cap">
+          <div class="card-body">
+            <h4 class="card-title">Card title</h4>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+              card's content.</p>
+            <a class="btn btn-primary">Button</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card mb-2">
+          <img class="card-img-top"
+            src="https://mdbootstrap.com/img/Photos/Horizontal/City/4-col/img%20(47).jpg" alt="Card image cap">
+          <div class="card-body">
+            <h4 class="card-title">Card title</h4>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+              card's content.</p>
+            <a class="btn btn-primary">Button</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card mb-2">
+          <img class="card-img-top"
+            src="https://mdbootstrap.com/img/Photos/Horizontal/City/4-col/img%20(48).jpg" alt="Card image cap">
+          <div class="card-body">
+            <h4 class="card-title">Card title</h4>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+              card's content.</p>
+            <a class="btn btn-primary">Button</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!--/.Second slide-->
+
+    <!--Third slide-->
+    <div class="carousel-item">
+
+      <div class="col-md-4">
+        <div class="card mb-2">
+          <img class="card-img-top"
+            src="https://mdbootstrap.com/img/Photos/Horizontal/Food/4-col/img%20(53).jpg" alt="Card image cap">
+          <div class="card-body">
+            <h4 class="card-title">Card title</h4>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+              card's content.</p>
+            <a class="btn btn-primary">Button</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card mb-2">
+          <img class="card-img-top"
+            src="https://mdbootstrap.com/img/Photos/Horizontal/Food/4-col/img%20(45).jpg" alt="Card image cap">
+          <div class="card-body">
+            <h4 class="card-title">Card title</h4>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+              card's content.</p>
+            <a class="btn btn-primary">Button</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card mb-2">
+          <img class="card-img-top"
+            src="https://mdbootstrap.com/img/Photos/Horizontal/Food/4-col/img%20(51).jpg" alt="Card image cap">
+          <div class="card-body">
+            <h4 class="card-title">Card title</h4>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+              card's content.</p>
+            <a class="btn btn-primary">Button</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!--/.Third slide-->
+
+  </div>
+  <!--/.Slides-->
+
+</div>
+<!--/.Carousel Wrapper-->
     </section>
 
     <!-- PROCESS
