@@ -12614,3 +12614,6 @@ body.compensate-for-scrollbar {
 @media (min-width: 992px) {
   .sidenav-right {
     right: 0; } }
+
+.highlighted {
+  background-color: rgba(0, 0, 0, 0.5); }
