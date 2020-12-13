@@ -12616,4 +12616,7 @@ body.compensate-for-scrollbar {
     right: 0; } }
 
 .highlighted {
-  background-color: rgba(0, 0, 0, 0.5); }
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 1px solid transparent;
+  border-radius: 15px;
+  outline: 2px; }

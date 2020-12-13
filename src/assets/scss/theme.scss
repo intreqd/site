@@ -27,4 +27,7 @@
 
 .highlighted {
     background-color: rgba(0,0,0,.5);
+    border : 1px solid transparent;
+    border-radius : 15px;
+    outline: 2px;
 }
