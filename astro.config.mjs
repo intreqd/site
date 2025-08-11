@@ -21,6 +21,7 @@ export default defineConfig({
   },
   outDir: './docs', // relative to project root
   //adapter: vercel(),
-  base: "intreqd/site",
+  site: 'https://intreqd.github.io/site',
+  base: "site",
   //output: "static"
 });
