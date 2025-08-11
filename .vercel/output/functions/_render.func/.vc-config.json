@@ -1,0 +1,6 @@
+{
+	"runtime": "nodejs22.x",
+	"handler": "docs/server/entry.mjs",
+	"launcherType": "Nodejs",
+	"supportsResponseStreaming": true
+}

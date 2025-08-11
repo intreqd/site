@@ -1,35 +1,39 @@
 import React, { useState } from "react";
 
 const CategoryIcons = {
-  "Web Development": (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      className="w-6 h-6 text-[var(--sec)] opacity-70"
-    >
-      <path d="M21 3C21.5523 3 22 3.44772 22 4V20C22 20.5523 21.5523 21 21 21H3C2.44772 21 2 20.5523 2 20V4C2 3.44772 2.44772 3 3 3H21ZM20 11H4V19H20V11ZM20 5H4V9H20V5ZM11 6V8H9V6H11ZM7 6V8H5V6H7Z"></path>
-    </svg>
+    "InterSystems": (
+<svg width="29px" height="29px" viewBox="0 0 29 29" version="1.1" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+    <title>Product icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <polygon id="path-1" points="0 0.90625 7.25 0.90625 7.25 27.1875 0 27.1875"></polygon>
+    </defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="currentColor" fill-rule="evenodd">
+        <g id="components/header-no-burger" transform="translate(-7.000000, -10.000000)">
+            <g id="left" transform="translate(-1.000000, 4.000000)">
+                <g id="logos/icon-HS" transform="translate(8.000000, 6.000000)">
+                    <g id="Icon" stroke-width="1" fill="#000">
+                        <polygon id="Fill-1" points="0 29 29 29 29 0 0 0"></polygon>
+                    </g>
+                    <g id="Group-26" stroke-width="1" transform="translate(8.156250, 1.812500)">
+                        <g id="Clip-25"></g>
+                        <polygon id="Fill-24" fill="currentColor" points="3.625 2.6957654 0 0.90625 0 23.6084692 7.25 27.1875 7.25 23.1881793 3.625 21.3994848"></polygon>
+                    </g>
+                    <polygon id="Fill-27" fill="currentColor" points="15.40625 25.335428 19.03125 27.1875 19.03125 3.70074728 11.78125 0 11.78125 4.13637908 15.40625 5.98675272"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
   ),
-  "Mobile Development": (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      className="w-6 h-6 text-[var(--sec)] opacity-70"
-    >
-      <path d="M7 4V20H17V4H7ZM6 2H18C18.5523 2 19 2.44772 19 3V21C19 21.5523 18.5523 22 18 22H6C5.44772 22 5 21.5523 5 21V3C5 2.44772 5.44772 2 6 2ZM12 17C12.5523 17 13 17.4477 13 18C13 18.5523 12.5523 19 12 19C11.4477 19 11 18.5523 11 18C11 17.4477 11.4477 17 12 17Z"></path>
-    </svg>
+  "OHDSI": (
+
+    <img src="svg/oHDSI.svg" height="28px" width="28px"></img>
+
   ),
-  "UI/UX Design & Prototyping": (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      className="w-6 h-6 text-[var(--sec)] opacity-70"
-    >
-      <path d="M5.7646 7.99998L5.46944 7.26944C5.26255 6.75737 5.50995 6.17454 6.02202 5.96765L15.2939 2.22158C15.8059 2.01469 16.3888 2.26209 16.5956 2.77416L22.2147 16.6819C22.4216 17.194 22.1742 17.7768 21.6622 17.9837L12.3903 21.7298C11.8783 21.9367 11.2954 21.6893 11.0885 21.1772L11.0002 20.9586V21H7.00021C6.44792 21 6.00021 20.5523 6.00021 20V19.7303L2.65056 18.377C2.13849 18.1701 1.89109 17.5873 2.09798 17.0752L5.7646 7.99998ZM8.00021 19H10.2089L8.00021 13.5333V19ZM6.00021 12.7558L4.32696 16.8972L6.00021 17.6084V12.7558ZM7.69842 7.44741L12.5683 19.5008L19.9858 16.5039L15.1159 4.45055L7.69842 7.44741ZM10.6766 9.47974C10.1645 9.68663 9.5817 9.43924 9.37481 8.92717C9.16792 8.4151 9.41532 7.83227 9.92739 7.62538C10.4395 7.41849 11.0223 7.66588 11.2292 8.17795C11.4361 8.69002 11.1887 9.27286 10.6766 9.47974Z"></path>
-    </svg>
+
+  "FHIR®": (
+    <img src="png/fhir_small.png" height="29px" width="29px"></img>
   ),
 };
 
@@ -37,20 +41,26 @@ const SkillsList = () => {
   const [openItem, setOpenItem] = useState<string | null>(null);
 
   const skills = {
-    "Web Development": [
-      "Single Page Applications (SPAs)",
-      "Landing pages and business websites",
-      "Portfolio websites",
+    "InterSystems": [
+      "IRIS Kubernetes Operator (IKO)",
+      "HealthShare",
+      "Health Connect Cloud",
+      "InterSystems OMOP"
     ],
-    "Mobile Development": [
-      "Mobile-friendly web apps",
-      "React Native mobile apps",
-    ],
-    "UI/UX Design & Prototyping": [
-      "UI design with Figma & Canva",
-      "UX research & improvements",
-      "Prototyping for websites & mobile apps",
-    ],
+"OHDSI": [
+  "High-availability OMOP CDM database cluster with automated backups",
+  "Secure ETL pipelines for loading and transforming clinical data",
+  "Authentication and role-based access control for Atlas/WebAPI",
+  "Monitoring and alerting for query performance and system health"
+],
+"FHIR®": [
+  "Highly available FHIR server with database replication and automated backups",
+  "Secure API gateway with authentication, authorization, and audit logging",
+  "ETL and data validation pipelines for ingesting clinical data into FHIR resources",
+  "Monitoring, alerting, and compliance checks for API performance and security",
+  "FHIR-based analytics platform for population health, quality measures, and reporting"
+]
+
   };
 
   const toggleItem = (item: string) => {
@@ -59,8 +69,9 @@ const SkillsList = () => {
 
   return (
     <div className="text-left pt-3 md:pt-9">
-      <h3 className="text-[var(--white)] text-3xl md:text-4xl font-semibold md:mb-6">
-        What I do?
+      <h2 className="text-lg text-[var(--sec)] mb-2 shiny-sec">Subject Matter Experts</h2>
+            <h3 className="text-[var(--white)] text-3xl md:text-4xl font-semibold md:mb-6">
+        Workloads
       </h3>
       <ul className="space-y-4 mt-4 text-lg">
         {Object.entries(skills).map(([category, items]) => (
