@@ -21,7 +21,7 @@ export default defineConfig({
   },
   outDir: './docs', // relative to project root
   //adapter: vercel(),
-  //site: 'https://intreqd.github.io/site'
-  //base: "site",
+  site: 'https://www.integrationrequired.com',
+  base: "/",
   //output: "static"
 });
