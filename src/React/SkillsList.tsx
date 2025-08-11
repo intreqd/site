@@ -12,7 +12,7 @@ const CategoryIcons = {
         <g id="components/header-no-burger" transform="translate(-7.000000, -10.000000)">
             <g id="left" transform="translate(-1.000000, 4.000000)">
                 <g id="logos/icon-HS" transform="translate(8.000000, 6.000000)">
-                    <g id="Icon" stroke-width="1" fill="#000">
+                    <g id="Icon" stroke-width="1" fill="transparent">
                         <polygon id="Fill-1" points="0 29 29 29 29 0 0 0"></polygon>
                     </g>
                     <g id="Group-26" stroke-width="1" transform="translate(8.156250, 1.812500)">
