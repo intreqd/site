@@ -23,5 +23,8 @@ export default defineConfig({
   //adapter: vercel(),
   site: 'https://www.integrationrequired.com',
   base: "/",
+  devToolbar: {
+    enabled: false,
+  },
   //output: "static"
 });
