@@ -1,0 +1,198 @@
+---
+import Container from "@components/elements/Container.astro";
+import Layout from "@layouts/Layout.astro";
+import { siteConfig } from "site-config";
+import LogoWall from "@components/logoWall.astro";
+
+const quickstart = `pnpm create astro@latest --template ${siteConfig.githubRepo}`;
+const quickstartId = "quickstart-command";
+
+// Keep page content data-driven so the homepage stays easy to scan and edit.
+const featureCards = [
+  {
+    title: "Foundation",
+    description: "Built on modern, lean technologies for maximum performance.",
+    items: ["Astro 6 & Tailwind CSS 4", "DaisyUI 5 Components", "Alpine.js Enhancements"],
+    badge: "Core",
+    buttons: [
+      { text: "View Stack", url: "/daisyui", primary: true },
+      { text: "Docs", url: "https://docs.astro.build", primary: false }
+    ]
+  },
+  {
+    title: "Capabilities",
+    description: "Features that make your site production-ready from day one.",
+    items: ["SEO & Meta Tags", "Sitemap & Robots.txt", "Local SVG Icons"],
+    badge: "Ready",
+    buttons: [
+      { text: "Explore", url: "/blog", primary: true },
+      { text: "Specs", url: "/imprint", primary: false }
+    ]
+  },
+  {
+    title: "Workflow",
+    description: "Designed for a frictionless developer experience.",
+    items: ["Low Setup Friction", "Easy to Customize", "Opinionated Defaults"],
+    badge: "Fast",
+    buttons: [
+      { text: "Get Started", url: "#", primary: true },
+      { text: "Guide", url: "#", primary: false }
+    ]
+  }
+];
+
+const starterTraits = [
+  {
+    logo: "/isc.png",
+    logoPos: "left",
+    text: "Opinionated enough to be useful and small enough to understand quickly."
+  },
+  {
+    logo: "/svg/googleCloud.svg",
+    logoPos: "right",
+    text: "Ready for production work with low setup friction and easy to customize."
+  }
+];
+---
+
+<Layout
+  title="Integration Required"
+  description=""
+>
+  <Container class="pt-6 sm:pt-8 lg:pt-12 pb-3 sm:pb-4 lg:pb-6">
+    <!--
+      Mobile-first structure:
+      1. Start with a single-column stack that reads well on narrow screens.
+      2. Introduce multi-column layouts only from `lg:` upward.
+    -->
+    <section class="space-y-8 lg:grid lg:grid-cols-[minmax(0,1.2fr)_minmax(18rem,24rem)] lg:gap-10 lg:space-y-0">
+      <div class="flex flex-col gap-6">
+        <p class="badge badge-outline">Independent Contractor</p>
+
+        <div class="space-y-4">
+          <h1 class="max-w-3xl text-2xl font-bold tracking-tight sm:text-3xl">
+            Named Technical Interoperability Engineer
+          </h1>
+          <p class="max-w-2xl text-base text-base-content/70 sm:text-lg">
+          Secure, Reliable, and Performant InterSystems Workloads, Healthcare Interoperability, and Advanced Analytics at impossible deployment speeds.
+          </p>
+
+        </div>
+
+        <div class="mt-auto grid gap-4 sm:grid-cols-2">
+          {starterTraits.map((item) => (
+            <div class="flex items-center gap-4 rounded-box border border-base-300 bg-base-100 px-5 py-4 shadow-sm">
+              {item.logoPos === "left" && (
+                <img src={item.logo} alt="" class="h-10 w-10 shrink-0 object-contain dark:invert" />
+              )}
+              <p class:list={[
+                "flex-1 text-sm font-medium text-base-content/80 leading-relaxed",
+                item.logo === "/isc.png" && "text-right"
+              ]}>
+                {item.text}
+              </p>
+              {item.logoPos === "right" && (
+                <img src={item.logo} alt="" class="h-10 w-10 shrink-0 object-contain dark:invert" />
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <aside class="card border border-base-300 bg-base-100 shadow-sm">
+        <div class="card-body gap-4">
+          <p class="text-sm font-semibold uppercase tracking-wide text-base-content/60">Quick start</p>
+          <div class="rounded-box border border-base-300 bg-base-200">
+            <div class="flex items-center justify-between gap-3 border-b border-base-300 px-4 py-3">
+              <div class="flex items-center gap-2 text-xs uppercase tracking-wide text-base-content/60">
+                <span class="h-2.5 w-2.5 rounded-full bg-success"></span>
+                <span>Command</span>
+              </div>
+              <button
+                type="button"
+                class="btn btn-xs btn-ghost"
+                data-copy-button
+                data-copy-target={quickstartId}
+              >
+                Copy
+              </button>
+            </div>
+            <pre class="overflow-x-auto px-4 py-4 text-sm leading-6"><code id={quickstartId}>{quickstart}</code></pre>
+          </div>
+          <p class="text-sm text-base-content/70">
+            Update `src/site-config.ts`, replace the sample content, and delete anything you do not need.
+          </p>
+          <div class="divider my-0"></div>
+          <p class="text-sm text-base-content/70">
+            The starter builds as a plain static Astro site by default, and you can add an adapter later if your deployment target needs one.
+          </p>
+        </div>
+      </aside>
+    </section>
+
+    <LogoWall />
+
+    <!-- Secondary information becomes a grid of 3 cards styled like the checklist. -->
+    <section class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {featureCards.map((card) => (
+        <div class="card card-compact relative overflow-hidden border border-base-300 bg-base-100 shadow-sm transition-all duration-300 hover:shadow-md">
+          <div class="card-body gap-5 relative z-10">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between gap-3">
+                <h2 class="card-title text-base font-bold">{card.title}</h2>
+                <span class="badge badge-secondary badge-soft">{card.badge}</span>
+              </div>
+              <p class="text-sm text-base-content/70">{card.description}</p>
+            </div>
+            
+            <ul class="list-disc space-y-2 pl-5 text-sm text-base-content/80">
+              {card.items.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+
+            <div class="card-actions justify-start">
+              {card.buttons.map((btn) => (
+                <a href={btn.url} class:list={["btn btn-sm", btn.primary ? "btn-primary" : "btn-ghost"]}>
+                  {btn.text}
+                </a>
+              ))}
+            </div>
+          </div>
+          <img src="https://placehold.co/100x300" alt="" class="absolute bottom-0 right-0 h-32 w-auto opacity-10 pointer-events-none" />
+        </div>
+      ))}
+    </section>
+  </Container>
+</Layout>
+
+<script>
+  function initCopyButtons() {
+    document.querySelectorAll<HTMLButtonElement>('[data-copy-button]').forEach((button) => {
+      if (button.dataset.copyReady === 'true') return;
+      button.dataset.copyReady = 'true';
+
+      button.addEventListener('click', async () => {
+        const targetId = button.getAttribute('data-copy-target');
+        const source = targetId ? document.getElementById(targetId) : null;
+        if (!source) return;
+
+        const originalLabel = button.textContent ?? 'Copy';
+
+        try {
+          await navigator.clipboard.writeText(source.textContent ?? '');
+          button.textContent = 'Copied';
+        } catch {
+          button.textContent = 'Failed';
+        }
+
+        window.setTimeout(() => {
+          button.textContent = originalLabel;
+        }, 1200);
+      });
+    });
+  }
+
+  // Re-run after Astro view transitions so the button works on client navigation too.
+  document.addEventListener('astro:page-load', initCopyButtons);
+</script>

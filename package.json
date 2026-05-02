@@ -16,7 +16,7 @@
     "@astrojs/vercel": "^8.2.2",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.5",
-    "astro": "^5.11.0",
+    "astro": "^6.1.10",
     "firebase": "^11.10.0",
     "fulldev-ui": "^0.6.5",
     "ogl": "^1.0.11",
