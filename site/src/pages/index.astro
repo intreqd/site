@@ -194,7 +194,7 @@ Accelerate your workload, develop your Managed Service or strategic initiative w
           <div class="card-body gap-5 relative z-10">
             <div class="space-y-3">
               <div class="flex items-center justify-between gap-3">
-                <h2 class="card-title text-base font-bold">{card.title}</h2>
+                <h2 class:list={["card-title text-base font-bold", card.title === "lifestage.health" && "text-black"]}>{card.title}</h2>
                 <div class="flex flex-wrap justify-end gap-1.5">
                   {card.badges.map((badge) => (
                     <span class:list={[
@@ -206,12 +206,18 @@ Accelerate your workload, develop your Managed Service or strategic initiative w
                   ))}
                 </div>
               </div>
-              <p class:list={["text-sm", (card.title === "DIMSE Cloud" || card.title === "PID^TOO||") ? "text-white/70" : "text-base-content/70"]}>
+              <p class:list={[
+                "text-sm", 
+                (card.title === "DIMSE Cloud" || card.title === "PID^TOO||") ? "text-white/70" : (card.title === "lifestage.health" ? "text-black/70" : "text-base-content/70")
+              ]}>
                 {card.description}
               </p>
             </div>
             
-            <ul class:list={["list-disc space-y-2 pl-5 text-sm", (card.title === "DIMSE Cloud" || card.title === "PID^TOO||") ? "text-white/80" : "text-base-content/80"]}>
+            <ul class:list={[
+              "list-disc space-y-2 pl-5 text-sm", 
+              (card.title === "DIMSE Cloud" || card.title === "PID^TOO||") ? "text-white/80" : (card.title === "lifestage.health" ? "text-black/80" : "text-base-content/80")
+            ]}>
               {card.items.map((item) => (
                 <li>{item}</li>
               ))}
@@ -225,7 +231,7 @@ Accelerate your workload, develop your Managed Service or strategic initiative w
                     "btn btn-sm",
                     btn.primary ? (
                       card.title === "PID^TOO||" ? "text-white border-0" : 
-                      (card.title === "lifestage.health" ? "text-base-content border-0" : "btn-primary")
+                      (card.title === "lifestage.health" ? "text-black border-0" : "btn-primary")
                     ) : (
                       (card.title === "DIMSE Cloud" || card.title === "PID^TOO||") ? "btn-outline text-white hover:bg-white hover:text-black" : 
                       (card.title === "lifestage.health" ? "btn-outline border-black text-black hover:bg-black hover:text-white" : "btn-ghost")

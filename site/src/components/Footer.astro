@@ -6,7 +6,9 @@ import Mindstorm from './elements/Mindstorm.astro';
 <footer class="mt-5 mb-20">
   <p class="text-center text-sm text-base-content/60">
     {featureFlags.enableImprint &&
-      <a class="hover:underline hover:text-primary-light" href="/imprint">Imprint</a>
+      <a class="btn btn-outline btn-xs border-base-300 text-base-content/60 hover:text-primary hover:border-primary px-3 transition-all duration-300" href="/imprint">
+        Legal, Tax, Insurance
+      </a>
     }
     {featureFlags.enableDataprotection &&
       <a class="hover:underline hover:text-primary-light" href="/dataprotection">Data Protection</a>
