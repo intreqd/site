@@ -10,33 +10,33 @@ const quickstartId = "quickstart-command";
 // Keep page content data-driven so the homepage stays easy to scan and edit.
 const featureCards = [
   {
-    title: "DIMSECLOUD",
-    description: "Built on modern, lean technologies for maximum performance.",
-    items: ["Astro 6 & Tailwind CSS 4", "DaisyUI 5 Components", "Alpine.js Enhancements"],
-    badge: "Core",
+    title: "DIMSE Cloud",
+    description: "Multi Regional DICOM Service Class Provider, and Routing at Scale",
+    items: ["IKO Powered Ingestion", "Google Cloud Healthcare API/DICOM Studio", "Cilium Powered CNI","Multi-Region Architecture"],
+    badges: ["Google Cloud","InterSystems IKO"],
     buttons: [
       { text: "View Stack", url: "/daisyui", primary: true },
-      { text: "Docs", url: "https://docs.astro.build", primary: false }
+      { text: "Whitepaper", url: "https://docs.astro.build", primary: false }
     ]
   },
   {
     title: "lifestage.health",
-    description: "Features that make your site production-ready from day one.",
-    items: ["SEO & Meta Tags", "Sitemap & Robots.txt", "Local SVG Icons"],
-    badge: "Ready",
+    description: "Transforming high-frequency data from devices like WHOOP into clinical-grade evidence.",
+    items: ["WHOOP Data Ingestion", "Multiple CDM Setup - Big Query/IRIS","OHDSI Ecosystem Implementation","Small Study Deployed for Global Collaboration"],
+    badges: ["OHDSI", "InterSystems OMOP"],
     buttons: [
-      { text: "Explore", url: "/blog", primary: true },
-      { text: "Specs", url: "/imprint", primary: false }
+      { text: "Join the Journey", url: "https://lifestage.health", primary: true },
+      { text: "Whitepaper", url: "/imprint", primary: false }
     ]
   },
   {
     title: "PID^TOO||",
-    description: "Designed for a frictionless developer experience.",
-    items: ["Low Setup Friction", "Easy to Customize", "Opinionated Defaults"],
-    badge: "Fast",
+    description: "FHIR® has an identify problem, this a battle tested solution.",
+    items: ["Machine Learning Powered Detection", "Simplistic Matching & Scoring", "FHIR® Resource Driven Remediation", "Merge Strategies"],
+    badges: ["FHIR®", "Google Cloud", "Zingg"],
     buttons: [
-      { text: "explore", url: "#", primary: true },
-      { text: "Guide", url: "#", primary: false }
+      { text: "Resolve Identities", url: "https://www.pidtoo.com", primary: true },
+      { text: "Whitepaper", url: "#", primary: false }
     ]
   }
 ];
@@ -61,19 +61,19 @@ const starterTraits = [
     logo: "/isc.png",
     logoPos: "left",
     textAlign: "right",
-    text: "Certified and battle tested on InterSystems technologies, the preferred weapon of mass solution."
+    text: '<a href="https://www.credly.com/users/sween" target="_blank" rel="noopener noreferrer" class="hover:underline text-primary transition-colors">Certified</a> and battle tested on InterSystems technologies, preferred weapon of mass solution and <a href="https://community.intersystems.com/user/sween" target="_blank" rel="noopener noreferrer" class="hover:underline text-primary transition-colors">developer community expert</a>.'
   },
   {
     logo: "https://raw.githubusercontent.com/cncf/artwork/main/other/kubestronaut/stacked/color/kubestronaut-stacked-color.svg",
     logoPos: "left",
     textAlign: "left",
-    text: "Kubestronaut certified with deep cloud-native architecture expertise."
+    text: 'CNCF Kubestronaut <a href="https://www.credly.com/users/sween" target="_blank" rel="noopener noreferrer" class="hover:underline text-primary transition-colors">certified</a> with deep cloud-native architecture expertise, I deploy here first.'
   },
   {
     logo: "/svg/googleCloud.svg",
     logoPos: "right",
     textAlign: "left",
-    text: "Certified and steward of production workloads and public Cloud of choice."
+    text: '<a href="https://www.credly.com/users/sween" target="_blank" rel="noopener noreferrer" class="hover:underline text-primary transition-colors">Certified</a> and steward of production workloads and public Cloud of choice.  <a href="https://developers.google.com/program/gear/" target="_blank" rel="noopener noreferrer" class="hover:underline text-primary transition-colors">GEAR</a> and <a href="https://me.developers.google.com/u/ronsweeney" target="_blank" rel="noopener noreferrer" class="hover:underline text-primary transition-colors">g.developer</a> decorated.'
   }
 ];
 ---
@@ -97,7 +97,7 @@ const starterTraits = [
             Named Technical Interoperability Engineer
           </h1>
           <p class="max-w-2xl text-base text-base-content/70 sm:text-lg">
-Accelerate your workload or strategic initiative with a short or long-term contract. Build secure, reliable, and performant workloads, healthcare interoperability, and advanced analytics at impossible deployment speeds.
+Accelerate your workload, develop your Managed Service or strategic initiative with a short or long-term contract. Build secure, reliable, and performant workloads, healthcare interoperability, and advanced analytics at impossible deployment speeds.
           </p>
 
         </div>
@@ -109,13 +109,14 @@ Accelerate your workload or strategic initiative with a short or long-term contr
                 {item.logoPos === "left" && (
                   <img src={item.logo} alt="" class="h-10 w-10 shrink-0 object-contain dark:invert" />
                 )}
-                <p class:list={[
-                  "flex-1 text-sm font-medium text-base-content/80 leading-relaxed",
-                  item.textAlign === "right" && "text-right",
-                  item.textAlign === "left" && "text-left"
-                ]}>
-                  {item.text}
-                </p>
+                <p 
+                  class:list={[
+                    "flex-1 text-sm font-medium text-base-content/80 leading-relaxed",
+                    item.textAlign === "right" && "text-right",
+                    item.textAlign === "left" && "text-left"
+                  ]}
+                  set:html={item.text}
+                />
                 {item.logoPos === "right" && (
                   <img src={item.logo} alt="" class="h-10 w-10 shrink-0 object-contain dark:invert" />
                 )}
@@ -129,13 +130,14 @@ Accelerate your workload or strategic initiative with a short or long-term contr
                 {item.logoPos === "left" && (
                   <img src={item.logo} alt="" class="h-10 w-10 shrink-0 object-contain dark:invert" />
                 )}
-                <p class:list={[
-                  "flex-1 text-sm font-medium text-base-content/80 leading-relaxed",
-                  item.textAlign === "right" && "text-right",
-                  item.textAlign === "left" && "text-left"
-                ]}>
-                  {item.text}
-                </p>
+                <p 
+                  class:list={[
+                    "flex-1 text-sm font-medium text-base-content/80 leading-relaxed",
+                    item.textAlign === "right" && "text-right",
+                    item.textAlign === "left" && "text-left"
+                  ]}
+                  set:html={item.text}
+                />
                 {item.logoPos === "right" && (
                   <img src={item.logo} alt="" class="h-10 w-10 shrink-0 object-contain dark:invert" />
                 )}
@@ -150,9 +152,8 @@ Accelerate your workload or strategic initiative with a short or long-term contr
                     <div class="mt-2 space-y-3">
             <div class="hover-gallery rounded-box w-full aspect-4/3 overflow-hidden [--items:4]">
               <img src="ron.png" alt="Abstract 1" />
-              <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop" alt="Abstract 2" />
-              <img src="https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?q=80&w=800&auto=format&fit=crop" alt="Abstract 3" />
-              <img src="https://images.unsplash.com/photo-1614850523296-d8c1af93d400?q=80&w=800&auto=format&fit=crop" alt="Abstract 4" />
+              <img src="ron2.png" alt="Abstract 2" />
+              <img src="ron3.png" alt="Abstract 3" />
             </div>
           </div>
           <div class="rounded-box border border-base-300 bg-base-200">
@@ -186,7 +187,7 @@ Accelerate your workload or strategic initiative with a short or long-term contr
         <div 
           class:list={[
             "card card-compact relative overflow-hidden border border-base-300 shadow-sm transition-all duration-300 hover:shadow-md",
-            card.title === "DIMSECLOUD" ? "bg-black text-white" : (card.title === "PID^TOO||" ? "text-white" : "bg-base-100")
+            card.title === "DIMSE Cloud" ? "bg-black text-white" : (card.title === "PID^TOO||" ? "text-white" : "bg-base-100")
           ]}
           style={card.title === "PID^TOO||" ? "background-color: #111D30" : (card.title === "lifestage.health" ? "background-color: #C8D5B9" : "")}
         >
@@ -194,16 +195,23 @@ Accelerate your workload or strategic initiative with a short or long-term contr
             <div class="space-y-3">
               <div class="flex items-center justify-between gap-3">
                 <h2 class="card-title text-base font-bold">{card.title}</h2>
-                <span class="badge badge-sm font-medium bg-transparent border-white/50 text-white px-2.5">
-                  {card.badge}
-                </span>
+                <div class="flex flex-wrap justify-end gap-1.5">
+                  {card.badges.map((badge) => (
+                    <span class:list={[
+                      "badge badge-sm font-medium bg-transparent px-2.5 py-3 whitespace-nowrap",
+                      card.title === "lifestage.health" ? "border-black text-black" : "border-white/50 text-white"
+                    ]}>
+                      {badge}
+                    </span>
+                  ))}
+                </div>
               </div>
-              <p class:list={["text-sm", (card.title === "DIMSECLOUD" || card.title === "PID^TOO||") ? "text-white/70" : "text-base-content/70"]}>
+              <p class:list={["text-sm", (card.title === "DIMSE Cloud" || card.title === "PID^TOO||") ? "text-white/70" : "text-base-content/70"]}>
                 {card.description}
               </p>
             </div>
             
-            <ul class:list={["list-disc space-y-2 pl-5 text-sm", (card.title === "DIMSECLOUD" || card.title === "PID^TOO||") ? "text-white/80" : "text-base-content/80"]}>
+            <ul class:list={["list-disc space-y-2 pl-5 text-sm", (card.title === "DIMSE Cloud" || card.title === "PID^TOO||") ? "text-white/80" : "text-base-content/80"]}>
               {card.items.map((item) => (
                 <li>{item}</li>
               ))}
@@ -219,7 +227,8 @@ Accelerate your workload or strategic initiative with a short or long-term contr
                       card.title === "PID^TOO||" ? "text-white border-0" : 
                       (card.title === "lifestage.health" ? "text-base-content border-0" : "btn-primary")
                     ) : (
-                      (card.title === "DIMSECLOUD" || card.title === "PID^TOO||") ? "btn-outline text-white hover:bg-white hover:text-black" : "btn-ghost"
+                      (card.title === "DIMSE Cloud" || card.title === "PID^TOO||") ? "btn-outline text-white hover:bg-white hover:text-black" : 
+                      (card.title === "lifestage.health" ? "btn-outline border-black text-black hover:bg-black hover:text-white" : "btn-ghost")
                     )
                   ]}
                   style={
