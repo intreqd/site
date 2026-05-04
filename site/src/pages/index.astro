@@ -10,7 +10,7 @@ const quickstartId = "quickstart-command";
 // Keep page content data-driven so the homepage stays easy to scan and edit.
 const featureCards = [
   {
-    title: "Foundation",
+    title: "DIMSECLOUD",
     description: "Built on modern, lean technologies for maximum performance.",
     items: ["Astro 6 & Tailwind CSS 4", "DaisyUI 5 Components", "Alpine.js Enhancements"],
     badge: "Core",
@@ -20,7 +20,7 @@ const featureCards = [
     ]
   },
   {
-    title: "Capabilities",
+    title: "lifestage.health",
     description: "Features that make your site production-ready from day one.",
     items: ["SEO & Meta Tags", "Sitemap & Robots.txt", "Local SVG Icons"],
     badge: "Ready",
@@ -30,14 +30,29 @@ const featureCards = [
     ]
   },
   {
-    title: "Workflow",
+    title: "PID^TOO||",
     description: "Designed for a frictionless developer experience.",
     items: ["Low Setup Friction", "Easy to Customize", "Opinionated Defaults"],
     badge: "Fast",
     buttons: [
-      { text: "Get Started", url: "#", primary: true },
+      { text: "explore", url: "#", primary: true },
       { text: "Guide", url: "#", primary: false }
     ]
+  }
+];
+
+const interopTraits = [
+  {
+    logo: "/fhir.png",
+    logoPos: "left",
+    textAlign: "right",
+    text: "HL7 FHIR implementation and healthcare data standards orchestration."
+  },
+  {
+    logo: "/svg/oHDSI.svg",
+    logoPos: "right",
+    textAlign: "left",
+    text: "OHDSI/OMOP common data model mapping and population health analytics."
   }
 ];
 
@@ -45,12 +60,20 @@ const starterTraits = [
   {
     logo: "/isc.png",
     logoPos: "left",
-    text: "Opinionated enough to be useful and small enough to understand quickly."
+    textAlign: "right",
+    text: "Certified and battle tested on InterSystems technologies, the preferred weapon of mass solution."
+  },
+  {
+    logo: "https://raw.githubusercontent.com/cncf/artwork/main/other/kubestronaut/stacked/color/kubestronaut-stacked-color.svg",
+    logoPos: "left",
+    textAlign: "left",
+    text: "Kubestronaut certified with deep cloud-native architecture expertise."
   },
   {
     logo: "/svg/googleCloud.svg",
     logoPos: "right",
-    text: "Ready for production work with low setup friction and easy to customize."
+    textAlign: "left",
+    text: "Certified and steward of production workloads and public Cloud of choice."
   }
 ];
 ---
@@ -74,34 +97,64 @@ const starterTraits = [
             Named Technical Interoperability Engineer
           </h1>
           <p class="max-w-2xl text-base text-base-content/70 sm:text-lg">
-          Secure, Reliable, and Performant InterSystems Workloads, Healthcare Interoperability, and Advanced Analytics at impossible deployment speeds.
+Accelerate your workload or strategic initiative with a short or long-term contract. Build secure, reliable, and performant workloads, healthcare interoperability, and advanced analytics at impossible deployment speeds.
           </p>
 
         </div>
 
-        <div class="mt-auto grid gap-4 sm:grid-cols-2">
-          {starterTraits.map((item) => (
-            <div class="flex items-center gap-4 rounded-box border border-base-300 bg-base-100 px-5 py-4 shadow-sm">
-              {item.logoPos === "left" && (
-                <img src={item.logo} alt="" class="h-10 w-10 shrink-0 object-contain dark:invert" />
-              )}
-              <p class:list={[
-                "flex-1 text-sm font-medium text-base-content/80 leading-relaxed",
-                item.logo === "/isc.png" && "text-right"
-              ]}>
-                {item.text}
-              </p>
-              {item.logoPos === "right" && (
-                <img src={item.logo} alt="" class="h-10 w-10 shrink-0 object-contain dark:invert" />
-              )}
-            </div>
-          ))}
+        <div class="mt-auto space-y-4">
+          <div class="grid gap-4 sm:grid-cols-2">
+            {interopTraits.map((item) => (
+              <div class="flex items-center gap-4 rounded-box border border-base-300 bg-base-100 px-5 py-4 shadow-sm">
+                {item.logoPos === "left" && (
+                  <img src={item.logo} alt="" class="h-10 w-10 shrink-0 object-contain dark:invert" />
+                )}
+                <p class:list={[
+                  "flex-1 text-sm font-medium text-base-content/80 leading-relaxed",
+                  item.textAlign === "right" && "text-right",
+                  item.textAlign === "left" && "text-left"
+                ]}>
+                  {item.text}
+                </p>
+                {item.logoPos === "right" && (
+                  <img src={item.logo} alt="" class="h-10 w-10 shrink-0 object-contain dark:invert" />
+                )}
+              </div>
+            ))}
+          </div>
+
+          <div class="grid gap-4 sm:grid-cols-3">
+            {starterTraits.map((item) => (
+              <div class="flex items-center gap-4 rounded-box border border-base-300 bg-base-100 px-5 py-4 shadow-sm">
+                {item.logoPos === "left" && (
+                  <img src={item.logo} alt="" class="h-10 w-10 shrink-0 object-contain dark:invert" />
+                )}
+                <p class:list={[
+                  "flex-1 text-sm font-medium text-base-content/80 leading-relaxed",
+                  item.textAlign === "right" && "text-right",
+                  item.textAlign === "left" && "text-left"
+                ]}>
+                  {item.text}
+                </p>
+                {item.logoPos === "right" && (
+                  <img src={item.logo} alt="" class="h-10 w-10 shrink-0 object-contain dark:invert" />
+                )}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
       <aside class="card border border-base-300 bg-base-100 shadow-sm">
         <div class="card-body gap-4">
-          <p class="text-sm font-semibold uppercase tracking-wide text-base-content/60">Quick start</p>
+                    <div class="mt-2 space-y-3">
+            <div class="hover-gallery rounded-box w-full aspect-4/3 overflow-hidden [--items:4]">
+              <img src="ron.png" alt="Abstract 1" />
+              <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop" alt="Abstract 2" />
+              <img src="https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?q=80&w=800&auto=format&fit=crop" alt="Abstract 3" />
+              <img src="https://images.unsplash.com/photo-1614850523296-d8c1af93d400?q=80&w=800&auto=format&fit=crop" alt="Abstract 4" />
+            </div>
+          </div>
           <div class="rounded-box border border-base-300 bg-base-200">
             <div class="flex items-center justify-between gap-3 border-b border-base-300 px-4 py-3">
               <div class="flex items-center gap-2 text-xs uppercase tracking-wide text-base-content/60">
@@ -119,13 +172,8 @@ const starterTraits = [
             </div>
             <pre class="overflow-x-auto px-4 py-4 text-sm leading-6"><code id={quickstartId}>{quickstart}</code></pre>
           </div>
-          <p class="text-sm text-base-content/70">
-            Update `src/site-config.ts`, replace the sample content, and delete anything you do not need.
-          </p>
-          <div class="divider my-0"></div>
-          <p class="text-sm text-base-content/70">
-            The starter builds as a plain static Astro site by default, and you can add an adapter later if your deployment target needs one.
-          </p>
+
+
         </div>
       </aside>
     </section>
@@ -135,25 +183,52 @@ const starterTraits = [
     <!-- Secondary information becomes a grid of 3 cards styled like the checklist. -->
     <section class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {featureCards.map((card) => (
-        <div class="card card-compact relative overflow-hidden border border-base-300 bg-base-100 shadow-sm transition-all duration-300 hover:shadow-md">
+        <div 
+          class:list={[
+            "card card-compact relative overflow-hidden border border-base-300 shadow-sm transition-all duration-300 hover:shadow-md",
+            card.title === "DIMSECLOUD" ? "bg-black text-white" : (card.title === "PID^TOO||" ? "text-white" : "bg-base-100")
+          ]}
+          style={card.title === "PID^TOO||" ? "background-color: #111D30" : (card.title === "lifestage.health" ? "background-color: #C8D5B9" : "")}
+        >
           <div class="card-body gap-5 relative z-10">
             <div class="space-y-3">
               <div class="flex items-center justify-between gap-3">
                 <h2 class="card-title text-base font-bold">{card.title}</h2>
-                <span class="badge badge-secondary badge-soft">{card.badge}</span>
+                <span class="badge badge-sm font-medium bg-transparent border-white/50 text-white px-2.5">
+                  {card.badge}
+                </span>
               </div>
-              <p class="text-sm text-base-content/70">{card.description}</p>
+              <p class:list={["text-sm", (card.title === "DIMSECLOUD" || card.title === "PID^TOO||") ? "text-white/70" : "text-base-content/70"]}>
+                {card.description}
+              </p>
             </div>
             
-            <ul class="list-disc space-y-2 pl-5 text-sm text-base-content/80">
+            <ul class:list={["list-disc space-y-2 pl-5 text-sm", (card.title === "DIMSECLOUD" || card.title === "PID^TOO||") ? "text-white/80" : "text-base-content/80"]}>
               {card.items.map((item) => (
                 <li>{item}</li>
               ))}
             </ul>
 
-            <div class="card-actions justify-start">
+            <div class="card-actions justify-start mt-auto">
               {card.buttons.map((btn) => (
-                <a href={btn.url} class:list={["btn btn-sm", btn.primary ? "btn-primary" : "btn-ghost"]}>
+                <a 
+                  href={btn.url} 
+                  class:list={[
+                    "btn btn-sm",
+                    btn.primary ? (
+                      card.title === "PID^TOO||" ? "text-white border-0" : 
+                      (card.title === "lifestage.health" ? "text-base-content border-0" : "btn-primary")
+                    ) : (
+                      (card.title === "DIMSECLOUD" || card.title === "PID^TOO||") ? "btn-outline text-white hover:bg-white hover:text-black" : "btn-ghost"
+                    )
+                  ]}
+                  style={
+                    btn.primary ? (
+                      card.title === "PID^TOO||" ? "background-color: #08AA6E" : 
+                      (card.title === "lifestage.health" ? "background-color: #EDF6F5" : "")
+                    ) : ""
+                  }
+                >
                   {btn.text}
                 </a>
               ))}
