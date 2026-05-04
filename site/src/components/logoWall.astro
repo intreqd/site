@@ -7,7 +7,8 @@ const technologies = [
   { id: "healthShare", label: "HealthShare" },
   { id: "healthCareApi", label: "Healthcare API" },
   { id: "googleCloud", label: "Google Cloud" },
-  { id: "ebpf", label: "eBPF" }
+  { id: "ebpf", label: "eBPF" },
+  { id: "cilium", label: "Cilium", isColor: true }
 ];
 ---
 
@@ -26,9 +27,12 @@ const technologies = [
       [...technologies, ...technologies, ...technologies].map((tech) => (
         <div class="flex items-center gap-2 group transition-all duration-300">
           <img
-            src={`/svg/${tech.id}.svg`}
+            src={tech.id === 'cilium' ? 'https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/webp/cilium.webp' : `/svg/${tech.id}.svg`}
             alt={tech.label}
-            class="h-7 w-auto object-contain transition-transform group-hover:scale-110 opacity-60 dark:invert"
+            class:list={[
+              "h-7 w-auto object-contain transition-transform group-hover:scale-110",
+              tech.isColor ? "opacity-100" : "opacity-60 dark:invert"
+            ]}
             width="30"
             height="30"
             loading="lazy"
