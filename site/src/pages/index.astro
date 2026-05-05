@@ -4,7 +4,10 @@ import Layout from "@layouts/Layout.astro";
 import { siteConfig } from "site-config";
 import LogoWall from "@components/logoWall.astro";
 
-const quickstart = `pnpm create astro@latest --template ${siteConfig.githubRepo}`;
+const quickstart = `git clone -b intersystems-main https://github.com/sween/iris-certified-agents.git && \
+cd iris-certified-agents && \
+./scripts/install.sh
+`;
 const quickstartId = "quickstart-command";
 
 // Keep page content data-driven so the homepage stays easy to scan and edit.
@@ -160,7 +163,7 @@ Accelerate your workload, develop your Managed Service or strategic initiative w
             <div class="flex items-center justify-between gap-3 border-b border-base-300 px-4 py-3">
               <div class="flex items-center gap-2 text-xs uppercase tracking-wide text-base-content/60">
                 <span class="h-2.5 w-2.5 rounded-full bg-success"></span>
-                <span>Command</span>
+                <span>Install Me As An Agent Skill</span>
               </div>
               <button
                 type="button"
