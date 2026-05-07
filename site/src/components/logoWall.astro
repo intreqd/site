@@ -8,7 +8,9 @@ const technologies = [
   { id: "healthCareApi", label: "Healthcare API" },
   { id: "googleCloud", label: "Google Cloud" },
   { id: "ebpf", label: "eBPF" },
-  { id: "cilium", label: "Cilium", isColor: true }
+  { id: "cilium", label: "Cilium", isColor: true, url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/webp/cilium.webp" },
+  { id: "prometheus", label: "Prometheus", isColor: true, url: "https://raw.githubusercontent.com/cncf/artwork/main/projects/prometheus/icon/color/prometheus-icon-color.svg" },
+  { id: "spectroCloud", label: "Spectro Cloud", isColor: true, url: "https://cdn.prod.website-files.com/64105dfa8da6a9f617932c6c/67af0b614d589896c673443b_spectro-cloud-favicon%20(1).png" }
 ];
 ---
 
@@ -27,7 +29,7 @@ const technologies = [
       [...technologies, ...technologies, ...technologies].map((tech) => (
         <div class="flex items-center gap-2 group transition-all duration-300">
           <img
-            src={tech.id === 'cilium' ? 'https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/webp/cilium.webp' : `/svg/${tech.id}.svg`}
+            src={tech.url || `/svg/${tech.id}.svg`}
             alt={tech.label}
             class:list={[
               "h-7 w-auto object-contain transition-transform group-hover:scale-110",
