@@ -58,6 +58,18 @@ const { title = siteConfig.title, description, image } = Astro.props;
         document.documentElement.setAttribute('data-theme', theme);
       })();
     </script>
+
+    <!-- Google tag (gtag.js) -->
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-48J9E1212D"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      
+      document.addEventListener('astro:page-load', () => {
+        gtag('js', new Date());
+        gtag('config', 'G-48J9E1212D');
+      });
+    </script>
   </head>
   <body>
     <!-- Skip-to-content: first focusable element on the page.

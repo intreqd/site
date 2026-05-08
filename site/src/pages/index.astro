@@ -20,7 +20,8 @@ const featureCards = [
     buttons: [
       { text: "View Stack", url: "/daisyui", primary: true },
       { text: "Whitepaper", url: "https://docs.astro.build", primary: false }
-    ]
+    ],
+    image: "dimse-white.png"
   },
   {
     title: "lifestage.health",
@@ -252,7 +253,7 @@ Accelerate your workload, develop your Managed Service or strategic initiative w
               ))}
             </div>
           </div>
-          <img src="https://placehold.co/100x300" alt="" class="absolute bottom-0 right-0 h-32 w-auto opacity-10 pointer-events-none" />
+          <img src={card.image || "https://placehold.co/100x300"} alt="" class:list={["absolute bottom-0.5 right-0.5 h-32 w-auto pointer-events-none", card.image ? "opacity-100" : "opacity-10"]} />
         </div>
       ))}
     </section>
