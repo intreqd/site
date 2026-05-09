@@ -26,12 +26,13 @@ const featureCards = [
   {
     title: "lifestage.health",
     description: "Transforming high-frequency data from devices like WHOOP into clinical-grade evidence.",
-    items: ["WHOOP Data Ingestion", "Multiple CDM Setup - Big Query/IRIS","OHDSI Ecosystem Implementation","Small Study Deployed for Global Collaboration"],
+    items: ["WHOOP Data Ingestion", "Multiple CDM Setup - Big Query/IRIS","OHDSI Ecosystem Implementation","Deployed for Global Collaboration"],
     badges: ["OHDSI", "InterSystems OMOP"],
     buttons: [
       { text: "Join the Journey", url: "https://lifestage.health", primary: true },
       { text: "Whitepaper", url: "/imprint", primary: false }
-    ]
+    ],
+    image: "lsh-white.png"
   },
   {
     title: "PID^TOO||",
@@ -41,7 +42,8 @@ const featureCards = [
     buttons: [
       { text: "Resolve Identities", url: "https://www.pidtoo.com", primary: true },
       { text: "Whitepaper", url: "#", primary: false }
-    ]
+    ],
+    image: "pidtoowhite.png"
   }
 ];
 
@@ -253,7 +255,7 @@ Accelerate your workload, develop your Managed Service or strategic initiative w
               ))}
             </div>
           </div>
-          <img src={card.image || "https://placehold.co/100x300"} alt="" class:list={["absolute bottom-0.5 right-0.5 h-32 w-auto pointer-events-none", card.image ? "opacity-100" : "opacity-10"]} />
+          <img src={card.image || "https://placehold.co/100x300"} alt="" class:list={["absolute bottom-0.5 right-0.5 w-auto pointer-events-none", card.image ? "opacity-100" : "opacity-10", card.title === "PID^TOO||" ? "h-40" : "h-32"]} />
         </div>
       ))}
     </section>
