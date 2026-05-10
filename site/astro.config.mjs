@@ -43,6 +43,14 @@ export default defineConfig({
       fallbacks: ["sans-serif"],
     },
   ],
+  image: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+    ],
+  },
   integrations: [mdx(), sitemap(), icon(), alpinejs()],
   vite: {
     plugins: [tailwindcss()],

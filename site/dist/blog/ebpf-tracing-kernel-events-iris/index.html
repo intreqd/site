@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="de"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="shortcut icon" href="/favicon.ico"><link rel="sitemap" href="/sitemap-index.xml"><meta name="generator" content="Astro v6.2.1"><title>Getting started with this Astro starter</title><link rel="canonical" href="https://www.integrationrequired.com/blog/getting-started-with-this-starter"><meta name="description" content="A practical walkthrough for using the starter, replacing the defaults, and shipping the first version."><meta name="robots" content="index, follow"><meta property="og:title" content="Getting started with this Astro starter"><meta property="og:type" content="website"><meta property="og:image" content="https://www.integrationrequired.com/opengraph.jpg"><meta property="og:url" content="https://www.integrationrequired.com/blog/getting-started-with-this-starter"><meta property="og:image:url" content="https://www.integrationrequired.com/opengraph.jpg"><meta property="og:image:alt" content="Getting started with this Astro starter"><meta name="twitter:card" content="summary_large_image"><!--
+<!DOCTYPE html><html lang="de"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="shortcut icon" href="/favicon.ico"><link rel="sitemap" href="/sitemap-index.xml"><meta name="generator" content="Astro v6.2.1"><title>eBPF: Tracing Kernel Events for IRIS Workloads</title><link rel="canonical" href="https://www.integrationrequired.com/blog/ebpf-tracing-kernel-events-iris"><meta name="description" content="Discover how eBPF can be used to trace kernel events and optimize InterSystems IRIS workloads. A deep dive into eBPF tools, flamegraphs, and practical experimentation."><meta name="robots" content="index, follow"><meta property="og:title" content="eBPF: Tracing Kernel Events for IRIS Workloads"><meta property="og:type" content="website"><meta property="og:image" content="https://www.integrationrequired.com/opengraph.jpg"><meta property="og:url" content="https://www.integrationrequired.com/blog/ebpf-tracing-kernel-events-iris"><meta property="og:image:url" content="https://www.integrationrequired.com/opengraph.jpg"><meta property="og:image:alt" content="eBPF: Tracing Kernel Events for IRIS Workloads"><meta name="twitter:card" content="summary_large_image"><!--
       Fonts flow:
       1. astro.config.mjs registers the font and exposes `--font-inter`.
       2. <Font /> loads that configured family into the page head.
@@ -28,7 +28,7 @@
         gtag('js', new Date());
         gtag('config', 'G-48J9E1212D');
       });
-    </script><link rel="stylesheet" href="/_astro/Layout.Bt8M-U42.css"><script type="module" src="/_astro/page.CQhogMj7.js"></script></head> <body> <!-- Skip-to-content: first focusable element on the page.
+    </script><link rel="stylesheet" href="/_astro/Layout.Cdi1JR_J.css"><script type="module" src="/_astro/page.CQhogMj7.js"></script></head> <body> <!-- Skip-to-content: first focusable element on the page.
          Hidden until keyboard-focused so sighted users never see it.
          Screen readers and keyboard users tab to it and jump past the nav. --> <a href="#main-content" class="skip-to-content">Skip to content</a> <div x-data="{ open: false }" x-on:astro:page-load.document="open = false" @keydown.escape.window="open = false" data-astro-cid-ri6uxye2> <header class="border-b border-base-300 bg-base-100" data-astro-cid-ri6uxye2> <div class="max-w-screen-xl mx-auto px-5">  <nav class="navbar min-h-20 px-0" data-astro-cid-ri6uxye2> <div class="navbar-start" data-astro-cid-ri6uxye2> <a href="/" class="btn btn-ghost px-0 hover:bg-transparent" data-astro-cid-ri6uxye2> <img src="/logo_black.png" alt="Your Site" class="h-[60px] w-auto object-contain transition-transform duration-300 hover:scale-105 logo-light" data-astro-cid-ri6uxye2> <img src="/logo_white.png" alt="Your Site" class="h-[60px] w-auto object-contain transition-transform duration-300 hover:scale-105 logo-dark" data-astro-cid-ri6uxye2> </a> </div>  <div class="navbar-end gap-2" data-astro-cid-ri6uxye2> <div class="hidden md:flex gap-2 items-center" data-astro-cid-ri6uxye2> <a class="btn btn-sm bg-[#003A9B] border-[#003A9B] text-white hover:bg-[#002b75] hover:border-[#002b75] flex items-center gap-2" href="https://www.indeed.com/employers/login" target="_blank" rel="noopener noreferrer" data-astro-cid-ri6uxye2> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" data-astro-cid-ri6uxye2><path d="M11.566 21.5633v-8.762c.2553.0231.5009.0346.758.0346 1.2225 0 2.3739-.3206 3.3506-.8928v9.6182c0 .8219-.1957 1.4287-.5757 1.8338-.378.4033-.8808.6049-1.491.6049-.6007 0-1.0766-.2016-1.468-.6183-.3781-.4032-.5739-1.01-.5739-1.8184zM11.589.5659c2.5447-.8929 5.4424-.8449 7.6186.987.405.3687.8673.8334 1.0515 1.3806.2207.6913-.7695-.073-.9057-.167-.71-.4532-1.4182-.8334-2.2127-1.0946C12.8614.3873 8.8122 2.709 6.2945 6.315c-1.0516 1.5939-1.7367 3.2721-2.299 5.1174-.0614.2017-.1094.4647-.2207.6413-.1113.2036-.048-.5453-.048-.5702.0845-.7623.2438-1.4997.4414-2.237C5.3292 5.3375 7.897 2.0655 11.5891.5658zm4.9281 7.0587c0 1.6686-1.353 3.0224-3.0205 3.0224-1.6677 0-3.0186-1.3538-3.0186-3.0224 0-1.6687 1.351-3.0224 3.0186-3.0224 1.6676 0 3.0205 1.3518 3.0205 3.0224Z" data-astro-cid-ri6uxye2></path></svg>
 Indeed
@@ -55,75 +55,86 @@ LinkedIn
 Github
 </a> <a class="btn bg-[#f57c00] border-[#f57c00] text-white hover:bg-[#e65100] hover:border-[#e65100] w-full flex items-center gap-2" href="https://www.brightstreetgroup.com" target="_blank" rel="noopener noreferrer" @click="open = false" data-astro-cid-ri6uxye2> <img src="/bsg-favicon.png" alt="BSG Logo" class="w-5 h-5 rounded-sm brightness-0 invert" data-astro-cid-ri6uxye2>
 Brightstreet Group
-</a> </div> </div> </div> <main id="main-content">  <div class="max-w-screen-xl mx-auto px-5 py-12 sm:py-16 lg:py-24">  <article class="max-w-3xl"> <header class="space-y-4"> <a href="/blog" class="link link-hover text-sm text-base-content/60">← All posts</a> <!--
+</a> </div> </div> </div> <main id="main-content">  <div class="max-w-screen-xl mx-auto px-5 pt-6 sm:pt-8 lg:pt-12 pb-12 sm:pb-16 lg:pb-24">  <article class="max-w-3xl"> <header class="space-y-4"> <a href="/blog" class="link link-hover text-sm text-base-content/60">← All posts</a> <!--
         heroImage is optional. Astro's <Image /> component optimizes the image
         at build time: converts to WebP/AVIF, generates srcset, prevents CLS.
         For remote URLs, add the hostname to `image.domains` in astro.config.mjs.
         For local files, import them in frontmatter or use the image() schema helper.
         Docs: https://docs.astro.build/en/guides/images/
-      -->  <div class="space-y-2"> <h1 class="text-2xl font-bold tracking-tight sm:text-3xl">Getting started with this Astro starter</h1> <p class="text-sm text-base-content/60"> <time datetime="2026-04-21T00:00:00.000Z"> April 20, 2026 </time>  </p> </div> </header> <!--
+      --> <img src="/_astro/photo-1558494949-ef010cbdcc31_Z2hQf5f.webp" alt="eBPF: Tracing Kernel Events for IRIS Workloads" loading="lazy" decoding="async" width="1200" height="200" class="mt-2 w-full rounded-box object-cover aspect-[6/1]"> <div class="space-y-2"> <h1 class="text-2xl font-bold tracking-tight sm:text-3xl">eBPF: Tracing Kernel Events for IRIS Workloads</h1> <div class="flex flex-wrap items-center gap-3"> <p class="text-sm text-base-content/60"> <time datetime="2024-09-08T00:00:00.000Z"> September 7, 2024 </time>  </p> <div class="flex flex-wrap gap-1"> <span class="badge badge-primary badge-sm badge-outline">InterSystems IRIS</span><span class="badge badge-primary badge-sm badge-outline">eBPF</span><span class="badge badge-primary badge-sm badge-outline">Kubernetes</span><span class="badge badge-primary badge-sm badge-outline">Linux</span><span class="badge badge-primary badge-sm badge-outline">Performance</span> </div> <a href="https://community.intersystems.com/post/ebpf-tracing-kernel-events-iris-workloads" target="_blank" rel="noopener noreferrer" class="badge badge-secondary badge-sm badge-outline link-hover flex items-center gap-1">
+Community
+<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> </a> </div> </div> </header> <!--
       daisyUI recommends using Tailwind utilities for layout and the Typography
       plugin for rich text. `prose` gives Markdown content predictable defaults
       without maintaining a custom article stylesheet in the starter.
-    --> <div class="prose prose-neutral mt-10 max-w-none prose-a:link prose-img:rounded-box"> <p>This repository is meant to be used quickly.</p>
-<p>The intended flow is not to configure every option before you begin. It is to start from a sensible default, replace the content that is specific to the demo, and keep the parts that help you ship.</p>
-<p><img src="/blog/starter-flow.svg" alt="Starter flow overview"/></p>
-<h2 id="start-with-the-defaults">Start with the defaults</h2>
-<p>The starter already includes a production-oriented baseline:</p>
-<ul>
-<li>Astro 6</li>
-<li>Tailwind CSS 4</li>
-<li>DaisyUI 5</li>
-<li>a typed blog collection</li>
-<li>sitemap and robots support</li>
-<li>icons, dark mode, and accessibility basics</li>
-</ul>
-<p>That means the first useful step is usually not adding more tooling. It is updating the existing project metadata and content.</p>
-<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">pnpm</span><span style="color:#9ECBFF"> create</span><span style="color:#9ECBFF"> astro@latest</span><span style="color:#79B8FF"> --template</span><span style="color:#9ECBFF"> aholbreich/astro-tailwind-daisyui-starter</span></span>
-<span class="line"><span style="color:#79B8FF">cd</span><span style="color:#9ECBFF"> my-project</span></span>
-<span class="line"><span style="color:#B392F0">pnpm</span><span style="color:#9ECBFF"> install</span></span>
-<span class="line"><span style="color:#B392F0">pnpm</span><span style="color:#9ECBFF"> dev</span></span></code></pre>
-<h2 id="replace-the-project-identity-first">Replace the project identity first</h2>
-<p>Start in <code>src/site-config.ts</code> and <code>astro.config.mjs</code>.</p>
-<p>That gives you the highest-value changes early:</p>
+    --> <div class="prose prose-neutral mt-10 max-w-none prose-a:link prose-img:rounded-box"> <p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(9575).png" alt="eBPF Introduction"/></p>
+<p>I attended <a href="https://events.linuxfoundation.org/cloudnativesecuritycon-north-america/">Cloud Native Security Con</a> in Seattle with the full intention of crushing OTEL day, then perusing the subject of security applied to Cloud Native workloads the following days leading up to CTF as a professional exercise. This was happily upended by a new understanding of eBPF, which got my screens, career, workloads, and attitude a much-needed upgrade with new approaches to solving workload problems.</p>
+<p>So I made it to the eBPF party and have been attending clinic after clinic on the subject ever since. Here I would like to “unbox” eBPF as a technical solution, mapped directly to what we do in practice, and step through my experimentation on supporting InterSystems IRIS Workloads, particularly on Kubernetes.</p>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(9591).png" alt="eBee Steps"/></p>
+<h2 style="text-align: center;">eBee Steps with eBPF and InterSystems IRIS Workloads</h2>
+<h2 id="what-is-ebpf">What is eBPF?</h2>
+<p>eBPF (extended Berkeley Packet Filter) is a killer Linux kernel feature that implements a VM within kernel space and makes it possible to run sandboxed apps safely with guiderails. These apps can “map” data into user land for observability, tracing, security, and networking. I think of it as a “sniffer” of the OS. While traditionally it was associated with BPF and networking, the extended version “sniffs” tracepoints, processes, scheduling, execution, and block device access.</p>
+<blockquote>
+<p><em>“What JavaScript is to the browser, eBPF is to the Linux Kernel”</em></p>
+</blockquote>
+<h3 id="the-vm">The VM</h3>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(9593).png" alt="eBPF VM Architecture"/></p>
+<p>Programs are written in a restricted C, then compiled into eBPF bytecode. This bytecode is then loaded into the kernel, where a <strong>Verifier</strong> ensures it won’t crash the kernel (checking for loops, out-of-bounds access, etc.). Once verified, it is JIT-compiled into native machine code and attached to a specific “hook.”</p>
+<hr/>
+<h2 id="the-hooks-how-we-see-iris">The Hooks: How we see IRIS</h2>
+<p>To get visibility into IRIS, we can attach eBPF programs to various hooks in the kernel or user space.</p>
+<h3 id="tracepoints">Tracepoints</h3>
+<p>Tracepoints are static hooks placed in the kernel code by developers. They are stable and provide a reliable way to hook into common events like system calls.</p>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(9623).png" alt="Kernel Tracepoints"/></p>
+<h3 id="kprobes">Kprobes</h3>
+<p>Kprobes (Kernel Probes) allow you to dynamically break into any kernel routine and collect information. Unlike tracepoints, they are not static and can be used on almost any kernel function.</p>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(9624).png" alt="Kprobes Illustration"/></p>
+<h3 id="uprobes">Uprobes</h3>
+<p>Uprobes (User Probes) are the user-space equivalent of kprobes. They allow you to hook into functions within a user-space application—like <code>irisdb</code> or <code>web gateway</code>. This is incredibly powerful for tracing custom application logic without modifying the binary.</p>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(9627).png" alt="Uprobes Illustration"/></p>
+<hr/>
+<h2 id="the-bcc-toolkit">The BCC Toolkit</h2>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/bcc.svg" alt="BCC Toolkit Logo"/></p>
+<p>Writing raw eBPF can be tough. The <strong>BCC (BPF Compiler Collection)</strong> toolkit makes it easier by providing a framework for writing BPF programs with Python or Lua front-ends.</p>
+<h3 id="example-tracing-open-syscalls-on-iris">Example: Tracing <code>open()</code> syscalls on IRIS</h3>
+<p>Using <code>opensnoop</code> from the BCC toolkit, we can see every file InterSystems IRIS touches in real-time:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> opensnoop-bpfcc</span><span style="color:#79B8FF"> -n</span><span style="color:#9ECBFF"> irisdb</span></span></code></pre>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="text"><code><span class="line"><span>PID    COMM               FD ERR PATH</span></span>
+<span class="line"><span>3017691 irisdb              0   0 /data/IRIS/iris.cpf</span></span>
+<span class="line"><span>3017691 irisdb             -1   2 /data/IRIS/_LastGood_.cpf_20240908</span></span>
+<span class="line"><span>3017691 irisdb             -1   2 /data/IRIS/_LastGood_.cpf</span></span>
+<span class="line"><span>3017691 irisdb              0   0 /data/IRIS/_LastGood_.cpf_5275</span></span>
+<span class="line"><span>3017691 irisdb             -1   2 /data/IRIS/_LastGood_.cpf</span></span>
+<span class="line"><span>3017756 irisdb             -1   2 /data/IRIS/mgr/journal/20240908.002</span></span>
+<span class="line"><span>3017756 irisdb              0   0 /data/IRIS/mgr/journal/20240908.002z</span></span></code></pre>
+<hr/>
+<h2 id="flamegraphs">Flamegraphs</h2>
+<p><img src="https://gh-card.dev/repos/brendangregg/FlameGraph.svg" alt="FlameGraph Repository"/></p>
+<p>One of the coolest things I stumbled upon was <a href="https://www.brendangregg.com/flamegraphs.html">Brendan Gregg’s implementation of flamegraphs</a>. They visualize bpf output to help understand performance and stack traces.</p>
+<p>Given the following <code>perf</code> recording during a start/stop of IRIS:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> perf</span><span style="color:#9ECBFF"> record</span><span style="color:#79B8FF"> -F</span><span style="color:#79B8FF"> 99</span><span style="color:#79B8FF"> -a</span><span style="color:#79B8FF"> -g</span><span style="color:#79B8FF"> --</span><span style="color:#9ECBFF"> sleep</span><span style="color:#79B8FF"> 60</span></span>
+<span class="line"><span style="color:#E1E4E8">[ perf record: Captured and wrote </span><span style="color:#79B8FF">3.701</span><span style="color:#E1E4E8"> MB perf.data (</span><span style="color:#79B8FF">15013</span><span style="color:#E1E4E8"> samples) ]</span></span></code></pre>
+<p>We can generate a flame graph with:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> perf</span><span style="color:#9ECBFF"> script</span><span style="color:#F97583"> &gt;</span><span style="color:#9ECBFF"> out.perf</span></span>
+<span class="line"><span style="color:#B392F0">./stackcollapse-perf.pl</span><span style="color:#9ECBFF"> out.perf</span><span style="color:#F97583"> &gt;</span><span style="color:#9ECBFF"> /tmp/gar.thing</span></span>
+<span class="line"><span style="color:#B392F0">./flamegraph.pl</span><span style="color:#9ECBFF"> /tmp/gar.thing</span><span style="color:#F97583"> &gt;</span><span style="color:#9ECBFF"> flamegraph.svg</span></span></code></pre>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(9622).png" alt="IRIS Flamegraph"/></p>
+<p>Flamegraphs are interactive (when viewed as SVG) and allow you to drill down into stack traces.</p>
 <ol>
-<li>site title</li>
-<li>description</li>
-<li>production URL</li>
-<li>footer text</li>
-<li>social metadata</li>
+<li><strong>X-axis</strong>: Represents the population of samples (not time, but frequency).</li>
+<li><strong>Y-axis</strong>: Shows stack depth. The top is the current function on CPU.</li>
+<li><strong>Width</strong>: Indicates how often that function (and its children) appeared in the samples.</li>
 </ol>
-<p>If you do only that and delete the content you do not need, the starter already becomes your project instead of a template preview.</p>
-<h2 id="use-the-blog-as-a-real-content-area">Use the blog as a real content area</h2>
-<p>Posts live in <code>src/content/blog/</code> and use the typed <code>blog</code> collection from <code>src/content.config.ts</code>.</p>
-<p>That means frontmatter errors fail early, which is exactly what you want in a starter intended for reuse.</p>
-<h3 id="example-post-structure">Example post structure</h3>
-<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="md"><code><span class="line"><span style="color:#79B8FF;font-weight:bold">---</span></span>
-<span class="line"><span style="color:#E1E4E8">title: My first post</span></span>
-<span class="line"><span style="color:#E1E4E8">description: A short summary shown in listings and meta tags.</span></span>
-<span class="line"><span style="color:#E1E4E8">pubDate: 2026-04-21</span></span>
-<span class="line"><span style="color:#E1E4E8">draft: false</span></span>
-<span class="line"><span style="color:#79B8FF;font-weight:bold">---</span></span></code></pre>
-<h2 id="video-example">Video example</h2>
-<p>The blog supports MDX, so you can embed richer content where it helps.</p>
-<div class="not-prose overflow-hidden rounded-box border border-base-300"><div class="aspect-video"><iframe class="h-full w-full" src="https://www.youtube-nocookie.com/embed/3jv2JmFJZwc?si=starter-demo" title="Astro starter walkthrough example" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe></div></div>
-<p>Use this sparingly. The starter should remain content-first, not media-heavy by default.</p>
-<h2 id="keep-the-repository-understandable">Keep the repository understandable</h2>
-<p>A useful rule for edits in this project:</p>
+<p><strong>“High and Wide”</strong> is what you look for when hunting performance bottlenecks.</p>
+<blockquote>
 <ul>
-<li>DaisyUI component classes first</li>
-<li>Tailwind layout utilities second</li>
-<li>custom CSS only when the first two are not enough</li>
+<li><span style="color:#e74c3c;">Red</span> == User-level</li>
+<li><span style="color:#e67e22;">Orange</span> == Kernel</li>
+<li><span style="color:#f1c40f;">Yellow</span> == C++</li>
+<li><span style="color:#2ecc71;">Green</span> == JIT/Java</li>
 </ul>
-<p>That keeps the codebase easier to scan and easier to remix later.</p>
-<h2 id="what-to-delete-early">What to delete early</h2>
-<p>If you are adapting this repository for a real project, the first likely deletions are:</p>
-<ul>
-<li>placeholder legal text</li>
-<li>sample blog content</li>
-<li>the DaisyUI reference page, if you no longer need it</li>
-<li>any starter copy that still mentions the template directly</li>
-</ul>
-<p>The goal is not to preserve every part of the starter. The goal is to keep the parts that still reduce work.</p> </div> </article>  </div>  </main> <footer class="mt-5 mb-20"> <p class="text-center text-sm text-base-content/60"> <a class="btn btn-outline btn-xs border-base-300 text-base-content/60 hover:text-primary hover:border-primary px-3 transition-all duration-300" href="/imprint">
+</blockquote>
+<p>This is especially powerful for those running Python in IRIS or productions with complex user-land code.</p>
+<p>Onward and upward! I hope this piqued your interest in the world of eBPF.</p> </div> </article>  </div>  </main> <footer class="mt-5 mb-20"> <p class="text-center text-sm text-base-content/60"> <a class="btn btn-outline btn-xs border-base-300 text-base-content/60 hover:text-primary hover:border-primary px-3 transition-all duration-300" href="/imprint">
 Legal, Tax, Insurance
 </a>  <span class="block sm:inline"> © 2015-2026 Integration Required, LLC</span> </p>  </footer> </body></html>

@@ -1,0 +1,103 @@
+---
+title: "eBPF: Parca - Continuous Profiling for IRIS Workloads"
+description: Explore continuous profiling for InterSystems IRIS using Parca and eBPF. Learn how to gain deep visibility into Python execution and FHIR unmarshalling without performance overhead.
+pubDate: 2024-09-10
+heroImage: https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&h=200&auto=format&fit=crop
+categories: ["InterSystems IRIS", "eBPF", "Parca", "Profiling", "Performance"]
+communityLink: https://community.intersystems.com/post/ebpf-parca-continuous-profiling-iris-workloads
+draft: false
+---
+
+![eBPF Parca Introduction](https://community.intersystems.com/sites/default/files/inline/images/images/image(9585).png)
+
+I spent a fair amount of time recently looking at eBPF solutions that provide "Continuous Profiling." The idea is simple: instead of running a profiler when you *think* there's a problem (and potentially missing it), you run a low-overhead profiler all the time across your entire fleet.
+
+Enter **Parca**.
+
+Parca uses eBPF to collect stack traces from the kernel and user space applications without needing to instrument the code or restart the pods. For InterSystems IRIS, this means we can see exactly what's happening inside `irisdb` and the associated processes across a whole Kubernetes cluster.
+
+### The Unboxing
+
+![Parca Architecture](https://community.intersystems.com/sites/default/files/inline/images/images/image(9633).png)
+
+Parca consists of a server (to store and query the profiles) and an agent (that runs on every node). The agent uses eBPF to capture stack traces, which are then shipped to the server. It supports native symbols, which is crucial for making sense of the `irisdb` traces.
+
+### The Deployment
+
+![Parca Deployment Diagram](https://community.intersystems.com/sites/default/files/inline/images/images/image(9628).png)
+
+Deploying Parca on Kubernetes is straightforward using their Helm charts or manifests. Once the agent is running as a DaemonSet, it immediately starts profiling every container on the node.
+
+```bash
+helm repo add parca https://parca-dev.github.io/helm-charts
+helm install parca parca/parca
+```
+
+![Parca Status and Targets](https://community.intersystems.com/sites/default/files/inline/images/images/image(9634).png)
+
+---
+
+## Testing with IRIS Workloads
+
+I set up two specific scenarios to see what Parca could reveal: a Python-heavy workload and a FHIR API workload.
+
+### Python Execution
+
+I wrote some "terrible" code in InterSystems IRIS using the integrated Python support to see if Parca could trace it.
+
+```cos
+Class EBPF.ParcaIRISPythonProfiling Extends %RegisteredObject
+{
+    ClassMethod Run()
+    {
+        While 1 {
+                HANG 10
+                Do ..TerribleCode()
+                Do ..WorserCode()
+                Do ..OkCode()
+                zn "%SYS"
+                do ##class(%SYS.System).WriteToConsoleLog("Parca Demo Fired")
+                zn "PARCA"
+        }
+    }
+
+    ClassMethod TerribleCode() [ Language = python ]
+    {
+        import time
+        def terrible_code():
+            time.sleep(30)
+            print("TerribleCode Fired...")
+        terrible_code()
+    }
+    
+    // ... WorserCode and OkCode ...
+}
+```
+
+In the Parca UI, I constrained the view to the specific pod and selected a sane timeframe:
+
+![Parca UI - Filtering for IRIS Pod](https://community.intersystems.com/sites/default/files/inline/images/images/Clipboard_2024-09-10-16-25-24.png)
+
+The resulting pprof revealed some interesting hints about how IRIS handles the Python integration:
+
+![pprof Visualization](https://community.intersystems.com/sites/default/files/inline/images/images/image(9645).png)
+
+I can see `irisdb` doing the Python execution and traces with `ISCAgent`. While I was hoping to see the specific Python method names (which requires some additional symbol work), I learned that **`pythoninit.so`** is the star of the Python call-out show.
+
+### FHIR Thinger
+
+Next, I looked at a FHIR workload. This revealed traces that were highly relevant from a kernel perspective. On the left of the profile, you can see the Apache threads for the web server standing up the API. Inside the `irisdb` traces, you can clearly see the unmarshalling of JSON.
+
+All of this spawns from a thread by what is affectionately known in the traces as a **`zu210fun`** party!
+
+![FHIR Workload Profiling](https://community.intersystems.com/sites/default/files/inline/images/images/image(9646).png)
+
+---
+
+## Distributed Observability
+
+Finally, here is the same workload as seen in Grafana, as Parca exports its metrics to the broader observability stack:
+
+![Parca in Grafana](https://community.intersystems.com/sites/default/files/inline/images/images/image(9647).png)
+
+The real power here is **distributed profiling**. You gain a lightweight, cluster-wide view of your InterSystems IRIS applications with zero code changes. The goal is simple: never have to ask a customer for a `pButtons` report ever again!

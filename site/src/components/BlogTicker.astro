@@ -1,0 +1,72 @@
+---
+import { getCollection } from "astro:content";
+
+const posts = await getCollection('blog', ({ data }) => !data.draft);
+const postData = posts.map(p => ({
+  title: p.data.title,
+  url: `/blog/${p.id}`
+}));
+---
+
+<div id="blog-ticker" class="mt-3 px-4 py-2.5 rounded-box border border-base-300 bg-base-200/50 backdrop-blur-sm text-[11px] font-medium text-base-content/60 flex items-center gap-3 overflow-hidden min-h-[36px]">
+  <div class="flex items-center gap-2 shrink-0">
+    <span class="flex h-1.5 w-1.5 rounded-full bg-primary animate-pulse"></span>
+    <span class="uppercase tracking-widest opacity-70">Insights:</span>
+  </div>
+  
+  <div id="ticker-container" class="relative flex-1 overflow-hidden">
+    <div id="ticker-content" class="truncate transition-all duration-1000 opacity-0 translate-y-1">
+      <a href="#" id="ticker-link" class="hover:text-primary transition-colors truncate block">
+        Loading latest insights...
+      </a>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ postData }}>
+  function initTicker() {
+    const content = document.getElementById('ticker-content');
+    const link = document.getElementById('ticker-link');
+    
+    if (!content || !link || !postData || postData.length === 0) return;
+
+    let currentIdx = -1;
+    
+    function updateTicker() {
+      // Fade out and move down slightly
+      content.classList.add('opacity-0', 'translate-y-1');
+      
+      setTimeout(() => {
+        let nextIdx;
+        if (postData.length > 1) {
+          do {
+            nextIdx = Math.floor(Math.random() * postData.length);
+          } while (nextIdx === currentIdx);
+        } else {
+          nextIdx = 0;
+        }
+        currentIdx = nextIdx;
+        
+        const post = postData[currentIdx];
+        link.textContent = post.title;
+        link.href = post.url;
+        
+        // Fade in and move to position
+        content.classList.remove('opacity-0', 'translate-y-1');
+      }, 1000);
+    }
+    
+    // Initial run
+    updateTicker();
+    
+    // Set interval for cycling
+    const interval = setInterval(updateTicker, 6000);
+
+    // Cleanup on page unload (for View Transitions)
+    document.addEventListener('astro:before-preparation', () => clearInterval(interval), { once: true });
+  }
+
+  // Support Astro View Transitions
+  initTicker();
+  document.addEventListener('astro:page-load', initTicker);
+</script>

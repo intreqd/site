@@ -1,0 +1,169 @@
+---
+title: "eBPF: Tetragon Security for IRIS Workloads"
+description: Step into the world of runtime enforcement for InterSystems IRIS using Tetragon and eBPF. Learn how to secure your Kubernetes clusters by enforcing system calls, file access, and process execution in real-time.
+pubDate: 2024-10-04
+heroImage: https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1200&h=200&auto=format&fit=crop
+categories: ["InterSystems IRIS", "eBPF", "Tetragon", "Security", "Kubernetes"]
+communityLink: https://community.intersystems.com/post/ebpf-tetragon-security-iris-workloads
+draft: false
+---
+
+![eBPF Tetragon Introduction](https://community.intersystems.com/sites/default/files/inline/images/images/image(9587).png)
+
+## Runtime Enforcement
+
+![Tetragon Observability](https://community.intersystems.com/sites/default/files/inline/images/screenshot_from_2024-10-04_17-15-02.png)
+
+So far in the eBPF journey applied to InterSystems workloads, we've been pretty much "read-only" when it comes to system calls, binary execution, and file monitoring. But much like the network security policies that enforce connectivity, what if we could enforce system calls, file access, and processes across an entire cluster?
+
+Enter **Tetragon**.
+
+Tetragon is a flexible, Kubernetes-aware security observability and runtime enforcement tool. It applies policy and filtering directly with eBPF, allowing for reduced observation overhead, tracking of any process, and real-time enforcement of policies.
+
+It provides enforcement when your application can't.
+
+### Where it Runs
+
+Tetragon provides observability and enforcement cluster-wide.
+
+![Tetragon Cluster Overview](https://community.intersystems.com/sites/default/files/inline/images/images/image(9733).png)
+
+---
+
+### Up and Running
+
+Here are the steps to get up and running, performed in the style of an [Isovalent Lab](https://isovalent.com/resource-library/labs/).
+
+#### <img src="https://static-00.iconduck.com/assets.00/kubernetes-icon-512x499-3mjeet3c.png" style="height: 31px; width: 32px;" /> Cluster
+We'll use a Kind cluster, 3 worker nodes wide, without a default CNI.
+
+```bash
+cat <<EOF | kind create cluster --config=-
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+- role: worker
+- role: worker
+- role: worker
+networking:
+  disableDefaultCNI: true
+EOF
+```
+
+#### <img src="https://community.intersystems.com/sites/default/files/inline/images/images/image-20241004162831-1.jpeg" style="height: 32px; width: 32px;" /> Cilium
+Install Cilium to provide the networking foundation.
+
+```bash
+helm install cilium cilium/cilium --version 1.16.1 \
+  --namespace kube-system \
+  --set operator.replicas=1 \
+  --set hubble.enabled=true \
+  --set hubble.ui.enabled=true
+```
+
+#### <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQntUACVYo6WiGDfsAp_QzW0Ym13Q3lUx2u7Q&s" style="height: 32px; width: 32px;" /> Tetragon
+Install the Tetragon agent.
+
+```bash
+helm install tetragon cilium/tetragon --namespace kube-system
+```
+
+![Tetragon Installation](https://community.intersystems.com/sites/default/files/inline/images/screenshot_from_2024-10-04_16-30-18.png)
+
+#### <img src="https://logosandtypes.com/wp-content/uploads/2020/07/intersystems.svg" style="height: 32px; width: 32px;" /> InterSystems IRIS
+Deploy a simple IRIS workload.
+
+```bash
+kubectl run iris-priv --image=containers.intersystems.com/intersystems/iris-community:2024.2 --privileged
+```
+
+![IRIS Workload Check](https://community.intersystems.com/sites/default/files/inline/images/screenshot_from_2024-10-04_15-42-04.png)
+
+---
+
+### <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnl52oP1zSFWVjyZ-uPjzIYCrvfie2BIqviw&s" style="height: 32px; width: 32px;" /> Runtime Enforcement
+
+Let's look at a practical use case: forbidding any process from calling out and "catting" the InterSystems license file.
+
+For this, we apply a `TracingPolicy` that enforces a `matchAction`. This policy essentially says: "If you run `cat /usr/irissys/mgr/iris.key`, **I am going to SIGKILL the process**."
+
+```yaml
+kubectl apply -f - <<EOF
+apiVersion: cilium.io/v1alpha1
+kind: TracingPolicy
+metadata:
+  name: "iris-read-file-sigkill"
+spec:
+  kprobes:
+  - call: "fd_install"
+    syscall: false
+    return: false
+    args:
+    - index: 0
+      type: int
+    - index: 1
+      type: "file"
+    selectors:
+    - matchPIDs:
+      - operator: NotIn
+        followForks: true
+        isNamespacePID: true
+        values:
+        - 1
+      matchArgs:
+      - index: 1
+        operator: "Prefix"
+        values:
+        - "/usr/irissys/secrets/"
+        - "/usr/irissys/mgr/iris.key"
+      matchActions:
+      - action: FollowFD
+        argFd: 0
+        argName: 1
+  - call: "__x64_sys_read"
+    syscall: true
+    args:
+    - index: 0
+      type: "fd"
+    selectors:
+    - matchActions:
+      - action: Sigkill
+EOF
+```
+
+Once deployed, the `TracingPolicy` is active:
+
+![TracingPolicy Active](https://community.intersystems.com/sites/default/files/inline/images/images/Screenshot%20from%202024-10-04%2016-23-25.png)
+
+Now, let's try to access the file:
+
+![Policy Enforcement in Action](https://community.intersystems.com/sites/default/files/inline/images/images/Screenshot%20from%202024-10-04%2016-18-23(1).png)
+
+The command fails with a cryptic error for the user, but behind the scenes, Tetragon administratively blocked it and sent a `SIGKILL` to the process!
+
+![SIGKILL Log](https://community.intersystems.com/sites/default/files/inline/images/images/Screenshot%20from%202024-10-04%2016-20-27(1).png)
+
+---
+
+### Experiments
+
+I've been experimenting with hundreds of policies. Here are a few notable ones:
+
+#### System Calls per Binary
+You can literally nerd out and see every system call made by each binary in your cluster.
+
+![Syscalls per Binary](https://community.intersystems.com/sites/default/files/inline/images/images/Screenshot%20from%202024-10-04%2007-55-19.png)
+
+#### Global File Access
+This `TracingPolicy` shows every process accessing every file in the cluster—a mesmerizing amount of detail.
+
+![Global File Access Monitoring](https://community.intersystems.com/sites/default/files/inline/images/images/Screenshot%20from%202024-10-04%2008-12-50.png)
+
+You can find more examples in the [Tetragon GitHub repository](https://github.com/cilium/tetragon/tree/main/examples/tracingpolicy), covering:
+*   Process attributes
+*   Command-line arguments
+*   Network activity
+*   File system operations
+
+Runtime enforcement is the next level of security for your IRIS workloads!

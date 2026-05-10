@@ -1,0 +1,121 @@
+---
+title: "eBPF: Tracing Kernel Events for IRIS Workloads"
+description: Discover how eBPF can be used to trace kernel events and optimize InterSystems IRIS workloads. A deep dive into eBPF tools, flamegraphs, and practical experimentation.
+pubDate: 2024-09-08
+heroImage: https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=1200&h=200&auto=format&fit=crop
+categories: ["InterSystems IRIS", "eBPF", "Kubernetes", "Linux", "Performance"]
+communityLink: https://community.intersystems.com/post/ebpf-tracing-kernel-events-iris-workloads
+draft: false
+---
+
+![eBPF Introduction](https://community.intersystems.com/sites/default/files/inline/images/images/image(9575).png)
+
+I attended [Cloud Native Security Con](https://events.linuxfoundation.org/cloudnativesecuritycon-north-america/) in Seattle with the full intention of crushing OTEL day, then perusing the subject of security applied to Cloud Native workloads the following days leading up to CTF as a professional exercise. This was happily upended by a new understanding of eBPF, which got my screens, career, workloads, and attitude a much-needed upgrade with new approaches to solving workload problems.
+
+So I made it to the eBPF party and have been attending clinic after clinic on the subject ever since. Here I would like to "unbox" eBPF as a technical solution, mapped directly to what we do in practice, and step through my experimentation on supporting InterSystems IRIS Workloads, particularly on Kubernetes.
+
+![eBee Steps](https://community.intersystems.com/sites/default/files/inline/images/images/image(9591).png)
+
+<h2 style="text-align: center;">eBee Steps with eBPF and InterSystems IRIS Workloads</h2>
+
+## What is eBPF?
+
+eBPF (extended Berkeley Packet Filter) is a killer Linux kernel feature that implements a VM within kernel space and makes it possible to run sandboxed apps safely with guiderails. These apps can "map" data into user land for observability, tracing, security, and networking. I think of it as a "sniffer" of the OS. While traditionally it was associated with BPF and networking, the extended version "sniffs" tracepoints, processes, scheduling, execution, and block device access.
+
+> *"What JavaScript is to the browser, eBPF is to the Linux Kernel"*
+
+### The VM
+
+![eBPF VM Architecture](https://community.intersystems.com/sites/default/files/inline/images/images/image(9593).png)
+
+Programs are written in a restricted C, then compiled into eBPF bytecode. This bytecode is then loaded into the kernel, where a **Verifier** ensures it won't crash the kernel (checking for loops, out-of-bounds access, etc.). Once verified, it is JIT-compiled into native machine code and attached to a specific "hook."
+
+---
+
+## The Hooks: How we see IRIS
+
+To get visibility into IRIS, we can attach eBPF programs to various hooks in the kernel or user space.
+
+### Tracepoints
+Tracepoints are static hooks placed in the kernel code by developers. They are stable and provide a reliable way to hook into common events like system calls.
+
+![Kernel Tracepoints](https://community.intersystems.com/sites/default/files/inline/images/images/image(9623).png)
+
+### Kprobes
+Kprobes (Kernel Probes) allow you to dynamically break into any kernel routine and collect information. Unlike tracepoints, they are not static and can be used on almost any kernel function.
+
+![Kprobes Illustration](https://community.intersystems.com/sites/default/files/inline/images/images/image(9624).png)
+
+### Uprobes
+Uprobes (User Probes) are the user-space equivalent of kprobes. They allow you to hook into functions within a user-space application—like `irisdb` or `web gateway`. This is incredibly powerful for tracing custom application logic without modifying the binary.
+
+![Uprobes Illustration](https://community.intersystems.com/sites/default/files/inline/images/images/image(9627).png)
+
+---
+
+## The BCC Toolkit
+
+![BCC Toolkit Logo](https://community.intersystems.com/sites/default/files/inline/images/bcc.svg)
+
+Writing raw eBPF can be tough. The **BCC (BPF Compiler Collection)** toolkit makes it easier by providing a framework for writing BPF programs with Python or Lua front-ends.
+
+### Example: Tracing `open()` syscalls on IRIS
+
+Using `opensnoop` from the BCC toolkit, we can see every file InterSystems IRIS touches in real-time:
+
+```bash
+sudo opensnoop-bpfcc -n irisdb
+```
+
+```text
+PID    COMM               FD ERR PATH
+3017691 irisdb              0   0 /data/IRIS/iris.cpf
+3017691 irisdb             -1   2 /data/IRIS/_LastGood_.cpf_20240908
+3017691 irisdb             -1   2 /data/IRIS/_LastGood_.cpf
+3017691 irisdb              0   0 /data/IRIS/_LastGood_.cpf_5275
+3017691 irisdb             -1   2 /data/IRIS/_LastGood_.cpf
+3017756 irisdb             -1   2 /data/IRIS/mgr/journal/20240908.002
+3017756 irisdb              0   0 /data/IRIS/mgr/journal/20240908.002z
+```
+
+---
+
+## Flamegraphs
+
+![FlameGraph Repository](https://gh-card.dev/repos/brendangregg/FlameGraph.svg)
+
+One of the coolest things I stumbled upon was [Brendan Gregg's implementation of flamegraphs](https://www.brendangregg.com/flamegraphs.html). They visualize bpf output to help understand performance and stack traces.
+
+Given the following `perf` recording during a start/stop of IRIS:
+
+```bash
+sudo perf record -F 99 -a -g -- sleep 60
+[ perf record: Captured and wrote 3.701 MB perf.data (15013 samples) ]
+```
+
+We can generate a flame graph with:
+
+```bash
+sudo perf script > out.perf
+./stackcollapse-perf.pl out.perf > /tmp/gar.thing
+./flamegraph.pl /tmp/gar.thing > flamegraph.svg
+```
+
+![IRIS Flamegraph](https://community.intersystems.com/sites/default/files/inline/images/images/image(9622).png)
+
+Flamegraphs are interactive (when viewed as SVG) and allow you to drill down into stack traces.
+
+1.  **X-axis**: Represents the population of samples (not time, but frequency).
+2.  **Y-axis**: Shows stack depth. The top is the current function on CPU.
+3.  **Width**: Indicates how often that function (and its children) appeared in the samples.
+
+**"High and Wide"** is what you look for when hunting performance bottlenecks.
+
+> - <span style="color:#e74c3c;">Red</span> == User-level
+> - <span style="color:#e67e22;">Orange</span> == Kernel
+> - <span style="color:#f1c40f;">Yellow</span> == C++
+> - <span style="color:#2ecc71;">Green</span> == JIT/Java
+
+This is especially powerful for those running Python in IRIS or productions with complex user-land code.
+
+Onward and upward! I hope this piqued your interest in the world of eBPF.

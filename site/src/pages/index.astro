@@ -3,6 +3,7 @@ import Container from "@components/elements/Container.astro";
 import Layout from "@layouts/Layout.astro";
 import { siteConfig } from "site-config";
 import LogoWall from "@components/logoWall.astro";
+import BlogTicker from "@components/BlogTicker.astro";
 
 const quickstart = `git clone -b intersystems-main https://github.com/sween/iris-certified-agents.git && \
 cd iris-certified-agents && \
@@ -179,6 +180,7 @@ Accelerate your workload, develop your Managed Service or strategic initiative w
             </div>
             <pre class="overflow-x-auto px-4 py-4 text-sm leading-6"><code id={quickstartId}>{quickstart}</code></pre>
           </div>
+          <BlogTicker />
 
 
         </div>

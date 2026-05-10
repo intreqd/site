@@ -1,0 +1,306 @@
+---
+title: "eBPF: Cilium on FHIR® - A Star Wars Story"
+description: Anakin Skywalker challenged the high ground and has been terribly injured on Mustafar. See how the Galactic Health System uses InterSystems IRIS for Health on Kubernetes protected by Cilium eBPF to manage his care.
+pubDate: 2024-09-19
+heroImage: https://images.unsplash.com/photo-1472457897821-70d3819a0e24?q=80&w=1200&h=200&auto=format&fit=crop
+categories: ["InterSystems IRIS for Health", "FHIR", "Kubernetes", "Security", "eBPF"]
+communityLink: https://community.intersystems.com/post/ebpf-cilium-fhir%C2%AE-star-wars-story
+draft: false
+---
+
+Anakin Skywalker challenged the high ground and has been terribly injured on Mustafar. He is a relatively new employee of the Galactic Empire, covered by a Large Group Planetary Plan and now has an active encounter in progress for emergent medical services in the Grand Medical Facility on Coruscant. The EMR deployed for the Galactic Health System is Powered by InterSystems FHIR Server running on Kubernetes protected by Cilium.
+
+Let's recreate the technical landscape, to be performed in the style of [Isovalent Labs](https://isovalent.com/resource-library/labs/)...
+
+### Kind Cluster
+
+Let's fire up a 3 node cluster, and disable the CNI so we can replace it with Cilium.
+
+```bash
+cat <<EOF | kind create cluster --config=-
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+- role: worker
+- role: worker
+- role: worker
+networking:
+  disableDefaultCNI: true
+EOF
+```
+
+This will provision the kind cluster, 3 nodes wide with a single control plane.
+
+### Cilium
+
+Cilium is an open-source project that provides networking, security, and observability for containerized environments like Kubernetes clusters. It uses a Linux kernel technology called eBPF (extended Berkeley Packet Filter) to inject security, networking, and observability logic into the kernel. In other words, it wields the force.
+
+```bash
+cilium install --version v1.16.0
+cilium status --wait
+```
+
+### Hubble
+
+Hubble is a visibility layer for Cilium, providing real-time insights into what Cilium powers are in play.
+
+```bash
+cilium enable hubble
+```
+
+![Cilium Hubble Status](https://community.intersystems.com/sites/default/files/inline/images/images/image(9677).png)
+
+### InterSystems FHIR Workload
+
+InterSystems is the GOAT of interoperability, and transforms Healthcare Data like a protocol Droid.
+
+```bash
+kubectl apply -f https://raw.githubusercontent.com/sween/basenube/main/scenarios/ciliumfhir/deploy/cilium-fhir-starwars.yaml
+```
+
+The resulting workload has 4 deployments:
+
+![InterSystems FHIR Workload Deployments](https://community.intersystems.com/sites/default/files/inline/images/images/image(9678).png)
+
+#### GrandMedicalFacility
+Integrated Delivery Network based in Coruscant, with facilities as far as the Outer Rim, runs Epic and utilizes InterSystems I4H as a FHIR Server.
+
+#### MedicalDroid FX-6
+This 1.83-meter-tall droid supplied Vader with a blood transfusion and trained in cybernetic legs procedures.
+
+#### MedicalDroid DD-13
+Also known as the DD-13 tripedal medical droid, this droid has three legs for stability and was designed to install cybernetic implants.
+
+#### MedicalDroid 2-1B
+2-1B droids have hypodermic injectors and precision-crafted servogrip pincers, and can be upgraded to specialize in areas like cybernetic limb replacement, neurosurgery, and alien biology.
+
+---
+
+Since we will need it anyway for upcoming interviews, let's tell the story in true **STAR** (Sithuation, Task, Action, Result) methodology.
+
+### Sith-uation
+
+Palpatine accompanied the fallen Jedi to the facility, and upon arrival helped registration admit him as Darth Vader.
+
+```bash
+cat > vader.json << 'EOF'
+{
+  "name": [
+    {
+      "use": "official",
+      "family": "Vader",
+      "given": [
+        "Darth"
+      ]
+    }
+  ],
+  "gender": "male",
+  "id": "DarthVader",
+  "birthDate": "1977-05-25",
+  "resourceType": "Patient"
+}
+EOF
+
+curl -v -X PUT \
+  -H "Content-Type: application/fhir+json" \
+  -d @vader.json \
+  "http://coruscanthealth:52773/intersystems/fhir/r5/Patient/DarthVader"
+```
+
+Darth Vader is now registered, and can be seen throughout the Health System...
+
+### Galactic IT Outage
+
+**There is a problem though!**
+
+Shortly after registration, a Galactic IT Outage has occurred, making the Identity Provider for the Health System unavailable. The InterSystems FHIR Resource Server is SMART enabled, and the IDP is down, making EMR launches impossible in the absence of the JWT token with the applicable scopes to protect the routes.
+
+![Galactic IT Outage Meme](https://community.intersystems.com/sites/default/files/inline/images/clipboard_2024-09-11-16-59-23.png)
+
+Sure as Bantha Fodder, we definitely have a problem... the care team cannot access the patient record, getting nothing but 401s and 403s. Inspecting the Hubble flows with Layer 7 information reveals the situation.
+
+![Hubble L7 Flows](https://community.intersystems.com/sites/default/files/inline/images/images/Clipboard_2024-09-18-12-09-09.png)
+![Hubble L7 Flows Detail](https://community.intersystems.com/sites/default/files/inline/images/images/image(9679).png)
+
+Adding some debug logging to the InterSystems FHIR endpoint confirms it:
+
+```cos
+zn "USER"
+Set ^FSLogChannel("all")=1
+zn "%SYS"
+Set ^%ISCLOG=5
+Set ^%ISCLOG("Category","HSFHIR")=5
+Set ^%ISCLOG("Category","HSFHIRServer")=5
+Set ^%ISCLOG("Category","OAuth2")=5
+Set ^%ISCLOG("Category","OAuth2Server")=5
+```
+
+```text
+zw ^FSLOG
+...
+^FSLOG(379555)="DispatchRequest^HS.FHIRServer.Service^944|Msg|Dispatch interaction read for Patient/DarthVader|09/19/2024 10:48:20.833339AM"
+^FSLOG(379556)="DispatchRequest^HS.FHIRServer.Service^944|Msg|Request Completed in .000186 secs: Patient/DarthVader|09/19/2024 10:48:20.833450AM"
+^FSLOG(379557)="processRequest^HS.FHIRServer.RestHandler^944|Msg|Response Status: 401, Json: Patient|09/19/2024 10:48:20.833454AM"
+...
+```
+
+### Task
+
+![Star Wars Task Meme](https://preview.redd.it/whats-a-great-line-from-star-wars-that-doesnt-get-quoted-v0-hbpf8fh6jeka1.jpg?width=640&crop=smart&auto=webp&s=74ad76f1df1d4652d47aa93b47b10ca36722e0c3)
+
+### Action
+
+With the route enforcement from SMART not applicable, let's do this our way and use Cilium to protect the endpoints while Vader gets the immediate attention the Emperor demands. We will go Rogue One here on the cluster and hand off the endpoint/route protection to Cilium while the Galaxy figures itself out from the outage.
+
+Let's institute a **deny all**, from everywhere, with a `CiliumClusterwideNetworkPolicy`, and work backwards zero trust style.
+
+```yaml
+cat <<EOF | kubectl apply -n galactic-fhir -f-
+apiVersion: cilium.io/v2
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: "denyall-coruscanthealth"
+spec:
+  description: "Block all the traffic (except DNS) by default"
+  egress:
+  - toEndpoints:
+    - matchLabels:
+        io.kubernetes.pod.namespace: kube-system
+        k8s-app: kube-dns
+    toPorts:
+    - ports:
+      - port: '53'
+        protocol: UDP
+      rules:
+        dns:
+        - matchPattern: '*'
+  endpointSelector:
+    matchExpressions:
+    - key: io.kubernetes.pod.namespace
+      operator: NotIn
+      values:
+      - kube-system
+EOF
+```
+
+Cilium is dropping traffic like it's hot! 
+
+![Cilium Deny All Output](https://community.intersystems.com/sites/default/files/inline/images/images/image(9680).png)
+
+Now, let's open up the FHIR endpoint on the InterSystems pod, disabling the OAuth2 client temporarily.
+
+```cos
+set app = "/intersystems/fhir/r5"
+Set strategy = ##class(HS.FHIRServer.API.InteractionsStrategy).GetStrategyForEndpoint(app)
+// 7 = Mass Openness
+Set configData = strategy.GetServiceConfigData()
+Set configData.DebugMode = 7
+Do strategy.SaveServiceConfigData(configData)
+```
+
+Lastly, let's create a `CiliumNetworkPolicy` to allow anybody from `org:empire` access to the route for Darth Vader's record in the `galactic-fhir` namespace.
+
+```yaml
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: "l7-visibility"
+spec:
+  endpointSelector:
+    matchLabels:
+      org: empire
+  egress:
+  - toPorts:
+    - ports:
+      - port: "53"
+        protocol: ANY
+      rules:
+        dns:
+        - matchPattern: "*"
+  - toEndpoints:
+    - matchLabels:
+        "k8s:io.kubernetes.pod.namespace": galactic-fhir
+    toPorts:
+    - ports:
+      - port: "52773"
+        protocol: TCP
+      rules:
+        http:
+        - method: "GET"
+          path: "/intersystems/fhir/r5/Patient/DarthVader"
+        - method: "HEAD"
+          path: "/intersystems/fhir/r5/Patient/DarthVader"
+```
+
+Looks like we may be able to get back to iRacing, I think we are good.
+
+![Hubble Visibility Empire](https://community.intersystems.com/sites/default/files/inline/images/images/image(9681).png)
+
+...except
+
+![Teams Meme Chat](https://community.intersystems.com/sites/default/files/inline/images/teamsmemes-chat.jpeg)
+
+Yeah, looks like the payer is getting dropped...
+
+![Hubble Drop Payer](https://community.intersystems.com/sites/default/files/inline/images/images/image(9682).png)
+
+Policy verdict = **DROPPED**.
+
+![Cilium Verdict Drop](https://community.intersystems.com/sites/default/files/inline/images/images/image(9683).png)
+
+Let's add another policy, allowing `org:payer` access to Vader's route:
+
+```yaml
+cat <<EOF | kubectl apply -n galactic-fhir -f-
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: "l7-visibility-payer"
+spec:
+  endpointSelector:
+    matchLabels:
+      org: payer
+  egress:
+  - toPorts:
+    - ports:
+      - port: "53"
+        protocol: ANY
+      rules:
+        dns:
+        - matchPattern: "*"
+  - toEndpoints:
+    - matchLabels:
+        "k8s:io.kubernetes.pod.namespace": galactic-fhir
+    toPorts:
+    - ports:
+      - port: "52773"
+        protocol: TCP
+      rules:
+        http:
+        - method: "GET"
+          path: "/intersystems/fhir/r5/Patient/DarthVader"
+        - method: "HEAD"
+          path: "/intersystems/fhir/r5/Patient/DarthVader"
+EOF
+```
+
+Welp, that did not quite cut it, and we can see why.
+
+![Cilium Payer Policy Verdict](https://community.intersystems.com/sites/default/files/inline/images/images/image(9684).png)
+
+![Teams Meme Chat Final](https://community.intersystems.com/sites/default/files/inline/images/teamsmemes-chat_1.jpeg)
+
+So we gave the payer a call and told them to access the "correct" patient record, and Anakin/Vader gets his legs.
+
+![Vader Transformation](https://community.intersystems.com/sites/default/files/inline/images/images/image(9685).png)
+
+### Rant time...
+
+![Vader Rant](https://community.intersystems.com/sites/default/files/inline/images/images/image(9686).png)
+
+### Result
+
+![Mission Result](https://community.intersystems.com/sites/default/files/inline/images/images/image-20240919091823-1.jpeg)
+
+Mission accomplished!

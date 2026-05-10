@@ -45,6 +45,8 @@ const blog = defineCollection({
     pubDate: z.coerce.date(),           // accepts ISO strings: "2024-01-15"
     updatedDate: z.coerce.date().optional(),
     heroImage: z.string().optional(),   // relative path or remote URL
+    categories: z.array(z.string()).optional(),
+    communityLink: z.string().url().optional(),
     draft: z.boolean().default(false),  // draft: true → excluded from getCollection()
   }),
 });

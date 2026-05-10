@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="de"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="shortcut icon" href="/favicon.ico"><link rel="sitemap" href="/sitemap-index.xml"><meta name="generator" content="Astro v6.2.1"><title>Remixing DaisyUI patterns in this repository</title><link rel="canonical" href="https://www.integrationrequired.com/blog/remixing-daisyui-patterns"><meta name="description" content="How to use the DaisyUI reference page as a practical source of starter-grade UI patterns."><meta name="robots" content="index, follow"><meta property="og:title" content="Remixing DaisyUI patterns in this repository"><meta property="og:type" content="website"><meta property="og:image" content="https://www.integrationrequired.com/opengraph.jpg"><meta property="og:url" content="https://www.integrationrequired.com/blog/remixing-daisyui-patterns"><meta property="og:image:url" content="https://www.integrationrequired.com/opengraph.jpg"><meta property="og:image:alt" content="Remixing DaisyUI patterns in this repository"><meta name="twitter:card" content="summary_large_image"><!--
+<!DOCTYPE html><html lang="de"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="shortcut icon" href="/favicon.ico"><link rel="sitemap" href="/sitemap-index.xml"><meta name="generator" content="Astro v6.2.1"><title>eBPF: Parca - Continuous Profiling for IRIS Workloads</title><link rel="canonical" href="https://www.integrationrequired.com/blog/ebpf-parca-continuous-profiling-iris"><meta name="description" content="Explore continuous profiling for InterSystems IRIS using Parca and eBPF. Learn how to gain deep visibility into Python execution and FHIR unmarshalling without performance overhead."><meta name="robots" content="index, follow"><meta property="og:title" content="eBPF: Parca - Continuous Profiling for IRIS Workloads"><meta property="og:type" content="website"><meta property="og:image" content="https://www.integrationrequired.com/opengraph.jpg"><meta property="og:url" content="https://www.integrationrequired.com/blog/ebpf-parca-continuous-profiling-iris"><meta property="og:image:url" content="https://www.integrationrequired.com/opengraph.jpg"><meta property="og:image:alt" content="eBPF: Parca - Continuous Profiling for IRIS Workloads"><meta name="twitter:card" content="summary_large_image"><!--
       Fonts flow:
       1. astro.config.mjs registers the font and exposes `--font-inter`.
       2. <Font /> loads that configured family into the page head.
@@ -28,7 +28,7 @@
         gtag('js', new Date());
         gtag('config', 'G-48J9E1212D');
       });
-    </script><link rel="stylesheet" href="/_astro/Layout.Bt8M-U42.css"><script type="module" src="/_astro/page.CQhogMj7.js"></script></head> <body> <!-- Skip-to-content: first focusable element on the page.
+    </script><link rel="stylesheet" href="/_astro/Layout.Cdi1JR_J.css"><script type="module" src="/_astro/page.CQhogMj7.js"></script></head> <body> <!-- Skip-to-content: first focusable element on the page.
          Hidden until keyboard-focused so sighted users never see it.
          Screen readers and keyboard users tab to it and jump past the nav. --> <a href="#main-content" class="skip-to-content">Skip to content</a> <div x-data="{ open: false }" x-on:astro:page-load.document="open = false" @keydown.escape.window="open = false" data-astro-cid-ri6uxye2> <header class="border-b border-base-300 bg-base-100" data-astro-cid-ri6uxye2> <div class="max-w-screen-xl mx-auto px-5">  <nav class="navbar min-h-20 px-0" data-astro-cid-ri6uxye2> <div class="navbar-start" data-astro-cid-ri6uxye2> <a href="/" class="btn btn-ghost px-0 hover:bg-transparent" data-astro-cid-ri6uxye2> <img src="/logo_black.png" alt="Your Site" class="h-[60px] w-auto object-contain transition-transform duration-300 hover:scale-105 logo-light" data-astro-cid-ri6uxye2> <img src="/logo_white.png" alt="Your Site" class="h-[60px] w-auto object-contain transition-transform duration-300 hover:scale-105 logo-dark" data-astro-cid-ri6uxye2> </a> </div>  <div class="navbar-end gap-2" data-astro-cid-ri6uxye2> <div class="hidden md:flex gap-2 items-center" data-astro-cid-ri6uxye2> <a class="btn btn-sm bg-[#003A9B] border-[#003A9B] text-white hover:bg-[#002b75] hover:border-[#002b75] flex items-center gap-2" href="https://www.indeed.com/employers/login" target="_blank" rel="noopener noreferrer" data-astro-cid-ri6uxye2> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" data-astro-cid-ri6uxye2><path d="M11.566 21.5633v-8.762c.2553.0231.5009.0346.758.0346 1.2225 0 2.3739-.3206 3.3506-.8928v9.6182c0 .8219-.1957 1.4287-.5757 1.8338-.378.4033-.8808.6049-1.491.6049-.6007 0-1.0766-.2016-1.468-.6183-.3781-.4032-.5739-1.01-.5739-1.8184zM11.589.5659c2.5447-.8929 5.4424-.8449 7.6186.987.405.3687.8673.8334 1.0515 1.3806.2207.6913-.7695-.073-.9057-.167-.71-.4532-1.4182-.8334-2.2127-1.0946C12.8614.3873 8.8122 2.709 6.2945 6.315c-1.0516 1.5939-1.7367 3.2721-2.299 5.1174-.0614.2017-.1094.4647-.2207.6413-.1113.2036-.048-.5453-.048-.5702.0845-.7623.2438-1.4997.4414-2.237C5.3292 5.3375 7.897 2.0655 11.5891.5658zm4.9281 7.0587c0 1.6686-1.353 3.0224-3.0205 3.0224-1.6677 0-3.0186-1.3538-3.0186-3.0224 0-1.6687 1.351-3.0224 3.0186-3.0224 1.6676 0 3.0205 1.3518 3.0205 3.0224Z" data-astro-cid-ri6uxye2></path></svg>
 Indeed
@@ -55,56 +55,75 @@ LinkedIn
 Github
 </a> <a class="btn bg-[#f57c00] border-[#f57c00] text-white hover:bg-[#e65100] hover:border-[#e65100] w-full flex items-center gap-2" href="https://www.brightstreetgroup.com" target="_blank" rel="noopener noreferrer" @click="open = false" data-astro-cid-ri6uxye2> <img src="/bsg-favicon.png" alt="BSG Logo" class="w-5 h-5 rounded-sm brightness-0 invert" data-astro-cid-ri6uxye2>
 Brightstreet Group
-</a> </div> </div> </div> <main id="main-content">  <div class="max-w-screen-xl mx-auto px-5 py-12 sm:py-16 lg:py-24">  <article class="max-w-3xl"> <header class="space-y-4"> <a href="/blog" class="link link-hover text-sm text-base-content/60">← All posts</a> <!--
+</a> </div> </div> </div> <main id="main-content">  <div class="max-w-screen-xl mx-auto px-5 pt-6 sm:pt-8 lg:pt-12 pb-12 sm:pb-16 lg:pb-24">  <article class="max-w-3xl"> <header class="space-y-4"> <a href="/blog" class="link link-hover text-sm text-base-content/60">← All posts</a> <!--
         heroImage is optional. Astro's <Image /> component optimizes the image
         at build time: converts to WebP/AVIF, generates srcset, prevents CLS.
         For remote URLs, add the hostname to `image.domains` in astro.config.mjs.
         For local files, import them in frontmatter or use the image() schema helper.
         Docs: https://docs.astro.build/en/guides/images/
-      -->  <div class="space-y-2"> <h1 class="text-2xl font-bold tracking-tight sm:text-3xl">Remixing DaisyUI patterns in this repository</h1> <p class="text-sm text-base-content/60"> <time datetime="2026-04-22T00:00:00.000Z"> April 21, 2026 </time>  </p> </div> </header> <!--
+      --> <img src="/_astro/photo-1551288049-bebda4e38f71_ZWq2OW.webp" alt="eBPF: Parca - Continuous Profiling for IRIS Workloads" loading="lazy" decoding="async" width="1200" height="200" class="mt-2 w-full rounded-box object-cover aspect-[6/1]"> <div class="space-y-2"> <h1 class="text-2xl font-bold tracking-tight sm:text-3xl">eBPF: Parca - Continuous Profiling for IRIS Workloads</h1> <div class="flex flex-wrap items-center gap-3"> <p class="text-sm text-base-content/60"> <time datetime="2024-09-10T00:00:00.000Z"> September 9, 2024 </time>  </p> <div class="flex flex-wrap gap-1"> <span class="badge badge-primary badge-sm badge-outline">InterSystems IRIS</span><span class="badge badge-primary badge-sm badge-outline">eBPF</span><span class="badge badge-primary badge-sm badge-outline">Parca</span><span class="badge badge-primary badge-sm badge-outline">Profiling</span><span class="badge badge-primary badge-sm badge-outline">Performance</span> </div> <a href="https://community.intersystems.com/post/ebpf-parca-continuous-profiling-iris-workloads" target="_blank" rel="noopener noreferrer" class="badge badge-secondary badge-sm badge-outline link-hover flex items-center gap-1">
+Community
+<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> </a> </div> </div> </header> <!--
       daisyUI recommends using Tailwind utilities for layout and the Typography
       plugin for rich text. `prose` gives Markdown content predictable defaults
       without maintaining a custom article stylesheet in the starter.
-    --> <div class="prose prose-neutral mt-10 max-w-none prose-a:link prose-img:rounded-box"> <p>The DaisyUI page in this repository is not meant to be a gallery.</p>
-<p>It is meant to be a reference surface for patterns developers are likely to copy into real pages and then simplify.</p>
-<p><img src="/blog/daisyui-patterns.svg" alt="DaisyUI pattern overview"/></p>
-<h2 id="start-from-patterns-not-from-novelty">Start from patterns, not from novelty</h2>
-<p>When adapting the reference page, prefer patterns that solve common starter problems:</p>
-<ul>
-<li>call-to-action groups</li>
-<li>feedback messages</li>
-<li>content summary cards</li>
-<li>metrics blocks</li>
-<li>secondary navigation</li>
-<li>small forms</li>
-</ul>
-<p>Those patterns survive contact with real projects better than novelty components do.</p>
-<h2 id="a-good-reuse-rule">A good reuse rule</h2>
-<p>If you copy a section from the DaisyUI page, try this order:</p>
-<ol>
-<li>keep the DaisyUI structure</li>
-<li>reduce the content to your actual use case</li>
-<li>remove any classes that no longer matter</li>
-<li>only then decide whether you need another wrapper component</li>
-</ol>
-<p>That sequence helps the project stay small and readable.</p>
-<h2 id="example-turn-a-reference-card-into-a-launch-checklist">Example: turn a reference card into a launch checklist</h2>
-<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="html"><code><span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">div</span><span style="color:#B392F0"> class</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;card border border-base-300 bg-base-100 shadow-sm&quot;</span><span style="color:#E1E4E8">&gt;</span></span>
-<span class="line"><span style="color:#E1E4E8">  &lt;</span><span style="color:#85E89D">div</span><span style="color:#B392F0"> class</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;card-body gap-5&quot;</span><span style="color:#E1E4E8">&gt;</span></span>
-<span class="line"><span style="color:#E1E4E8">    &lt;</span><span style="color:#85E89D">h3</span><span style="color:#B392F0"> class</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;card-title&quot;</span><span style="color:#E1E4E8">&gt;Launch checklist&lt;/</span><span style="color:#85E89D">h3</span><span style="color:#E1E4E8">&gt;</span></span>
-<span class="line"><span style="color:#E1E4E8">    &lt;</span><span style="color:#85E89D">ul</span><span style="color:#B392F0"> class</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;list-disc space-y-2 pl-5&quot;</span><span style="color:#E1E4E8">&gt;</span></span>
-<span class="line"><span style="color:#E1E4E8">      &lt;</span><span style="color:#85E89D">li</span><span style="color:#E1E4E8">&gt;Set the production URL&lt;/</span><span style="color:#85E89D">li</span><span style="color:#E1E4E8">&gt;</span></span>
-<span class="line"><span style="color:#E1E4E8">      &lt;</span><span style="color:#85E89D">li</span><span style="color:#E1E4E8">&gt;Replace placeholder legal content&lt;/</span><span style="color:#85E89D">li</span><span style="color:#E1E4E8">&gt;</span></span>
-<span class="line"><span style="color:#E1E4E8">      &lt;</span><span style="color:#85E89D">li</span><span style="color:#E1E4E8">&gt;Publish the first post&lt;/</span><span style="color:#85E89D">li</span><span style="color:#E1E4E8">&gt;</span></span>
-<span class="line"><span style="color:#E1E4E8">    &lt;/</span><span style="color:#85E89D">ul</span><span style="color:#E1E4E8">&gt;</span></span>
-<span class="line"><span style="color:#E1E4E8">    &lt;</span><span style="color:#85E89D">div</span><span style="color:#B392F0"> class</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;card-actions justify-start&quot;</span><span style="color:#E1E4E8">&gt;</span></span>
-<span class="line"><span style="color:#E1E4E8">      &lt;</span><span style="color:#85E89D">button</span><span style="color:#B392F0"> class</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;btn btn-primary btn-sm&quot;</span><span style="color:#E1E4E8">&gt;Ship it&lt;/</span><span style="color:#85E89D">button</span><span style="color:#E1E4E8">&gt;</span></span>
-<span class="line"><span style="color:#E1E4E8">    &lt;/</span><span style="color:#85E89D">div</span><span style="color:#E1E4E8">&gt;</span></span>
-<span class="line"><span style="color:#E1E4E8">  &lt;/</span><span style="color:#85E89D">div</span><span style="color:#E1E4E8">&gt;</span></span>
-<span class="line"><span style="color:#E1E4E8">&lt;/</span><span style="color:#85E89D">div</span><span style="color:#E1E4E8">&gt;</span></span></code></pre>
-<p>That is often enough. You do not need a design system layer before the project even has real content.</p>
-<h2 id="video-example">Video example</h2>
-<p>This repository also supports richer documentation posts when they are useful for maintainers or teammates.</p>
-<div class="not-prose overflow-hidden rounded-box border border-base-300"><div class="aspect-video"><iframe class="h-full w-full" src="https://www.youtube-nocookie.com/embed/8sXRyHI3bLw?si=daisyui-demo" title="DaisyUI component walkthrough example" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe></div></div> </div> </article>  </div>  </main> <footer class="mt-5 mb-20"> <p class="text-center text-sm text-base-content/60"> <a class="btn btn-outline btn-xs border-base-300 text-base-content/60 hover:text-primary hover:border-primary px-3 transition-all duration-300" href="/imprint">
+    --> <div class="prose prose-neutral mt-10 max-w-none prose-a:link prose-img:rounded-box"> <p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(9585).png" alt="eBPF Parca Introduction"/></p>
+<p>I spent a fair amount of time recently looking at eBPF solutions that provide “Continuous Profiling.” The idea is simple: instead of running a profiler when you <em>think</em> there’s a problem (and potentially missing it), you run a low-overhead profiler all the time across your entire fleet.</p>
+<p>Enter <strong>Parca</strong>.</p>
+<p>Parca uses eBPF to collect stack traces from the kernel and user space applications without needing to instrument the code or restart the pods. For InterSystems IRIS, this means we can see exactly what’s happening inside <code>irisdb</code> and the associated processes across a whole Kubernetes cluster.</p>
+<h3 id="the-unboxing">The Unboxing</h3>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(9633).png" alt="Parca Architecture"/></p>
+<p>Parca consists of a server (to store and query the profiles) and an agent (that runs on every node). The agent uses eBPF to capture stack traces, which are then shipped to the server. It supports native symbols, which is crucial for making sense of the <code>irisdb</code> traces.</p>
+<h3 id="the-deployment">The Deployment</h3>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(9628).png" alt="Parca Deployment Diagram"/></p>
+<p>Deploying Parca on Kubernetes is straightforward using their Helm charts or manifests. Once the agent is running as a DaemonSet, it immediately starts profiling every container on the node.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">helm</span><span style="color:#9ECBFF"> repo</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> parca</span><span style="color:#9ECBFF"> https://parca-dev.github.io/helm-charts</span></span>
+<span class="line"><span style="color:#B392F0">helm</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> parca</span><span style="color:#9ECBFF"> parca/parca</span></span></code></pre>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(9634).png" alt="Parca Status and Targets"/></p>
+<hr/>
+<h2 id="testing-with-iris-workloads">Testing with IRIS Workloads</h2>
+<p>I set up two specific scenarios to see what Parca could reveal: a Python-heavy workload and a FHIR API workload.</p>
+<h3 id="python-execution">Python Execution</h3>
+<p>I wrote some “terrible” code in InterSystems IRIS using the integrated Python support to see if Parca could trace it.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="plaintext"><code><span class="line"><span>Class EBPF.ParcaIRISPythonProfiling Extends %RegisteredObject</span></span>
+<span class="line"><span>{</span></span>
+<span class="line"><span>    ClassMethod Run()</span></span>
+<span class="line"><span>    {</span></span>
+<span class="line"><span>        While 1 {</span></span>
+<span class="line"><span>                HANG 10</span></span>
+<span class="line"><span>                Do ..TerribleCode()</span></span>
+<span class="line"><span>                Do ..WorserCode()</span></span>
+<span class="line"><span>                Do ..OkCode()</span></span>
+<span class="line"><span>                zn &quot;%SYS&quot;</span></span>
+<span class="line"><span>                do ##class(%SYS.System).WriteToConsoleLog(&quot;Parca Demo Fired&quot;)</span></span>
+<span class="line"><span>                zn &quot;PARCA&quot;</span></span>
+<span class="line"><span>        }</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    ClassMethod TerribleCode() [ Language = python ]</span></span>
+<span class="line"><span>    {</span></span>
+<span class="line"><span>        import time</span></span>
+<span class="line"><span>        def terrible_code():</span></span>
+<span class="line"><span>            time.sleep(30)</span></span>
+<span class="line"><span>            print(&quot;TerribleCode Fired...&quot;)</span></span>
+<span class="line"><span>        terrible_code()</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span>    </span></span>
+<span class="line"><span>    // ... WorserCode and OkCode ...</span></span>
+<span class="line"><span>}</span></span></code></pre>
+<p>In the Parca UI, I constrained the view to the specific pod and selected a sane timeframe:</p>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/Clipboard_2024-09-10-16-25-24.png" alt="Parca UI - Filtering for IRIS Pod"/></p>
+<p>The resulting pprof revealed some interesting hints about how IRIS handles the Python integration:</p>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(9645).png" alt="pprof Visualization"/></p>
+<p>I can see <code>irisdb</code> doing the Python execution and traces with <code>ISCAgent</code>. While I was hoping to see the specific Python method names (which requires some additional symbol work), I learned that <strong><code>pythoninit.so</code></strong> is the star of the Python call-out show.</p>
+<h3 id="fhir-thinger">FHIR Thinger</h3>
+<p>Next, I looked at a FHIR workload. This revealed traces that were highly relevant from a kernel perspective. On the left of the profile, you can see the Apache threads for the web server standing up the API. Inside the <code>irisdb</code> traces, you can clearly see the unmarshalling of JSON.</p>
+<p>All of this spawns from a thread by what is affectionately known in the traces as a <strong><code>zu210fun</code></strong> party!</p>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(9646).png" alt="FHIR Workload Profiling"/></p>
+<hr/>
+<h2 id="distributed-observability">Distributed Observability</h2>
+<p>Finally, here is the same workload as seen in Grafana, as Parca exports its metrics to the broader observability stack:</p>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(9647).png" alt="Parca in Grafana"/></p>
+<p>The real power here is <strong>distributed profiling</strong>. You gain a lightweight, cluster-wide view of your InterSystems IRIS applications with zero code changes. The goal is simple: never have to ask a customer for a <code>pButtons</code> report ever again!</p> </div> </article>  </div>  </main> <footer class="mt-5 mb-20"> <p class="text-center text-sm text-base-content/60"> <a class="btn btn-outline btn-xs border-base-300 text-base-content/60 hover:text-primary hover:border-primary px-3 transition-all duration-300" href="/imprint">
 Legal, Tax, Insurance
 </a>  <span class="block sm:inline"> © 2015-2026 Integration Required, LLC</span> </p>  </footer> </body></html>

@@ -23,7 +23,7 @@ const { Content } = await render(post);
 ---
 
 <Layout title={post.data.title} description={post.data.description}>
-  <Container class="py-12 sm:py-16 lg:py-24">
+  <Container class="pt-6 sm:pt-8 lg:pt-12 pb-12 sm:pb-16 lg:pb-24">
     <article class="max-w-3xl">
       <header class="space-y-4">
         <a href="/blog" class="link link-hover text-sm text-base-content/60">← All posts</a>
@@ -40,25 +40,45 @@ const { Content } = await render(post);
           src={post.data.heroImage}
           alt={post.data.title}
           width={1200}
-          height={630}
-          class="mt-2 w-full rounded-box object-cover"
+          height={200}
+          class="mt-2 w-full rounded-box object-cover aspect-[6/1]"
         />
       )}
 
         <div class="space-y-2">
           <h1 class="text-2xl font-bold tracking-tight sm:text-3xl">{post.data.title}</h1>
-          <p class="text-sm text-base-content/60">
-            <time datetime={post.data.pubDate.toISOString()}>
-              {post.data.pubDate.toLocaleDateString('en', { year: 'numeric', month: 'long', day: 'numeric' })}
-            </time>
-            {post.data.updatedDate && (
-              <span>
-                · Updated <time datetime={post.data.updatedDate.toISOString()}>
-                  {post.data.updatedDate.toLocaleDateString('en', { year: 'numeric', month: 'long', day: 'numeric' })}
-                </time>
-              </span>
+          <div class="flex flex-wrap items-center gap-3">
+            <p class="text-sm text-base-content/60">
+              <time datetime={post.data.pubDate.toISOString()}>
+                {post.data.pubDate.toLocaleDateString('en', { year: 'numeric', month: 'long', day: 'numeric' })}
+              </time>
+              {post.data.updatedDate && (
+                <span>
+                  · Updated <time datetime={post.data.updatedDate.toISOString()}>
+                    {post.data.updatedDate.toLocaleDateString('en', { year: 'numeric', month: 'long', day: 'numeric' })}
+                  </time>
+                </span>
+              )}
+            </p>
+            {post.data.categories && post.data.categories.length > 0 && (
+              <div class="flex flex-wrap gap-1">
+                {post.data.categories.map((category) => (
+                  <span class="badge badge-primary badge-sm badge-outline">{category}</span>
+                ))}
+              </div>
             )}
-          </p>
+            {post.data.communityLink && (
+              <a 
+                href={post.data.communityLink} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="badge badge-secondary badge-sm badge-outline link-hover flex items-center gap-1"
+              >
+                Community
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+              </a>
+            )}
+          </div>
         </div>
       </header>
 
