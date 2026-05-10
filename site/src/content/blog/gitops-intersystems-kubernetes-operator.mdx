@@ -1,0 +1,158 @@
+---
+title: "GitOps with the InterSystems Kubernetes Operator"
+description: Turn over control of provisioning the InterSystems Kubernetes Operator and manage your "Cloud" of InterSystems Solutions through GitOps practices with Argo CD.
+pubDate: 2023-10-18
+heroImage: https://community.intersystems.com/sites/default/files/inline/images/argo-iko.png
+categories: ["GitOps", "Kubernetes", "IKO", "Argo CD", "InterSystems IRIS", "PID^TOO||"]
+communityLink: https://community.intersystems.com/post/gitops-intersystems-kubernetes-operator
+draft: false
+---
+
+This article will cover turning over control of provisioning the InterSystems Kubernetes Operator (IKO), and starting your journey managing your own "Cloud" of InterSystems Solutions through GitOps practices. This deployment pattern is also the fulfillment path for the [PID^TOO||](https://www.pidtoo.com) FHIR Breathing Identity Resolution Engine.
+
+### GitOps
+GitOps is an alternative deployment paradigm where the Kubernetes Cluster itself "pulls" updates from manifests residing in source control to manage the state of your solutions. Git becomes the single source of truth for your infrastructure.
+
+### Prerequisites
+*   **Kubernetes Cluster**: Tested on EKS, GKE, and MicroK8s.
+*   **Git Repository**: GitLab, GitHub, or any repo accessible by your cluster.
+
+### Argo CD
+The star of the show is [Argo CD](https://argoproj.github.io/cd/), which provides a declarative approach to continuous delivery with a fantastic UI. 
+
+#### Installation
+```bash
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+```
+
+#### Accessing the UI
+1.  **Grab Secret**: Decrypt the initial admin password.
+    ![Grab Secret](https://community.intersystems.com/sites/default/files/inline/images/secret.png)
+2.  **Port Forward**: Redirect port 4000 to your local host.
+    ![Port Forward](https://community.intersystems.com/sites/default/files/inline/images/pf.png)
+3.  **Login**: Navigate to `https://localhost:4000` and supply the credentials.
+    ![Argo Login](https://community.intersystems.com/sites/default/files/inline/images/signup.png)
+
+### InterSystems Kubernetes Operator (IKO)
+Refer to the [official documentation](https://docs.intersystems.com/components/csp/docbook/DocBook.UI.Page.cls?KEY=AIKO) for obtaining the IKO Helm chart. Once obtained, check it into your git repo. 
+
+#### Repository Structure
+Unpack the IKO Helm chart into a directory (e.g., `iko/iris_operator_amd-3.5.48.100`):
+
+```text
+├── iko
+│   ├── AIKO.pdf
+│   └── iris_operator_amd-3.5.48.100
+│       ├── chart
+│       │   └── iris-operator
+│       │       ├── Chart.yaml
+│       │       ├── templates
+│       │       │   ├── apiregistration.yaml
+│       │       │   └── ...
+│       │       └── values.yaml
+```
+
+#### IKO Setup
+Create the `isc` namespace and add the pull secret for `containers.intersystems.com`:
+
+```bash
+kubectl create ns isc
+kubectl create secret docker-registry pidtoo-pull-secret \
+  --namespace isc \
+  --docker-server=https://containers.intersystems.com \
+  --docker-username='your-username' \
+  --docker-password='your-password'
+```
+
+### Connect Git to Argo CD
+In the Argo CD UI, connect your repository. This step makes the manifests available to the cluster.
+![Connect Git](https://community.intersystems.com/sites/default/files/inline/images/gitconnect.png)
+
+### Declare Branch to Argo CD
+We use the "App of Apps" paradigm to manage our applications. Create the following folder structure in your repo:
+
+```text
+├── argocd
+│   ├── app-of-apps
+│   │   ├── charts
+│   │   │   └── iris-cluster-collection
+│   │   │       ├── Chart.yaml
+│   │   │       ├── templates
+│   │   │       │   └── iris-operator-application.yaml
+│   │   │       └── values.yaml
+│   │   └── cluster-seeds
+│   │       └── seed.yaml
+```
+
+#### IKO Application Template (`iris-operator-application.yaml`)
+```yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: iko
+  namespace: argocd
+spec:
+  destination:
+    namespace: isc
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: iko/iris_operator_amd-3.5.48.100/chart/iris-operator
+    repoURL: {{ .Values.repoURL }}
+    targetRevision: {{ .Values.targetRevision }}
+  syncPolicy:
+    automated: {}
+    syncOptions:
+      - CreateNamespace=true
+```
+
+#### Cluster Seed (`seed.yaml`)
+```yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gitops-iko-seed
+  namespace: argocd
+  labels:
+    isAppOfApps: 'true'
+spec:
+  destination:
+    namespace: isc
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: argocd/app-of-apps/charts/iris-cluster-collection
+    repoURL: https://github.com/pidtoo/gitops_iko.git
+    targetRevision: main
+  syncPolicy:
+    automated: {}
+    syncOptions:
+      - CreateNamespace=true
+```
+
+### Seed the Cluster!
+This is the final step. Apply the seed manifest to your cluster:
+
+```bash
+kubectl apply -n argocd -f argocd/app-of-apps/cluster-seeds/seed.yaml
+```
+
+![Argo CD Status](https://community.intersystems.com/sites/default/files/inline/images/goeswell.png)
+
+Immediately, you should see Argo CD applications coming to life.
+![Applications View](https://community.intersystems.com/sites/default/files/inline/images/ikolights.png)
+
+#### IKO Operator View
+![Operator Details](https://community.intersystems.com/sites/default/files/inline/images/nodeview.png)
+
+Welcome to GitOps with the InterSystems Kubernetes Operator!
+
+---
+**🎥 Watch the Live Demo:** [Git Demos are the Best! - October 19, 2023](https://youtu.be/IKoadH_oOPU?feature=shared)
+
+**Authors:**
+*   Ron Sweeney, Principal Architect @ Integration Required / PID^TOO||
+*   Dan McCracken, COO @ Devsoperative, INC
+
+> 💡 This article is considered an InterSystems Data Platform **Best Practice**.

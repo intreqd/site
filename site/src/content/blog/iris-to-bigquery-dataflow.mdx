@@ -1,0 +1,131 @@
+---
+title: "IRIS Data to Google Big Query - InterSystems Cloud SQL via Dataflow"
+description: How to include IRIS Data into your Google Big Query Data Warehouse and in your Data Studio data explorations using Google Cloud Dataflow.
+pubDate: 2022-07-07
+heroImage: https://community.intersystems.com/sites/default/files/inline/images/sqlaasprovisioning_0.png
+categories: ["BigQuery", "Dataflow", "GCP", "InterSystems IRIS", "Cloud SQL", "Analytics", "ETL"]
+communityLink: https://community.intersystems.com/post/iris-data-google-big-query-intersystems-cloud-sql-dataflow
+draft: false
+---
+
+![Google Dataflow](https://community.intersystems.com/sites/default/files/inline/images/dataflow.png)
+
+How to include IRIS Data into your Google Big Query Data Warehouse and in your Data Studio data explorations. In this article we will be using Google Cloud Dataflow to connect to our InterSystems Cloud SQL Service and build a job to persist the results of an IRIS query in Big Query on an interval.
+
+If you were lucky enough to get access to Cloud SQL at Global Summit 2022 as mentioned in ["InterSystems IRIS: What's New, What's Next"](https://www.intersystems.com/resources/intersystems-iris-whats-new-whats-next), it makes the example a snap, but you can pull this off with any publicly or VPC accessible listener you have provisioned instead.
+
+### Provision InterSystems Cloud SQL
+Provision InterSystems Cloud SQL for temporary use and note your connectivity details:
+
+![Provisioning](https://community.intersystems.com/sites/default/files/inline/images/sqlaasprovisioning_0.png)
+
+**Connection URL Example:**
+```text
+jdbc:IRIS://k8s-c5ce7068-a4244044-265532e16d-2be47d3d6962f6cc.elb.us-east-1.amazonaws.com:1972/USER
+```
+
+**Credentials:**
+```text
+SQLAdmin / Testing12!
+```
+
+**Driver Class:**
+```text
+com.intersystems.jdbc.IRISDriver
+```
+
+![SQL Overview](https://community.intersystems.com/sites/default/files/inline/images/sqlass_overview.png)
+
+---
+
+### Setup Google Cloud Platform
+
+#### 1. Provision a GCP Project
+```bash
+gcloud projects create iris-2-datastudio --set-as-default
+```
+
+#### 2. Enable APIs
+Enable Big Query, Dataflow, and Cloud Storage:
+```bash
+gcloud services enable bigquery.googleapis.com
+gcloud services enable dataflow.googleapis.com
+gcloud services enable storage.googleapis.com
+```
+
+#### 3. Create a Cloud Storage Bucket
+```bash
+gsutil mb gs://iris-2-datastudio
+```
+
+#### 4. Upload the JDBC Driver
+Upload the [latest InterSystems JDBC driver](https://intersystems-community.github.io/iris-driver-distribution/) to the root of the bucket:
+```bash
+wget https://github.com/intersystems-community/iris-driver-distribution/raw/main/intersystems-jdbc-3.3.0.jar
+gsutil cp intersystems-jdbc-3.3.0.jar gs://iris-2-datastudio
+```
+
+#### 5. Create a Big Query Dataset
+```bash
+bq --location=us mk \
+  --dataset \
+  --description "sqlaas to big query" \
+  iris-2-datastudio:irisdata
+```
+
+#### 6. Create a Big Query Destination Table
+Big Query can create tables on the fly if you supply a schema, but for this template, it's better to establish the table beforehand. You can export a CSV from your IRIS Database using a tool like [DBeaver](https://dbeaver.io/) and use the "Create Table" dialog in the GCP console to auto-generate the schema from that CSV.
+
+![Create Table](https://community.intersystems.com/sites/default/files/inline/images/createtable.png)
+
+---
+
+### Google Dataflow Job
+Now we are ready to execute the job to read our InterSystems IRIS data and ingest it into Google Big Query.
+
+In the Google Cloud Console, head over to Dataflow and select **"Create Job from Template"**.
+![Go Dataflow](https://community.intersystems.com/sites/default/files/inline/images/godataflow.png)
+
+Fill out the form with the generated prerequisites:
+![Job Template Top](https://community.intersystems.com/sites/default/files/inline/images/top_0.png)
+... and supply your credentials for IRIS at the bottom:
+![Job Template Bottom](https://community.intersystems.com/sites/default/files/inline/images/bottom_0.png)
+
+#### Alternate: CLI Route
+For those who prefer the CLI, here is the command to run the job:
+
+```bash
+gcloud dataflow jobs run iris-2-bq-dataflow \
+  --gcs-location gs://dataflow-templates-us-central1/latest/Jdbc_to_BigQuery \
+  --region us-central1 \
+  --num-workers 2 \
+  --staging-location gs://iris-2-datastudio/tmp \
+  --parameters \
+connectionURL=jdbc:IRIS://your-host:1972/USER, \
+driverClassName=com.intersystems.jdbc.IRISDriver, \
+query="SELECT * FROM INFORMATION_SCHEMA.TABLES;", \
+outputTable=iris-2-datastudio:irisdata.dataflowtable, \
+driverJars=gs://iris-2-datastudio/intersystems-jdbc-3.3.0.jar, \
+bigQueryLoadingTemporaryDirectory=gs://iris-2-datastudio/input, \
+username=SQLAdmin, \
+password=Testing12!
+```
+
+---
+
+### Results
+Once the job is kicked off, you can monitor its progress in the Dataflow console.
+![Success](https://community.intersystems.com/sites/default/files/inline/images/success.png)
+
+#### Source Data in IRIS Cloud SQL:
+![IRIS Data](https://community.intersystems.com/sites/default/files/inline/images/irisdata.png)
+
+#### Inspected Results in Big Query:
+![BigQuery Results](https://community.intersystems.com/sites/default/files/inline/images/result.png)
+
+#### Visualization in Data Studio:
+Once the data is in Big Query, it is trivial to include it into Data Studio.
+![Data Studio Flair](https://community.intersystems.com/sites/default/files/inline/images/flair.png)
+
+---
+> 💡 This article is considered as InterSystems Data Platform **Best Practice**.

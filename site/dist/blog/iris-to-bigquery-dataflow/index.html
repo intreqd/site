@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="de"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="shortcut icon" href="/favicon.ico"><link rel="sitemap" href="/sitemap-index.xml"><meta name="generator" content="Astro v6.2.1"><title>IKO Plus: Stretched Cross Cloud, Cross Regional IrisCluster with Tailscale</title><link rel="canonical" href="https://www.integrationrequired.com/blog/iko-plus-stretched-cross-cloud-tailscale"><meta name="description" content="Taking cross-regional high availability to the next level by stretching an InterSystems IRIS cluster across both Google Cloud and AWS using Tailscale for a truly vendor-agnostic disaster recovery strategy."><meta name="robots" content="index, follow"><meta property="og:title" content="IKO Plus: Stretched Cross Cloud, Cross Regional IrisCluster with Tailscale"><meta property="og:type" content="website"><meta property="og:image" content="https://www.integrationrequired.com/opengraph.jpg"><meta property="og:url" content="https://www.integrationrequired.com/blog/iko-plus-stretched-cross-cloud-tailscale"><meta property="og:image:url" content="https://www.integrationrequired.com/opengraph.jpg"><meta property="og:image:alt" content="IKO Plus: Stretched Cross Cloud, Cross Regional IrisCluster with Tailscale"><meta name="twitter:card" content="summary_large_image"><!--
+<!DOCTYPE html><html lang="de"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="shortcut icon" href="/favicon.ico"><link rel="sitemap" href="/sitemap-index.xml"><meta name="generator" content="Astro v6.2.1"><title>IRIS Data to Google Big Query - InterSystems Cloud SQL via Dataflow</title><link rel="canonical" href="https://www.integrationrequired.com/blog/iris-to-bigquery-dataflow"><meta name="description" content="How to include IRIS Data into your Google Big Query Data Warehouse and in your Data Studio data explorations using Google Cloud Dataflow."><meta name="robots" content="index, follow"><meta property="og:title" content="IRIS Data to Google Big Query - InterSystems Cloud SQL via Dataflow"><meta property="og:type" content="website"><meta property="og:image" content="https://www.integrationrequired.com/opengraph.jpg"><meta property="og:url" content="https://www.integrationrequired.com/blog/iris-to-bigquery-dataflow"><meta property="og:image:url" content="https://www.integrationrequired.com/opengraph.jpg"><meta property="og:image:alt" content="IRIS Data to Google Big Query - InterSystems Cloud SQL via Dataflow"><meta name="twitter:card" content="summary_large_image"><!--
       Fonts flow:
       1. astro.config.mjs registers the font and exposes `--font-inter`.
       2. <Font /> loads that configured family into the page head.
@@ -55,71 +55,87 @@ LinkedIn
 Github
 </a> <a class="btn bg-[#f57c00] border-[#f57c00] text-white hover:bg-[#e65100] hover:border-[#e65100] w-full flex items-center gap-2" href="https://www.brightstreetgroup.com" target="_blank" rel="noopener noreferrer" @click="open = false" data-astro-cid-ri6uxye2> <img src="/bsg-favicon.png" alt="BSG Logo" class="w-5 h-5 rounded-sm brightness-0 invert" data-astro-cid-ri6uxye2>
 Brightstreet Group
-</a> </div> </div> </div> <main id="main-content">  <div class="max-w-screen-xl mx-auto px-5 pt-6 sm:pt-8 lg:pt-12 pb-12 sm:pb-16 lg:pb-24">  <article class="max-w-3xl"> <header class="space-y-4"> <a href="/blog" class="link link-hover text-sm text-base-content/60">← All posts</a> <div class="mt-2 overflow-hidden rounded-box"> <img src="/_astro/1208x201_18dbNC.webp" alt="IKO Plus: Stretched Cross Cloud, Cross Regional IrisCluster with Tailscale" loading="lazy" decoding="async" width="1200" height="600" class="w-full object-cover"> </div> <div class="space-y-2"> <h1 class="text-2xl font-bold tracking-tight sm:text-3xl">IKO Plus: Stretched Cross Cloud, Cross Regional IrisCluster with Tailscale</h1> <div class="flex flex-wrap items-center gap-3"> <p class="text-sm text-base-content/60"> <time datetime="2025-09-30T00:00:00.000Z"> September 29, 2025 </time>  </p> <div class="flex flex-wrap gap-1"> <span class="badge badge-primary badge-sm badge-outline">iko</span><span class="badge badge-primary badge-sm badge-outline">InterSystems IRIS</span><span class="badge badge-primary badge-sm badge-outline">Kubernetes</span><span class="badge badge-primary badge-sm badge-outline">Tailscale</span><span class="badge badge-primary badge-sm badge-outline">Google Cloud</span><span class="badge badge-primary badge-sm badge-outline">AWS</span><span class="badge badge-primary badge-sm badge-outline">Multi-Cloud</span> </div> <a href="https://community.intersystems.com/post/iko-plus-stretched-cross-cloud-cross-regional-iriscluster-tailscale" target="_blank" rel="noopener noreferrer" class="badge badge-secondary badge-sm badge-outline link-hover flex items-center gap-1">
+</a> </div> </div> </div> <main id="main-content">  <div class="max-w-screen-xl mx-auto px-5 pt-6 sm:pt-8 lg:pt-12 pb-12 sm:pb-16 lg:pb-24">  <article class="max-w-3xl"> <header class="space-y-4"> <a href="/blog" class="link link-hover text-sm text-base-content/60">← All posts</a> <div class="mt-2 overflow-hidden rounded-box"> <img src="https://community.intersystems.com/sites/default/files/inline/images/sqlaasprovisioning_0.png" alt="IRIS Data to Google Big Query - InterSystems Cloud SQL via Dataflow" loading="lazy" decoding="async" width="1200" height="600" class="w-full object-cover"> </div> <div class="space-y-2"> <h1 class="text-2xl font-bold tracking-tight sm:text-3xl">IRIS Data to Google Big Query - InterSystems Cloud SQL via Dataflow</h1> <div class="flex flex-wrap items-center gap-3"> <p class="text-sm text-base-content/60"> <time datetime="2022-07-07T00:00:00.000Z"> July 6, 2022 </time>  </p> <div class="flex flex-wrap gap-1"> <span class="badge badge-primary badge-sm badge-outline">BigQuery</span><span class="badge badge-primary badge-sm badge-outline">Dataflow</span><span class="badge badge-primary badge-sm badge-outline">GCP</span><span class="badge badge-primary badge-sm badge-outline">InterSystems IRIS</span><span class="badge badge-primary badge-sm badge-outline">Cloud SQL</span><span class="badge badge-primary badge-sm badge-outline">Analytics</span><span class="badge badge-primary badge-sm badge-outline">ETL</span> </div> <a href="https://community.intersystems.com/post/iris-data-google-big-query-intersystems-cloud-sql-dataflow" target="_blank" rel="noopener noreferrer" class="badge badge-secondary badge-sm badge-outline link-hover flex items-center gap-1">
 Community
 <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> </a> </div> </div> </header> <!--
       daisyUI recommends using Tailwind utilities for layout and the Typography
       plugin for rich text. `prose` gives Markdown content predictable defaults
       without maintaining a custom article stylesheet in the starter.
-    --> <div class="prose prose-neutral mt-10 max-w-none prose-a:link prose-img:rounded-box"> <p>In the previous post, we stretched an InterSystems IrisCluster across Google Cloud regions. Today, we’re taking it a step further: <strong>Cross-Cloud</strong>. We are going to stretch our cluster between Google Cloud (US/UK) and Amazon Web Services (AWS).</p>
-<h3 id="the-multi-cloud-objective">The Multi-Cloud Objective</h3>
-<p>Why go cross-cloud?</p>
-<ol>
-<li><strong>Vendor Agnostic DR</strong>: True disaster recovery shouldn’t just survive a regional outage, but a provider-wide catastrophic event.</li>
-<li><strong>Regulatory Compliance</strong>: Many industries require data to be hosted by alternate vendors for business continuity.</li>
-<li><strong>Regional Locality</strong>: Using the best region regardless of the provider.</li>
-</ol>
-<h3 id="the-strategy">The Strategy</h3>
-<p>We’ll add a third node to our Tailnet, this time hosted in <strong>AWS (Oregon)</strong>. This node will serve as our Async DR member.</p>
-<h3 id="step-1-prepare-the-aws-node">Step 1: Prepare the AWS Node</h3>
-<p>First, we need to label our new AWS node so the IKO knows where to place our DR instance.</p>
-<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11886).png" alt="Labeling AWS Node"/></p>
-<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">kubectl</span><span style="color:#9ECBFF"> label</span><span style="color:#9ECBFF"> node</span><span style="color:#9ECBFF"> ip-10-129-0-182.ec2.internal</span><span style="color:#9ECBFF"> topology.kubernetes.io/zone=us-aws</span><span style="color:#79B8FF"> -n</span><span style="color:#9ECBFF"> ikoplus</span></span></code></pre>
-<h3 id="step-2-update-iriscluster-topology">Step 2: Update IrisCluster Topology</h3>
-<p>We need to update our <code>IrisCluster</code> definition to include the new Async DR member and map it to the new zone.</p>
-<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11887).png" alt="Updating IKO Topology"/></p>
-<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#6A737D"># Snippet of the mirrorMap and topology update</span></span>
-<span class="line"><span style="color:#85E89D">mirrorMap</span><span style="color:#E1E4E8">:</span></span>
-<span class="line"><span style="color:#E1E4E8">  - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">data</span></span>
-<span class="line"><span style="color:#85E89D">    members</span><span style="color:#E1E4E8">:</span></span>
-<span class="line"><span style="color:#E1E4E8">      - </span><span style="color:#85E89D">role</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">master</span></span>
-<span class="line"><span style="color:#85E89D">        zone</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">us-east1-a</span></span>
-<span class="line"><span style="color:#E1E4E8">      - </span><span style="color:#85E89D">role</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">slave</span></span>
-<span class="line"><span style="color:#85E89D">        zone</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">europe-west2-a</span></span>
-<span class="line"><span style="color:#E1E4E8">      - </span><span style="color:#85E89D">role</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">asyncdr</span></span>
-<span class="line"><span style="color:#85E89D">        zone</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">us-aws</span></span></code></pre>
-<h3 id="step-3-deployment--attestation">Step 3: Deployment &amp; Attestation</h3>
-<p>Applying the changes… Bam!</p>
-<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11888).png" alt="Cluster Deployment Result"/></p>
-<p>The IKO successfully provisions the Async DR member in AWS. We can verify the location of our pods across the different cloud providers.</p>
-<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11889).png" alt="Cloud Provider Attestation"/></p>
-<p>And checking the mirror status within IRIS confirms everything is in sync across the Atlantic and the US mainland.</p>
-<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11890).png" alt="IRIS Mirror Status"/></p>
-<h3 id="lessons-learned--foot-guns">Lessons Learned &amp; “Foot Guns”</h3>
-<p>Going cross-cloud introduced a few challenges that weren’t present in the single-cloud setup:</p>
-<h4 id="aws-specifics">AWS Specifics</h4>
-<ul>
-<li><strong>DNS</strong>: Disabled DNS hostnames in the VPC and used host entries with Tailscale IPs.</li>
-<li><strong>Time Sync</strong>: Tightened up polling for <code>chronyd</code> to ensure all members were on the same page.</li>
-<li><strong>Networking</strong>: Used an Internet Gateway (IGW) without a NAT gateway for simplicity in this lab.</li>
-</ul>
-<h4 id="instance-configuration">Instance Configuration</h4>
-<ul>
-<li>Enabled IP forwarding for Tailscale to route traffic correctly.</li>
-</ul>
-<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#79B8FF">echo</span><span style="color:#9ECBFF"> &#39;net.ipv4.ip_forward = 1&#39;</span><span style="color:#F97583"> |</span><span style="color:#B392F0"> sudo</span><span style="color:#9ECBFF"> tee</span><span style="color:#79B8FF"> -a</span><span style="color:#9ECBFF"> /etc/sysctl.d/99-tailscale.conf</span></span>
-<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> sysctl</span><span style="color:#79B8FF"> -p</span><span style="color:#9ECBFF"> /etc/sysctl.d/99-tailscale.conf</span></span></code></pre>
-<h4 id="tailnet-configuration">Tailnet Configuration</h4>
-<p>Subnet advertising and route acceptance were required on all boxes, followed by approval in the Tailscale admin console.</p>
-<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/Clipboard_2025-09-29-12-53-57.png" alt="Tailscale Route Approval"/></p>
-<h3 id="business-continuity-checklist">Business Continuity Checklist</h3>
-<p>Let’s see if we met our goals:</p>
-<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11891).png" alt="Business Continuity Checklist"/></p>
-<ul>
-<li>✅ <strong>High Availability</strong>: Implemented via IKO Mirror.</li>
-<li>✅ <strong>Disaster Recovery Distance</strong>: Our DR instance is over 2500 miles from the nearest HA member.</li>
-<li>✅ <strong>Alternate Vendor</strong>: We are running on both Google Cloud and AWS.</li>
-</ul>
-<p>Onward and Upward! Multi-cloud IRIS clusters are now a reality.</p> </div> </article>  </div>  </main> <footer class="mt-5 mb-20"> <p class="text-center text-sm text-base-content/60"> <a class="btn btn-outline btn-xs border-base-300 text-base-content/60 hover:text-primary hover:border-primary px-3 transition-all duration-300" href="/imprint">
+    --> <div class="prose prose-neutral mt-10 max-w-none prose-a:link prose-img:rounded-box"> <p><img src="https://community.intersystems.com/sites/default/files/inline/images/dataflow.png" alt="Google Dataflow"/></p>
+<p>How to include IRIS Data into your Google Big Query Data Warehouse and in your Data Studio data explorations. In this article we will be using Google Cloud Dataflow to connect to our InterSystems Cloud SQL Service and build a job to persist the results of an IRIS query in Big Query on an interval.</p>
+<p>If you were lucky enough to get access to Cloud SQL at Global Summit 2022 as mentioned in <a href="https://www.intersystems.com/resources/intersystems-iris-whats-new-whats-next">“InterSystems IRIS: What’s New, What’s Next”</a>, it makes the example a snap, but you can pull this off with any publicly or VPC accessible listener you have provisioned instead.</p>
+<h3 id="provision-intersystems-cloud-sql">Provision InterSystems Cloud SQL</h3>
+<p>Provision InterSystems Cloud SQL for temporary use and note your connectivity details:</p>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/sqlaasprovisioning_0.png" alt="Provisioning"/></p>
+<p><strong>Connection URL Example:</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="text"><code><span class="line"><span>jdbc:IRIS://k8s-c5ce7068-a4244044-265532e16d-2be47d3d6962f6cc.elb.us-east-1.amazonaws.com:1972/USER</span></span></code></pre>
+<p><strong>Credentials:</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="text"><code><span class="line"><span>SQLAdmin / Testing12!</span></span></code></pre>
+<p><strong>Driver Class:</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="text"><code><span class="line"><span>com.intersystems.jdbc.IRISDriver</span></span></code></pre>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/sqlass_overview.png" alt="SQL Overview"/></p>
+<hr/>
+<h3 id="setup-google-cloud-platform">Setup Google Cloud Platform</h3>
+<h4 id="1-provision-a-gcp-project">1. Provision a GCP Project</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">gcloud</span><span style="color:#9ECBFF"> projects</span><span style="color:#9ECBFF"> create</span><span style="color:#9ECBFF"> iris-2-datastudio</span><span style="color:#79B8FF"> --set-as-default</span></span></code></pre>
+<h4 id="2-enable-apis">2. Enable APIs</h4>
+<p>Enable Big Query, Dataflow, and Cloud Storage:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">gcloud</span><span style="color:#9ECBFF"> services</span><span style="color:#9ECBFF"> enable</span><span style="color:#9ECBFF"> bigquery.googleapis.com</span></span>
+<span class="line"><span style="color:#B392F0">gcloud</span><span style="color:#9ECBFF"> services</span><span style="color:#9ECBFF"> enable</span><span style="color:#9ECBFF"> dataflow.googleapis.com</span></span>
+<span class="line"><span style="color:#B392F0">gcloud</span><span style="color:#9ECBFF"> services</span><span style="color:#9ECBFF"> enable</span><span style="color:#9ECBFF"> storage.googleapis.com</span></span></code></pre>
+<h4 id="3-create-a-cloud-storage-bucket">3. Create a Cloud Storage Bucket</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">gsutil</span><span style="color:#9ECBFF"> mb</span><span style="color:#9ECBFF"> gs://iris-2-datastudio</span></span></code></pre>
+<h4 id="4-upload-the-jdbc-driver">4. Upload the JDBC Driver</h4>
+<p>Upload the <a href="https://intersystems-community.github.io/iris-driver-distribution/">latest InterSystems JDBC driver</a> to the root of the bucket:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">wget</span><span style="color:#9ECBFF"> https://github.com/intersystems-community/iris-driver-distribution/raw/main/intersystems-jdbc-3.3.0.jar</span></span>
+<span class="line"><span style="color:#B392F0">gsutil</span><span style="color:#9ECBFF"> cp</span><span style="color:#9ECBFF"> intersystems-jdbc-3.3.0.jar</span><span style="color:#9ECBFF"> gs://iris-2-datastudio</span></span></code></pre>
+<h4 id="5-create-a-big-query-dataset">5. Create a Big Query Dataset</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">bq</span><span style="color:#79B8FF"> --location=us</span><span style="color:#9ECBFF"> mk</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  --dataset</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  --description</span><span style="color:#9ECBFF"> &quot;sqlaas to big query&quot;</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  iris-2-datastudio:irisdata</span></span></code></pre>
+<h4 id="6-create-a-big-query-destination-table">6. Create a Big Query Destination Table</h4>
+<p>Big Query can create tables on the fly if you supply a schema, but for this template, it’s better to establish the table beforehand. You can export a CSV from your IRIS Database using a tool like <a href="https://dbeaver.io/">DBeaver</a> and use the “Create Table” dialog in the GCP console to auto-generate the schema from that CSV.</p>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/createtable.png" alt="Create Table"/></p>
+<hr/>
+<h3 id="google-dataflow-job">Google Dataflow Job</h3>
+<p>Now we are ready to execute the job to read our InterSystems IRIS data and ingest it into Google Big Query.</p>
+<p>In the Google Cloud Console, head over to Dataflow and select <strong>“Create Job from Template”</strong>.
+<img src="https://community.intersystems.com/sites/default/files/inline/images/godataflow.png" alt="Go Dataflow"/></p>
+<p>Fill out the form with the generated prerequisites:
+<img src="https://community.intersystems.com/sites/default/files/inline/images/top_0.png" alt="Job Template Top"/>
+… and supply your credentials for IRIS at the bottom:
+<img src="https://community.intersystems.com/sites/default/files/inline/images/bottom_0.png" alt="Job Template Bottom"/></p>
+<h4 id="alternate-cli-route">Alternate: CLI Route</h4>
+<p>For those who prefer the CLI, here is the command to run the job:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">gcloud</span><span style="color:#9ECBFF"> dataflow</span><span style="color:#9ECBFF"> jobs</span><span style="color:#9ECBFF"> run</span><span style="color:#9ECBFF"> iris-2-bq-dataflow</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  --gcs-location</span><span style="color:#9ECBFF"> gs://dataflow-templates-us-central1/latest/Jdbc_to_BigQuery</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  --region</span><span style="color:#9ECBFF"> us-central1</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  --num-workers</span><span style="color:#79B8FF"> 2</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  --staging-location</span><span style="color:#9ECBFF"> gs://iris-2-datastudio/tmp</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  --parameters</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#E1E4E8">connectionURL=jdbc:IRIS://your-host:1972/USER, </span><span style="color:#79B8FF">\</span></span>
+<span class="line"><span style="color:#E1E4E8">driverClassName=com.intersystems.jdbc.IRISDriver, </span><span style="color:#79B8FF">\</span></span>
+<span class="line"><span style="color:#E1E4E8">query=</span><span style="color:#9ECBFF">&quot;SELECT * FROM INFORMATION_SCHEMA.TABLES;&quot;</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">\</span></span>
+<span class="line"><span style="color:#E1E4E8">outputTable=iris-2-datastudio:irisdata.dataflowtable, </span><span style="color:#79B8FF">\</span></span>
+<span class="line"><span style="color:#E1E4E8">driverJars=gs://iris-2-datastudio/intersystems-jdbc-3.3.0.jar, </span><span style="color:#79B8FF">\</span></span>
+<span class="line"><span style="color:#E1E4E8">bigQueryLoadingTemporaryDirectory=gs://iris-2-datastudio/input, </span><span style="color:#79B8FF">\</span></span>
+<span class="line"><span style="color:#E1E4E8">username=SQLAdmin, </span><span style="color:#79B8FF">\</span></span>
+<span class="line"><span style="color:#E1E4E8">password=Testing12!</span></span></code></pre>
+<hr/>
+<h3 id="results">Results</h3>
+<p>Once the job is kicked off, you can monitor its progress in the Dataflow console.
+<img src="https://community.intersystems.com/sites/default/files/inline/images/success.png" alt="Success"/></p>
+<h4 id="source-data-in-iris-cloud-sql">Source Data in IRIS Cloud SQL:</h4>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/irisdata.png" alt="IRIS Data"/></p>
+<h4 id="inspected-results-in-big-query">Inspected Results in Big Query:</h4>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/result.png" alt="BigQuery Results"/></p>
+<h4 id="visualization-in-data-studio">Visualization in Data Studio:</h4>
+<p>Once the data is in Big Query, it is trivial to include it into Data Studio.
+<img src="https://community.intersystems.com/sites/default/files/inline/images/flair.png" alt="Data Studio Flair"/></p>
+<hr/>
+<blockquote>
+<p>💡 This article is considered as InterSystems Data Platform <strong>Best Practice</strong>.</p>
+</blockquote> </div> </article>  </div>  </main> <footer class="mt-5 mb-20"> <p class="text-center text-sm text-base-content/60"> <a class="btn btn-outline btn-xs border-base-300 text-base-content/60 hover:text-primary hover:border-primary px-3 transition-all duration-300" href="/imprint">
 Legal, Tax, Insurance
 </a>  <span class="block sm:inline"> © 2015-2026 Integration Required, LLC</span> </p>  </footer> </body></html>

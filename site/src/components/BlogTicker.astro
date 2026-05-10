@@ -15,14 +15,14 @@ const postData = posts.map(p => ({
       <span class="flex h-1.5 w-1.5 rounded-full bg-primary animate-pulse"></span>
       <span class="text-[10px] uppercase tracking-widest font-bold text-base-content/50">Latest Insights</span>
     </div>
-    <span class="text-[9px] font-mono text-base-content/30">RANDOM_SELECT</span>
+    <a href="/blog" class="btn btn-xs btn-ghost border border-base-content/10 text-[9px] h-5 min-h-0 px-2 font-mono text-base-content/40 hover:text-primary hover:border-primary/30 transition-all">BLOG</a>
   </div>
   
   <!-- Content -->
   <div class="px-4 py-3.5">
     <div id="ticker-container" class="relative overflow-hidden min-h-[1.5rem] flex items-center">
       <div id="ticker-content" class="w-full transition-all duration-1000 opacity-0 translate-y-1">
-        <a href="#" id="ticker-link" class="text-xs font-medium text-base-content/70 hover:text-primary transition-colors truncate block">
+        <a href="#" id="ticker-link" class="text-sm font-medium text-base-content/70 hover:text-primary transition-colors truncate block">
           Loading...
         </a>
       </div>

@@ -1,53 +1,166 @@
 ---
 title: "OMOP Odyssey - Celebration (House of Hades)"
-description: Celebrating the successful integration of InterSystems IRIS with the OMOP Common Data Model, exploring the "House of Hades" where data resides and is analyzed.
-pubDate: 2025-02-20
-heroImage: https://placehold.co/1208x201?text=InterSystems+Portfolio
-categories: ["OMOP", "InterSystems IRIS", "Data Integration", "OHDSI", "Healthcare"]
+description: OHDSI officially announced InterSystems IRIS as a supported platform and dialect with DatabaseConnector 6.4.0. Let's showcase creating the OMOP CDM 5.4 on IRIS.
+pubDate: 2024-05-10
+heroImage: https://community.intersystems.com/sites/default/files/inline/images/images/image(10763).png
+categories: ["InterSystems IRIS", "OMOP", "OHDSI", "Analytics", "Healthcare Interoperability"]
 communityLink: https://community.intersystems.com/post/omop-odyssey-celebration-house-hades
-draft: false
 ---
 
-![OMOP Odyssey Celebration](https://community.intersystems.com/sites/default/files/inline/images/images/image(10763).png)
+### Hades DatabaseConnector 6.4.0 now does IRIS stuff!
+A well-deserved celebration 🎉 that OHDSI officially announced [IRIS as a supported platform](https://github.com/OHDSI/CommonDataModel/pull/717) and dialect with [DatabaseConnector 6.4.0](https://ohdsi.github.io/DatabaseConnector/index.html) in the OHDSI Hades Project! Let's showcase this accomplishment and create the OMOP CDM 5.4 on InterSystems IRIS, persona time!
 
-After our journey through the technical landscapes of Troy, we've arrived at a moment of celebration. We've successfully bridged the clinical world with the analytical power of the OMOP Common Data Model using InterSystems IRIS. Welcome to the **House of Hades**, the foundational layer where our transformed data now resides, ready for deep discovery.
+---
 
-### The Foundation: InterSystems IRIS & OMOP
+### Ms. TLS - I am running InterSystems Cloud Document (Health Connect Cloud or equivalent)
+I have a running IRIS Cloud Document workload and managed to create the OMOPCDM54 DATABASE with minimal steps on my system, the Cloud Portal, and RStudio.
 
-The integration between InterSystems IRIS and OMOP isn't just about moving data—it's about creating a robust, high-performance foundation for healthcare analytics.
+#### 1. System Setup
+However you import certs on your system, it needs to be done here to connect to InterSystems Cloud Document deployment. I use the following script loosely across solutions, where I paste in the cert I downloaded from the portal and it imports the cert for me.
 
-![InterSystems IRIS & OMOP Integration](https://community.intersystems.com/sites/default/files/inline/images/images/image(10670).png)
+**import_iris_certificate.sh**
+```bash
+#!/bin/bash
+cat << 'EOF' > /usr/local/share/ca-certificates/cloudsql-gar2.crt
+-----BEGIN CERTIFICATE-----
+PEM FROM CLOUD DEPLOYMENT HERE
+-----END CERTIFICATE-----
+EOF
 
-### Navigating the House of Hades
+update-ca-certificates
 
-In the OMOP world, the "House of Hades" (HADES) is actually a collection of open-source R packages for population-level characterization, patient-level prediction, and population-level estimation.
+PEM_FILE="/etc/ssl/certs/cloudsql-gar2.pem"
+PASSWORD="changeit"
+JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
+KEYSTORE="$JAVA_HOME/lib/security/cacerts"
+CERTS=$(grep 'END CERTIFICATE' $PEM_FILE| wc -l)
 
-![OHDSI HADES Overview](https://community.intersystems.com/sites/default/files/inline/images/images/image(10671).png)
+echo $KEYSTORE
 
-### Connectivity and Validation
-
-We've established our connection using standard OHDSI tools, pointing them at our InterSystems-powered OMOP CDM.
-
-![Connectivity Test](https://community.intersystems.com/sites/default/files/inline/images/images/image_1.png)
-
-```r
-# Testing the connection
-connection <- DatabaseConnector::connect(connectionDetails)
-# Success!
+# To process multiple certs with keytool, you need to extract
+# each one from the PEM file and import it into the Java KeyStore.
+for N in $(seq 0 $(($CERTS - 1))); do
+  ALIAS="$(basename $PEM_FILE)-$N"
+  echo "Adding to keystore with alias:$ALIAS"
+  cat $PEM_FILE | awk "n==$N { print }; /END CERTIFICATE/ { n++ }" | keytool -noprompt -import -trustcacerts \
+    -alias $ALIAS -keystore $KEYSTORE -storepass $PASSWORD
+done
 ```
 
-![Nostalgic Credentials](https://community.intersystems.com/sites/default/files/inline/images/images/image%20(6).png)
+#### 2. The Cloud Portal
+This can be done alternate ways over the listener as well, but to highlight it can be done in the Cloud Portal, we can use the SQL Query Tools.
 
-### Verifying the Schema
+![Cloud Portal SQL Query](https://community.intersystems.com/sites/default/files/inline/images/images/image(10670).png)
 
-Refreshing the System Management Portal (SMP) shows our OMOP schema is fully populated and ready for business.
+#### 3. RStudio
+Next step is RStudio, where the OHDSI packages will do most of the work after a little bit of setup.
 
-![SMP Refresh](https://community.intersystems.com/sites/default/files/inline/images/images/image(10673).png)
+```r
+install.packages("devtools")
+devtools::install_github("OHDSI/CommonDataModel")
+install.packages("DatabaseConnector")
+install.packages("SqlRender")
 
-### Woooo! 🎉
+Sys.setenv("DATABASECONNECTOR_JAR_FOLDER" = "/home/sween/Desktop/OMOP/iris-omop-extdb/jars")
+library(DatabaseConnector)
+downloadJdbcDrivers("iris")
+```
 
-This is a major milestone in the Odyssey. By combining InterSystems IRIS's legendary interoperability with the OHDSI standard, we're opening up new horizons for data-driven medicine.
+We can check to see if the iris dialect (now included with OHDSI tooling) is actually in there.
 
-![Celebration Shout Out](https://community.intersystems.com/sites/default/files/inline/images/images/image(10665).png)
+```r
+CommonDataModel::listSupportedDialects()
+```
 
-Excellent work and shout outs for everyone involved in this effort! The Odyssey continues...
+![IRIS Dialect Supported](https://community.intersystems.com/sites/default/files/inline/images/images/image(10671).png)
+
+Crowd goes wild, indeed IRIS is in there. I wanted to just dump the DDLs it creates to take a peek at them.
+
+```r
+CommonDataModel::buildRelease(cdmVersions = "5.4", targetDialects = "iris", outputfolder = "./ddl/iris/")
+```
+
+Inspecting our output folder:
+![DDL Output](https://community.intersystems.com/sites/default/files/inline/images/images/image_1.png)
+
+Now let's target our InterSystems Cloud Document instance and actually create the OMOP database.
+
+**Connect:**
+```r
+cd <- DatabaseConnector::createConnectionDetails(
+  dbms = "iris", 
+  connectionString = "jdbc:IRIS://your-cloud-instance:443/USER/:::true", 
+  user = "SQLAdmin", 
+  port = "443", 
+  password = "PASSWORD", 
+  pathToDriver = "./jars"
+)
+```
+
+**Execute:**
+```r
+CommonDataModel::executeDdl(
+  connectionDetails = cd, 
+  cdmVersion = "5.4", 
+  cdmDatabaseSchema = "OMOPCDM54"
+)
+```
+
+If everything goes well, no errors will be reported in RStudio.
+![RStudio Success](https://community.intersystems.com/sites/default/files/inline/images/images/image_2.png)
+
+Check your work on the InterSystems Cloud Document deployment. It's empty, but it's there!
+![Cloud Document Deployment](https://community.intersystems.com/sites/default/files/inline/images/images/image%20(5).png)
+
+👣🔫 **Alert:** In the CDM for IRIS, there is something to be aware of with a name collision of sorts with the "DOMAIN" table. In InterSystems SQL, `DOMAIN` is a keyword. You have to account for quoting the table name for operations.
+
+```python
+for table in cdmtables:
+    try:
+        if table == "domain":
+            sql = f'(select * from OMOPCDM54."{table}") AS temp_table;'
+        else:
+            sql = f'(select * from OMOPCDM54.{table}) AS temp_table;'
+```
+
+---
+
+### I'm in a hurry, and security is somebody else's job
+If you want the OMOP database on your local IRIS Community, Eval, Container, or POD, most of the steps apply above, just with a new connection string and creating the schema through the SMP.
+
+![SMP Schema Creation](https://community.intersystems.com/sites/default/files/inline/images/images/image(10672).png)
+
+Now back in RStudio again, point to the developer instance:
+
+```r
+cd <- DatabaseConnector::createConnectionDetails(
+  dbms = "iris", 
+  connectionString = "jdbc:IRIS://192.168.1.162:1972/USER", 
+  user = "_SYSTEM", 
+  port = "1972", 
+  password = "SYS", 
+  pathToDriver = "./jars"
+)
+
+CommonDataModel::executeDdl(
+  connectionDetails = cd, 
+  cdmVersion = "5.4", 
+  cdmDatabaseSchema = "OMOPCDM54"
+)
+```
+
+![Connecting to Local IRIS](https://community.intersystems.com/sites/default/files/inline/images/images/image%20(6).png)
+
+Connecting with nostalgic credentials... Now refresh the SMP and expand the OMOPCDM54 schema. Woooo!
+![SMP Refresh Success](https://community.intersystems.com/sites/default/files/inline/images/images/image(10673).png)
+
+🙌 🎉 Excellent work and shout outs for those involved in this effort!
+
+![Final Celebration](https://community.intersystems.com/sites/default/files/inline/images/images/image(10665).png)
+
+**OMOP Odyssey Series:**
+- [OMOP Odyssey - InterSystems OMOP, The Cloud Service (Troy)](https://community.intersystems.com/post/omop-odyssey-intersystems-omop-cloud-service-troy)
+- [OMOP Odyssey - FHIR® to OMOP ETL (Calypso’s Island)](https://community.intersystems.com/post/omop-odyssey-fhir%C2%AE-omop-etl-calypso%E2%80%99s-island)
+
+---
+> 💡 This article is considered InterSystems Data Platform **Best Practice**.
