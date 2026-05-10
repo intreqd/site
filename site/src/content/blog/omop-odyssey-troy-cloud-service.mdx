@@ -1,0 +1,85 @@
+---
+title: "OMOP Odyssey - InterSystems OMOP, The Cloud Service (Troy)"
+description: Embark on a journey to transform healthcare data using the InterSystems OMOP Cloud Service, starting with the setup of external PostgreSQL databases for OMOP CDM 5.4.
+pubDate: 2025-08-22
+heroImage: https://placehold.co/1208x201?text=InterSystems+Portfolio
+categories: ["OMOP", "InterSystems IRIS", "Cloud", "FHIR", "PostgreSQL", "Healthcare"]
+communityLink: https://community.intersystems.com/post/omop-odyssey-intersystems-omop-cloud-service-troy
+draft: false
+---
+
+![OMOP Odyssey Banner](https://community.intersystems.com/sites/default/files/inline/images/images/image(10762).png)
+
+Welcome to the start of the **OMOP Odyssey**. Our goal is to bridge the gap between clinical data (often in FHIR format) and the analytical power of the **OMOP Common Data Model (CDM)**. We'll be using the **InterSystems OMOP Cloud Service** as our primary vessel for this transformation.
+
+### The Objective: Troy
+
+In this first stage, we need to establish our destination: a functional OMOP CDM 5.4 database. We'll be using an external PostgreSQL instance to host our CDM, and we'll configure the InterSystems service to target it.
+
+![Architecture Overview](https://community.intersystems.com/sites/default/files/inline/images/images/image(10624).png)
+
+### Provisioning the External Database
+
+We're starting with a fresh PostgreSQL instance on AWS RDS. Our first task is to create the schema and tables required for OMOP CDM 5.4.
+
+![AWS RDS Provisioning](https://community.intersystems.com/sites/default/files/inline/images/images/image(10625).png)
+
+### Setting up the Environment
+
+We'll use R and the `DatabaseConnector` and `SqlRender` libraries from the OHDSI community to execute the DDL (Data Definition Language) for the CDM.
+
+![R Environment Setup](https://community.intersystems.com/sites/default/files/inline/images/images/image(10626).png)
+
+```r
+# R Snippet for OHDSI libraries
+install.packages("DatabaseConnector")
+install.packages("SqlRender")
+Sys.setenv("DATABASECONNECTOR_JAR_FOLDER" = "/home/sween/Desktop/OMOP/iris-omop-extdb/jars")
+library(DatabaseConnector)
+downloadJdbcDrivers("postgresql")
+```
+
+![Downloading Drivers](https://community.intersystems.com/sites/default/files/inline/images/images/image(10627).png)
+
+### Executing the DDL
+
+With our drivers in place, we connect to the PostgreSQL instance and execute the DDL to create the OMOP tables.
+
+![Connecting to Postgres](https://community.intersystems.com/sites/default/files/inline/images/images/image(10628).png)
+
+```r
+# Connect and Create
+cd <- DatabaseConnector::createConnectionDetails(
+  dbms = "postgresql",
+  server = "extrdp-ops.biggie-smalls.us-east-2.rds.amazonaws.com/OMOPCDM54",
+  user = "postgres",
+  password = "REDACTED",
+  pathToDriver = "./jars"
+)
+
+CommonDataModel::executeDdl(
+  connectionDetails = cd,
+  cdmVersion = "5.4",
+  cdmDatabaseSchema = "omopcdm54"
+)
+```
+
+![Executing DDL Progress](https://community.intersystems.com/sites/default/files/inline/images/images/image(10674).png)
+
+### Verifying the Work
+
+Now let's check our work. We should have an external PostgreSQL OMOP database ready to receive data.
+
+![Verifying OMOP Tables](https://community.intersystems.com/sites/default/files/inline/images/images/image(10675).png)
+
+### Configuring the InterSystems OMOP Cloud Service
+
+Finally, we configure the InterSystems OMOP Cloud Service to point to our newly created destination. This completes the transformation pipeline from FHIR to our external OMOP database.
+
+![Cloud Service Configuration](https://community.intersystems.com/sites/default/files/inline/images/images/image(10677).png)
+
+The InterSystems OMOP Cloud Service is now all set! The journey has just begun...
+
+![Stage Troy Complete](https://community.intersystems.com/sites/default/files/inline/images/images/image(10662).png)
+
+Stay tuned as we continue the **OMOP Odyssey**.

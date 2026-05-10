@@ -8,17 +8,24 @@ const postData = posts.map(p => ({
 }));
 ---
 
-<div id="blog-ticker" class="mt-3 px-4 py-2.5 rounded-box border border-base-300 bg-base-200/50 backdrop-blur-sm text-[11px] font-medium text-base-content/60 flex items-center gap-3 overflow-hidden min-h-[36px]">
-  <div class="flex items-center gap-2 shrink-0">
-    <span class="flex h-1.5 w-1.5 rounded-full bg-primary animate-pulse"></span>
-    <span class="uppercase tracking-widest opacity-70">Insights:</span>
+<div id="blog-ticker" class="mt-4 rounded-box border border-base-300 bg-base-200/50 backdrop-blur-sm overflow-hidden flex flex-col">
+  <!-- Header / Divider -->
+  <div class="flex items-center justify-between gap-3 border-b border-base-300 px-4 py-2.5 bg-base-300/30">
+    <div class="flex items-center gap-2">
+      <span class="flex h-1.5 w-1.5 rounded-full bg-primary animate-pulse"></span>
+      <span class="text-[10px] uppercase tracking-widest font-bold text-base-content/50">Latest Insights</span>
+    </div>
+    <span class="text-[9px] font-mono text-base-content/30">RANDOM_SELECT</span>
   </div>
   
-  <div id="ticker-container" class="relative flex-1 overflow-hidden">
-    <div id="ticker-content" class="truncate transition-all duration-1000 opacity-0 translate-y-1">
-      <a href="#" id="ticker-link" class="hover:text-primary transition-colors truncate block">
-        Loading latest insights...
-      </a>
+  <!-- Content -->
+  <div class="px-4 py-3.5">
+    <div id="ticker-container" class="relative overflow-hidden min-h-[1.5rem] flex items-center">
+      <div id="ticker-content" class="w-full transition-all duration-1000 opacity-0 translate-y-1">
+        <a href="#" id="ticker-link" class="text-xs font-medium text-base-content/70 hover:text-primary transition-colors truncate block">
+          Loading...
+        </a>
+      </div>
     </div>
   </div>
 </div>
@@ -62,11 +69,10 @@ const postData = posts.map(p => ({
     // Set interval for cycling
     const interval = setInterval(updateTicker, 6000);
 
-    // Cleanup on page unload (for View Transitions)
+    // Cleanup
     document.addEventListener('astro:before-preparation', () => clearInterval(interval), { once: true });
   }
 
-  // Support Astro View Transitions
   initTicker();
   document.addEventListener('astro:page-load', initTicker);
 </script>

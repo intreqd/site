@@ -28,22 +28,17 @@ const { Content } = await render(post);
       <header class="space-y-4">
         <a href="/blog" class="link link-hover text-sm text-base-content/60">← All posts</a>
 
-      <!--
-        heroImage is optional. Astro's <Image /> component optimizes the image
-        at build time: converts to WebP/AVIF, generates srcset, prevents CLS.
-        For remote URLs, add the hostname to `image.domains` in astro.config.mjs.
-        For local files, import them in frontmatter or use the image() schema helper.
-        Docs: https://docs.astro.build/en/guides/images/
-      -->
-      {post.data.heroImage && (
-        <Image
-          src={post.data.heroImage}
-          alt={post.data.title}
-          width={1200}
-          height={200}
-          class="mt-2 w-full rounded-box object-cover aspect-[6/1]"
-        />
-      )}
+        {post.data.heroImage && (
+          <div class="mt-2 overflow-hidden rounded-box">
+            <Image
+              src={post.data.heroImage}
+              alt={post.data.title}
+              width={1200}
+              height={600}
+              class="w-full object-cover"
+            />
+          </div>
+        )}
 
         <div class="space-y-2">
           <h1 class="text-2xl font-bold tracking-tight sm:text-3xl">{post.data.title}</h1>

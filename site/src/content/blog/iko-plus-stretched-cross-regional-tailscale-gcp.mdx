@@ -1,0 +1,82 @@
+---
+title: "IKO Plus: Stretched Cross Regional IrisCluster with Tailscale on Google Cloud Platform"
+description: Learn how to deploy a stretched InterSystems IRIS cluster across Google Cloud regions using Tailscale for seamless networking and cross-regional high availability.
+pubDate: 2025-10-01
+heroImage: https://placehold.co/1208x201?text=InterSystems+Portfolio
+categories: ["iko", "InterSystems IRIS", "Kubernetes", "Tailscale", "Google Cloud", "Networking"]
+communityLink: https://community.intersystems.com/post/iko-plus-stretched-cross-regional-iriscluster-tailscale-google-cloud-platform
+draft: false
+---
+
+![IKO Plus Stretched Cluster](https://community.intersystems.com/sites/default/files/inline/images/images/image(11786).png)
+
+In this installment of the **IKO Plus** series, we are going to get a little bit "stretched." We'll look at how to deploy an InterSystems IrisCluster that spans multiple Google Cloud regions (e.g., US and UK) using **Tailscale** to provide a unified, secure overlay network between our Kubernetes clusters.
+
+### The Problem: Cross-Regional High Availability
+
+Traditionally, stretching a database cluster across regions involves complex VPC peering, VPN gateways, and careful CIDR management. We want the performance and simplicity of the InterSystems Kubernetes Operator (IKO) but with the resilience of a multi-region footprint.
+
+### The Solution: Tailscale Overlay
+
+Tailscale allows us to create a secure, flat mesh network between nodes in different regions without worrying about underlying firewalls or complex routing. By installing Tailscale on our Kubernetes nodes, we can allow the IKO to manage mirror pairs across the Atlantic.
+
+![Tailscale Overlay Network](https://community.intersystems.com/sites/default/files/inline/images/images/image(11785).png)
+
+### The Setup
+
+We'll start with two Kubernetes clusters in Google Cloud Platform (GCP):
+- **Region A**: `us-east1`
+- **Region B**: `europe-west2` (UK)
+
+Each cluster will have Tailscale installed, and we'll use Tailscale's subnet routing to expose the pod and service CIDRs to each other.
+
+### IKO Topology
+
+Using the IKO, we define a single `IrisCluster` resource. The magic happens in the `topology` section where we specify `preferredZones` to ensure our mirror pair is distributed across our regional footprints.
+
+```yaml
+apiVersion: intersystems.com/v3
+kind: IrisCluster
+metadata:
+  name: stretched-iris
+spec:
+  topology:
+    dataMaster:
+      preferredZones: ["us-east1-a"]
+    dataSlave:
+      preferredZones: ["europe-west2-a"]
+```
+
+![IrisCluster Deployment](https://community.intersystems.com/sites/default/files/inline/images/images/image(11787).png)
+
+### Deploying the Stretched Cluster
+
+Once the networking is established, we apply our configuration.
+
+![Deploying the Cluster](https://community.intersystems.com/sites/default/files/inline/images/images/image(11788).png)
+
+And just like that, the IKO provisions the master in the US and the slave in the UK, with mirroring automatically configured over the Tailscale mesh.
+
+![Stretched Mirroring Active](https://community.intersystems.com/sites/default/files/inline/images/images/image(11790).png)
+
+### Checking our Work
+
+Let's prove the geo-location by shelling into each pod and running a simple location check.
+
+#### US Pod (Master)
+🇺🇸
+![US Location Check](https://community.intersystems.com/sites/default/files/inline/images/images/image(11791).png)
+
+#### UK Pod (Slave)
+🇬🇧
+![UK Location Check](https://community.intersystems.com/sites/default/files/inline/images/images/image(11792).png)
+
+🎤⬇️
+
+![Mission Accomplished](https://community.intersystems.com/sites/default/files/inline/images/images/image(11793).png)
+
+### Summary
+
+By combining the **InterSystems Kubernetes Operator** with **Tailscale**, we've achieved a true "stretched" database architecture with minimal networking overhead. This setup provides excellent disaster recovery and regional locality for global applications.
+
+Stay tuned for more! Special thanks to Mark Hayden from InterSystems for his guidance on IKO topology zones.

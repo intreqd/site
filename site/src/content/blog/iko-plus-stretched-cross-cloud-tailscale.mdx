@@ -1,0 +1,99 @@
+---
+title: "IKO Plus: Stretched Cross Cloud, Cross Regional IrisCluster with Tailscale"
+description: Taking cross-regional high availability to the next level by stretching an InterSystems IRIS cluster across both Google Cloud and AWS using Tailscale for a truly vendor-agnostic disaster recovery strategy.
+pubDate: 2025-09-30
+heroImage: https://placehold.co/1208x201?text=InterSystems+Portfolio
+categories: ["iko", "InterSystems IRIS", "Kubernetes", "Tailscale", "Google Cloud", "AWS", "Multi-Cloud"]
+communityLink: https://community.intersystems.com/post/iko-plus-stretched-cross-cloud-cross-regional-iriscluster-tailscale
+draft: false
+---
+
+In the previous post, we stretched an InterSystems IrisCluster across Google Cloud regions. Today, we're taking it a step further: **Cross-Cloud**. We are going to stretch our cluster between Google Cloud (US/UK) and Amazon Web Services (AWS).
+
+### The Multi-Cloud Objective
+
+Why go cross-cloud?
+1. **Vendor Agnostic DR**: True disaster recovery shouldn't just survive a regional outage, but a provider-wide catastrophic event.
+2. **Regulatory Compliance**: Many industries require data to be hosted by alternate vendors for business continuity.
+3. **Regional Locality**: Using the best region regardless of the provider.
+
+### The Strategy
+
+We'll add a third node to our Tailnet, this time hosted in **AWS (Oregon)**. This node will serve as our Async DR member.
+
+### Step 1: Prepare the AWS Node
+
+First, we need to label our new AWS node so the IKO knows where to place our DR instance.
+
+![Labeling AWS Node](https://community.intersystems.com/sites/default/files/inline/images/images/image(11886).png)
+
+```bash
+kubectl label node ip-10-129-0-182.ec2.internal topology.kubernetes.io/zone=us-aws -n ikoplus
+```
+
+### Step 2: Update IrisCluster Topology
+
+We need to update our `IrisCluster` definition to include the new Async DR member and map it to the new zone.
+
+![Updating IKO Topology](https://community.intersystems.com/sites/default/files/inline/images/images/image(11887).png)
+
+```yaml
+# Snippet of the mirrorMap and topology update
+mirrorMap:
+  - name: data
+    members:
+      - role: master
+        zone: us-east1-a
+      - role: slave
+        zone: europe-west2-a
+      - role: asyncdr
+        zone: us-aws
+```
+
+### Step 3: Deployment & Attestation
+
+Applying the changes... Bam!
+
+![Cluster Deployment Result](https://community.intersystems.com/sites/default/files/inline/images/images/image(11888).png)
+
+The IKO successfully provisions the Async DR member in AWS. We can verify the location of our pods across the different cloud providers.
+
+![Cloud Provider Attestation](https://community.intersystems.com/sites/default/files/inline/images/images/image(11889).png)
+
+And checking the mirror status within IRIS confirms everything is in sync across the Atlantic and the US mainland.
+
+![IRIS Mirror Status](https://community.intersystems.com/sites/default/files/inline/images/images/image(11890).png)
+
+### Lessons Learned & "Foot Guns"
+
+Going cross-cloud introduced a few challenges that weren't present in the single-cloud setup:
+
+#### AWS Specifics
+- **DNS**: Disabled DNS hostnames in the VPC and used host entries with Tailscale IPs.
+- **Time Sync**: Tightened up polling for `chronyd` to ensure all members were on the same page.
+- **Networking**: Used an Internet Gateway (IGW) without a NAT gateway for simplicity in this lab.
+
+#### Instance Configuration
+- Enabled IP forwarding for Tailscale to route traffic correctly.
+
+```bash
+echo 'net.ipv4.ip_forward = 1' | sudo tee -a /etc/sysctl.d/99-tailscale.conf
+sudo sysctl -p /etc/sysctl.d/99-tailscale.conf
+```
+
+#### Tailnet Configuration
+Subnet advertising and route acceptance were required on all boxes, followed by approval in the Tailscale admin console.
+
+![Tailscale Route Approval](https://community.intersystems.com/sites/default/files/inline/images/images/Clipboard_2025-09-29-12-53-57.png)
+
+### Business Continuity Checklist
+
+Let's see if we met our goals:
+
+![Business Continuity Checklist](https://community.intersystems.com/sites/default/files/inline/images/images/image(11891).png)
+
+- ✅ **High Availability**: Implemented via IKO Mirror.
+- ✅ **Disaster Recovery Distance**: Our DR instance is over 2500 miles from the nearest HA member.
+- ✅ **Alternate Vendor**: We are running on both Google Cloud and AWS.
+
+Onward and Upward! Multi-cloud IRIS clusters are now a reality.

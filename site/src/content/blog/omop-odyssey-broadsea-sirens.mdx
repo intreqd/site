@@ -1,0 +1,65 @@
+---
+title: "OMOP Odyssey - BroadSea (The Sirens)"
+description: Navigating the "Sirens" of the OHDSI ecosystem by deploying BroadSea, a containerized platform for OMOP analytics, and integrating it with the InterSystems OMOP Cloud Service.
+pubDate: 2025-09-20
+heroImage: https://placehold.co/1208x201?text=InterSystems+Portfolio
+categories: ["OMOP", "InterSystems IRIS", "BroadSea", "OHDSI", "Docker", "Analytics"]
+communityLink: https://community.intersystems.com/post/omop-odyssey-broadsea-sirens
+draft: false
+---
+
+![OMOP Odyssey BroadSea](https://community.intersystems.com/sites/default/files/inline/images/images/image(10861).png)
+
+Welcome to the **Sirens**. In the OHDSI ecosystem, the allure of deep data discovery is powerful, but the setup can be treacherous. To navigate these waters, we're deploying **BroadSea**, a comprehensive, containerized platform that brings together all the essential OHDSI tools—Atlas, WebAPI, and Hades—into a single, deployable unit.
+
+### The Vessel: BroadSea
+
+BroadSea simplifies the deployment of the entire OHDSI analytical stack using Docker. It allows us to spin up a fully functional research environment in minutes, rather than days.
+
+![BroadSea Architecture](https://community.intersystems.com/sites/default/files/inline/images/images/image(10862).png)
+
+### Setting Sail with Docker Compose
+
+We use Docker Compose to orchestrate our BroadSea deployment. This ensures that Atlas, WebAPI, and our results database are all correctly configured and networked.
+
+![Docker Compose Deployment](https://community.intersystems.com/sites/default/files/inline/images/images/image(10864).png)
+
+### Integrating with InterSystems OMOP
+
+The most critical part of our mission is connecting BroadSea's WebAPI to our InterSystems OMOP Cloud Service. This requires some "nostalgic" credential management and manual SQL insertion into the WebAPI source tables.
+
+![WebAPI Configuration](https://community.intersystems.com/sites/default/files/inline/images/images/image(10865).png)
+
+```bash
+# Registering the InterSystems Source
+export IRIS_JDBC="jdbc:IRIS://k8s-elb.us-east-2.amazonaws.com:443/USER/:::true"
+cat << EOF > 200_populate_iris_source_daimon.sql
+INSERT INTO webapi.source(source_id, source_name, source_key, source_connection, source_dialect, username, password)
+VALUES (2, 'InterSystems OMOP Stage', 'IRIS', '$IRIS_JDBC', 'iris', '$IRIS_USER', '$IRIS_PASS');
+# ...
+EOF
+docker-compose exec broadsea-atlasdb psql -U postgres -f "/docker-entrypoint-initdb.d/200_populate_iris_source_daimon.sql"
+```
+
+### Navigating Security
+
+To ensure secure communication between our containers and the InterSystems cloud service, we need to import our SSL certificates into the Java keystores of the BroadSea services.
+
+![SSL Certificate Import](https://community.intersystems.com/sites/default/files/inline/images/images/image(10866).png)
+
+```bash
+# Importing the IRIS certificate
+docker-compose exec broadsea-hades bash -c "/usr/bin/keytool -importcert -file /home/ohdsi/certificateSQLaaS.pem -keystore /home/ohdsi/keystore.jks -alias IRIScert -storepass changeit -noprompt"
+```
+
+### The Arrival: Atlas is Live!
+
+With our connection established and security in place, we can refresh the WebAPI and log into **Atlas**. Our InterSystems OMOP data is now ready for world-class characterization and cohort building.
+
+![Atlas Interface Live](https://community.intersystems.com/sites/default/files/inline/images/images/image(10869).png)
+
+The journey through the Sirens has been successful. Our InterSystems data is now fully integrated with the global OHDSI community tools.
+
+![BroadSea Summary](https://community.intersystems.com/sites/default/files/inline/images/images/image(10872).png)
+
+Stay tuned for the next stage of the **OMOP Odyssey**.

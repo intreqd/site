@@ -1,0 +1,77 @@
+---
+title: "Databricks Station - InterSystems Cloud SQL"
+description: Connecting Databricks to InterSystems Cloud SQL using JDBC, exploring how to read and write data between the two platforms for advanced analytics and machine learning.
+pubDate: 2024-09-27
+heroImage: https://placehold.co/1208x201?text=InterSystems+Portfolio
+categories: ["Databricks", "InterSystems IRIS", "Cloud SQL", "JDBC", "PySpark", "Analytics"]
+communityLink: https://community.intersystems.com/post/databricks-station-intersystems-cloud-sql
+draft: false
+---
+
+![Databricks Station Banner](https://community.intersystems.com/sites/default/files/inline/images/databricks_station_-_intersystems_cloud_sql.png)
+
+Connecting the high-performance analytical capabilities of **Databricks** with the robust data management of **InterSystems Cloud SQL** opens up a world of possibilities for healthcare and financial data engineering. In this station, we'll walk through the process of bridging these two clouds using JDBC.
+
+### The Setup: Driver and Connectivity
+
+To get started, we need to ensure Databricks can speak "IRIS". This involves uploading the InterSystems JDBC driver to our Databricks cluster and configuring the necessary environment variables.
+
+![Driver Installation](https://community.intersystems.com/sites/default/files/inline/images/drivercert_anim_preview.jpg)
+
+### Inbound: Reading from InterSystems Cloud SQL
+
+Once the driver is in place, we can use PySpark to read data from Cloud SQL. This is perfect for pulling curated datasets into Databricks for machine learning or complex feature engineering.
+
+![Inbound Data Flow](https://community.intersystems.com/sites/default/files/inline/images/databricks_station_-_inbound_from_cloud_sql.png)
+
+```python
+# PySpark Snippet to Read from Cloud SQL
+jdbc_url = "jdbc:IRIS://cloud-sql-host:443/USER"
+connection_properties = {
+    "user": "DB_USER",
+    "password": "DB_PASSWORD",
+    "driver": "com.intersystems.jdbc.IRISDriver",
+    "ssl": "true"
+}
+
+df = spark.read.jdbc(
+    url=jdbc_url, 
+    table="(SELECT TOP 10 * FROM SQLUser.MyTable) AS tmp", 
+    properties=connection_properties
+)
+df.show()
+```
+
+![Reading Data Result](https://community.intersystems.com/sites/default/files/inline/images/images/Clipboard_2024-07-23-08-43-47.png)
+
+### Outbound: Writing to InterSystems Cloud SQL
+
+Equally important is the ability to write results back to Cloud SQL. Whether it's model predictions or aggregated insights, pushing data back to the InterSystems environment makes it accessible to downstream applications and users.
+
+![Outbound Data Flow](https://community.intersystems.com/sites/default/files/inline/images/databricks_station_-_outbound_to_cloud_sql.png)
+
+```python
+# PySpark Snippet to Write to Cloud SQL
+df_results.write.jdbc(
+    url=jdbc_url, 
+    table="SQLUser.Analytics_Results", 
+    mode="overwrite", 
+    properties=connection_properties
+)
+```
+
+![Writing Data Validation](https://community.intersystems.com/sites/default/files/inline/images/images/Clipboard_2024-07-23-09-18-34.png)
+
+### Best Practices
+
+When working with these two platforms, keep these tips in mind:
+
+*   **Filter Early**: Use PySpark's DataFrame API to filter and aggregate data *before* reading from the database to minimize network transfer.
+*   **Atomic Operations**: For write operations, consider using transactions or single-partition writes to ensure consistency.
+*   **SSL/TLS**: Always use encrypted connections (SSL=true) when communicating between cloud environments.
+
+### Conclusion
+
+Bridging Databricks and InterSystems Cloud SQL creates a powerful "data station" for your analytical workloads. By leveraging the strengths of both platforms, you can build scalable, high-performance data pipelines that drive real business value.
+
+![Databricks Station Summary](https://community.intersystems.com/sites/default/files/inline/images/databricks_station_-_outbound.png)

@@ -49,6 +49,10 @@ export default defineConfig({
         protocol: 'https',
         hostname: 'images.unsplash.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'placehold.co',
+      },
     ],
   },
   integrations: [mdx(), sitemap(), icon(), alpinejs()],

@@ -1,0 +1,71 @@
+---
+title: "IKO Plus: Operator Works From Home - IrisCluster Provisioning Across Kubernetes Clusters"
+description: Decoupling the InterSystems Kubernetes Operator from the managed clusters to enable centralized, remote provisioning and lifecycle management across multiple Kubernetes environments.
+pubDate: 2025-10-24
+heroImage: https://placehold.co/1208x201?text=InterSystems+Portfolio
+categories: ["iko", "InterSystems IRIS", "Kubernetes", "Remote Management", "Operator Patterns"]
+communityLink: https://community.intersystems.com/post/iko-plus-operator-works-home-iriscluster-provisioning-across-kubernetes-clusters
+draft: false
+---
+
+In this installment of **IKO Plus**, we're exploring a "Work From Home" (WFH) pattern for the InterSystems Kubernetes Operator. Typically, the operator runs inside the same cluster as the `IrisCluster` it manages. But what if you wanted one operator to manage clusters across your entire organization?
+
+### The Concept: Decoupled Provisioning
+
+The goal is to have the IKO running in a "Home" cluster (e.g., a management cluster) while it provisions and manages `IrisCluster` resources in a "Work" cluster (e.g., production or staging).
+
+### Step 1: Install IKO at HOME 🏠
+
+We install the IKO using Helm in our management cluster. We need to ensure it has the appropriate kubeconfigs to reach out to other clusters.
+
+![Operator Running at Home](https://community.intersystems.com/sites/default/files/inline/images/images/Clipboard_2025-10-22-16-08-14.png)
+
+```yaml
+# values.yaml snippet for remote management
+operator:
+  useKubeapiserverFqdnForAks: true
+  healthcheck:
+    enabled: true
+```
+
+### Step 2: Install CRDs (only) at WORK 🏢
+
+The operator expects the `IrisCluster` Custom Resource Definitions (CRDs) to exist in the cluster where the resources are defined. However, we don't want the operator itself running there. We can export the CRDs from home and apply them to work.
+
+![CRDs Loaded at Work](https://community.intersystems.com/sites/default/files/inline/images/images/Clipboard_2025-10-22-16-20-22.png)
+
+```bash
+# Export from home, apply to work
+kubectl get crd irisclusters.intersystems.com --kubeconfig home.kubeconfig -o yaml > ikocrds.yaml
+kubectl create -f ikocrds.yaml --kubeconfig work.kubeconfig
+```
+
+### Step 3: Remote Provisioning (WFH)
+
+Now for the magic. When we apply an `IrisCluster` manifest to the "Work" cluster, the operator sitting in the "Home" cluster will detect the new resource and begin the provisioning process remotely.
+
+![Remote Provisioning Logic](https://community.intersystems.com/sites/default/files/inline/images/images/image(12032).png)
+
+### The Demo
+
+Watch as the operator at home plans and schedules the IRIS pods in the remote work cluster.
+
+![WFH Provisioning Demo](https://community.intersystems.com/sites/default/files/inline/images/kooha-2025-10-23-12-51-46_anim_preview.jpg)
+
+The operator logs show it actively managing the remote resource:
+
+![Operator Remote Logs](https://community.intersystems.com/sites/default/files/inline/images/images/image(12034).png)
+
+And the `IrisCluster` status in the work cluster confirms it's healthy and managed:
+
+![IrisCluster Status Work](https://community.intersystems.com/sites/default/files/inline/images/images/image(12033).png)
+
+💥 Mission accomplished. The operator is successfully working from home!
+
+### Why Use This Pattern?
+
+- **Centralized Upgrades**: Upgrade your operator in one place for all clusters.
+- **Resource Efficiency**: Save overhead by not running an operator pod in every single cluster.
+- **Security**: Keep sensitive credentials (like those needed by the operator) in a single, more secure management cluster.
+
+Onward and Upward! The K-Ninja strikes again.

@@ -1,0 +1,57 @@
+---
+title: "IKO Plus: Multi-Cluster IrisClusters Propagated with Karmada"
+description: Scaling InterSystems IRIS across multiple Kubernetes clusters using Karmada for centralized management, resource propagation, and cross-cluster governance.
+pubDate: 2025-10-24
+heroImage: https://placehold.co/1208x201?text=InterSystems+Portfolio
+categories: ["iko", "InterSystems IRIS", "Kubernetes", "Karmada", "Multi-Cluster"]
+communityLink: https://community.intersystems.com/post/iko-plus-multi-cluster-irisclusters-propogated-karmada
+draft: false
+---
+
+In this installment of the **IKO Plus** series, we are looking at **Karmada** (Kubernetes Armada). If you are managing InterSystems IRIS across dozens or even hundreds of Kubernetes clusters, you need a way to centralize management and propagate resources reliably.
+
+### Why Karmada?
+
+Karmada allows you to run your cloud-native applications across multiple Kubernetes clusters and clouds, with no changes to your applications. It provides:
+- **Centralized Management**: One control plane to rule them all.
+- **Resource Propagation**: Define a resource once, and Karmada ensures it exists where it should.
+- **Cross-Cluster Governance**: Ensure compliance across your entire fleet.
+
+### The Setup
+
+We have our "host" cluster where Karmada is installed, and we want to join our regional clusters.
+
+### Joining and Propagating
+
+First, we join our member clusters to the Karmada control plane.
+
+![Joining Clusters to Karmada](https://community.intersystems.com/sites/default/files/inline/images/images/image(12010).png)
+
+Now, let's propagate our stretched cluster configuration from a previous post to a new target cluster in GCP.
+
+![Karmada Propagation Demo](https://community.intersystems.com/sites/default/files/inline/images/kooha-2025-10-19-17-25-50_anim_preview.jpg)
+
+The second cluster is now available for business in Google Cloud Platform as a stretched cluster.
+
+![Stretched Cluster in GCP](https://community.intersystems.com/sites/default/files/inline/images/images/image(12011).png)
+
+### Propagation Policies
+
+The magic happens in the `PropagationPolicy`. To get an `IrisCluster` out to a new region, we simply edit the policy to include the new target `k8s`.
+
+![Editing Propagation Policy](https://community.intersystems.com/sites/default/files/inline/images/images/image(12012).png)
+
+And there you have it: a clone of the `IrisCluster` out on GCP, managed centrally.
+
+![IRIS Cluster Clone on GCP](https://community.intersystems.com/sites/default/files/inline/images/images/image(12013).png)
+
+### Summary & Advanced Features
+
+Karmada scratches the surface of what's possible with multi-cluster management. Advanced users can explore:
+- **Overrides**: Customize resources per joined cluster (e.g., different storage classes).
+- **Networking**: Integrate with Submariner for cross-cluster pod-to-pod communication.
+- **Push vs. Pull**: Choose the configuration style that fits your workflow.
+
+[![Karmada GitHub](https://gh-card.dev/repos/karmada-io/karmada.png)](https://karmada.io/)
+
+Scaling InterSystems IRIS is no longer a cluster-by-cluster manual effort. With Karmada and the IKO, you have a true "Armada" of data platforms at your fingertips.

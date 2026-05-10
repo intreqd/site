@@ -1,0 +1,57 @@
+---
+title: "OMOP Odyssey - No Code CDM Exploration with Databricks AI/BI Genie (Island of Aeolus)"
+description: Exploring the OMOP Common Data Model without writing a single line of code using Databricks AI/BI Genie on the "Island of Aeolus," comparing natural language queries with standard SQL results.
+pubDate: 2025-09-12
+heroImage: https://placehold.co/1208x201?text=InterSystems+Portfolio
+categories: ["OMOP", "InterSystems IRIS", "Databricks", "AI/BI", "No Code", "Data Exploration"]
+communityLink: https://community.intersystems.com/post/omop-odyssey-no-code-cdm-exploration-databricks-aibi-genie-island-aeolus
+draft: false
+---
+
+![OMOP Odyssey Aeolus](https://community.intersystems.com/sites/default/files/inline/images/images/image(10765).png)
+
+Welcome to the **Island of Aeolus**. In this stage of our Odyssey, we're exploring the "winds of change" in data discovery. We've transformed our clinical data into the OMOP CDM, but now we want to explore it without the need for complex SQL or R programming. Enter **Databricks AI/BI Genie**.
+
+### The Concept: No-Code Exploration
+
+Databricks Genie allows users to interact with their data using natural language. It acts as an intelligent layer that translates human questions into optimized SQL queries, making data exploration accessible to everyone—not just data scientists.
+
+![Databricks & OMOP Integration](https://community.intersystems.com/sites/default/files/inline/images/images/image(10740).png)
+
+### Setting Up the Genie
+
+We point our Genie at our InterSystems-powered OMOP CDM. The Genie indexes the schema, understands the relationships between tables, and prepares itself to answer our questions.
+
+![Genie Indexing](https://community.intersystems.com/sites/default/files/inline/images/images/image(10741).png)
+
+### Asking the Wind
+
+Let's start with a simple question: "How many patients are in our OMOP database?"
+
+![Simple Patient Count](https://community.intersystems.com/sites/default/files/inline/images/images/image(10742).png)
+
+The Genie instantly provides the answer, along with the SQL it used to generate the result.
+
+### Natural Language vs. SQL
+
+For more complex queries, the Genie's power really shines. We asked for the number of patients with an observation period longer than one year.
+
+![Genie Complex Query](https://community.intersystems.com/sites/default/files/inline/images/images/image(10751).png)
+
+Let's compare the Genie's output with a standard OHDSI SQL example:
+
+| Databricks Genie SQL | Standard OMOP SQL |
+| :--- | :--- |
+| ```sql SELECT COUNT(DISTINCT person_id) FROM omopcdm54.iccastage.observation_period WHERE DATEDIFF(observation_period_end_date, observation_period_start_date) > 365 ``` | ```sql SELECT COUNT(DISTINCT person_ID) AS NUM_persons FROM observation_period WHERE observation_period_END_DATE - observation_period_START_DATE >= 365; ``` |
+
+The style is different, and the Genie explicitly handles the schema location, but the result is fundamentally the same.
+
+### Beyond the Basics
+
+While exploring the CDM itself is useful, the real magic happens when we start looking at the analytical results. However, to get there, we'll need to dive back into the OHDSI community tooling.
+
+The journey through the Island of Aeolus has shown us that the future of data exploration is conversational.
+
+![Aeolus Summary](https://community.intersystems.com/sites/default/files/inline/images/images/image(10750).png)
+
+Stay tuned for the next stage of the **OMOP Odyssey**.

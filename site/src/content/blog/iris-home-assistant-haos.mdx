@@ -1,0 +1,84 @@
+---
+title: "IRIS on Home Assistant (HAOS Add-on)"
+description: Running InterSystems IRIS as a native Home Assistant add-on, enabling automated smart home metrics and Ambient AI capabilities directly within HAOS.
+pubDate: 2024-03-21
+heroImage: https://community.intersystems.com/sites/default/files/inline/images/images/header.png
+categories: ["Home Assistant", "InterSystems IRIS", "HAOS", "IoT", "Automation", "Smart Home"]
+communityLink: https://community.intersystems.com/post/iris-home-assistant-add-haos
+draft: false
+---
+
+Have you ever wanted to run **InterSystems IRIS** as part of your smart home ecosystem? With the **Home Assistant Operating System (HAOS)** add-on architecture, you can now run IRIS directly on your Home Assistant hub. This opens up incredible possibilities for local data persistence, Ambient AI, and advanced automation.
+
+### The Objective: Native IRIS on HAOS
+
+The goal is to package InterSystems IRIS (specifically the Health Community edition) as a native HAOS add-on. This allows it to be managed, started, and stopped directly from the Home Assistant interface.
+
+![About the Add-on](https://community.intersystems.com/sites/default/files/inline/images/images/about.png)
+
+### Setting Up the Repository
+
+To get started, you need to add the custom repository to your Home Assistant Add-on Store.
+
+![Adding Repository](https://community.intersystems.com/sites/default/files/inline/images/images/image(12052).png)
+
+Once added, you'll see the "InterSystems IRIS Health Community" add-on available for installation.
+
+![Add-on Store Listing](https://community.intersystems.com/sites/default/files/inline/images/images/image(12053).png)
+
+### Configuration and Exposure
+
+The add-on uses `network_mode: host` to ensure that IRIS's ports (1972 and 52773) are correctly exposed to your local network. You can configure the endpoint and other options directly in the HA UI.
+
+![Add-on Configuration](https://community.intersystems.com/sites/default/files/inline/images/images/image(12056).png)
+
+### Extra Credit: Scraping Metrics
+
+One of the coolest things about running IRIS on HAOS is the ability to expose IRIS metrics as Home Assistant sensors. By using the REST platform in your `configuration.yaml`, you can scrape the IRIS Prometheus metrics API.
+
+```yaml
+# configuration.yaml snippet
+sensor:
+  - platform: rest
+    name: iris_log_reads_per_sec
+    resource: http://127.0.0.1:52773/api/monitor/metrics
+    value_template: >
+      {% set lines = value.split('\n') %}
+      {% for line in lines %}
+        {% if line.startswith('iris_log_reads_per_sec ') %}
+          {{ line.split()[-1] }}
+        {% endif %}
+      {% endfor %}
+```
+
+Now you have IRIS performance data available as a first-class sensor in your Home Assistant dashboard!
+
+![IRIS Metrics in Dashboard](https://community.intersystems.com/sites/default/files/inline/images/images/image(12058).png)
+
+### Under the Hood
+
+The add-on is powered by two main files: a `config.json` defining the HAOS integration and a simple `Dockerfile` pointing to the InterSystems container registry.
+
+![GitHub Project](https://gh-card.dev/repos/sween/iris-haos.svg)
+
+```json
+// config.json snippet
+{
+  "name": "InterSystems IRIS Health Community (HAOS)",
+  "version": "0.1.1",
+  "slug": "irishealth",
+  "description": "Runs InterSystems IRIS Health Community as a Home Assistant add-on",
+  "startup": "services",
+  "boot": "auto",
+  "arch": ["amd64", "aarch64"],
+  "ports": { "1972/tcp": 1972, "52773/tcp": 52773 },
+  "webui": "http://[HOST]:[PORT:52773]/csp/sys/UtilHome.csp"
+}
+```
+
+```dockerfile
+# Dockerfile
+FROM containers.intersystems.com/intersystems/irishealth-community:2025.1
+```
+
+Cheers to automated, intelligent homes powered by InterSystems!

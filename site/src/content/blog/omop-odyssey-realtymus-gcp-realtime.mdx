@@ -1,0 +1,59 @@
+---
+title: "OMOP Odyssey - GCP Healthcare API Real Time FHIR® to OMOP Transformation (RealTymus)"
+description: Implementing a real-time FHIR to OMOP transformation pipeline using GCP Healthcare API, Pub/Sub, and Cloud Functions to bridge data events directly into the InterSystems OMOP Cloud Service.
+pubDate: 2025-10-24
+heroImage: https://placehold.co/1208x201?text=InterSystems+Portfolio
+categories: ["OMOP", "InterSystems IRIS", "GCP", "Healthcare API", "Real Time", "Cloud Functions", "FHIR"]
+communityLink: https://community.intersystems.com/post/omop-odyssey-gcp-healthcare-api-real-time-fhir%C2%AE-omop-transformation-realtymus
+draft: false
+---
+
+![OMOP Odyssey GCP Realtime](https://community.intersystems.com/sites/default/files/inline/images/images/image(11119).png)
+
+Welcome to **RealTymus**. In this stage of the Odyssey, we're pushing the boundaries of data velocity. We've automated batch exports, but now we want to transform healthcare events *as they happen*. We're using the **GCP Healthcare API**, **Pub/Sub**, and **Cloud Functions** to create a real-time bridge to the **InterSystems OMOP Cloud Service**.
+
+### The Architecture: Event-Driven Transformation
+
+The core idea is simple: every time a FHIR resource is created or updated in the GCP Healthcare API, it triggers a notification. Our pipeline catches that notification and immediately kicks off the transformation to OMOP.
+
+![Real-Time Architecture Overview](https://community.intersystems.com/sites/default/files/inline/images/images/image(11120).png)
+
+### Step One: Pub/Sub Subscription
+
+We configure our GCP FHIR store to publish events to a Pub/Sub topic. Our Cloud Function is subscribed to this topic, waiting for incoming data events.
+
+![Cloud Function Subscription](https://community.intersystems.com/sites/default/files/inline/images/images/image(11167).png)
+
+### Step Two: Exporting to GCS
+
+When an event occurs, the Cloud Function triggers an export of the specific resource (or the entire store for small datasets) to a Google Cloud Storage (GCS) bucket.
+
+![Export to GCS](https://community.intersystems.com/sites/default/files/inline/images/images/image(11168).png)
+
+### Step Three: Bridging the Clouds
+
+Once the data is in GCS, our Cloud Function creates a ZIP archive and pushes it directly to the ingestion S3 bucket of the InterSystems OMOP Cloud Service on AWS.
+
+![Zip Push to AWS](https://community.intersystems.com/sites/default/files/inline/images/images/image(11176).png)
+
+### Step Four: InterSystems Transformation
+
+InterSystems picks up the event-driven ZIP and immediately transforms the FHIR resources into the target OMOP CDM.
+
+![InterSystems Transform in Action](https://community.intersystems.com/sites/default/files/inline/images/images/image(11177).png)
+
+### Step Five: Immediate Validation
+
+We can verify the transformation instantly. A FHIR Organization resource created in GCP is now available as a `care_site` in our OMOP CDM.
+
+![Care Site Validation](https://community.intersystems.com/sites/default/files/inline/images/images/image(11178).png)
+
+When did that transformation happen? **Now.** Everything that's happening now is happening now.
+
+![Spaceballs Now](https://y.yarn.co/1606b976-d008-47d7-a644-7451fff44fd4_text.gif)
+
+### Conclusion
+
+By leveraging event-driven cloud native services, we've reduced the latency between clinical events and analytical readiness to near real-time. This opens up incredible possibilities for real-time population health monitoring and clinical decision support.
+
+The journey through RealTymus is complete. The Odyssey continues...

@@ -1,0 +1,81 @@
+---
+title: "IKO Plus: Database Management, Migration, or Day 1 Seeding your Mirrored IrisCluster"
+description: Techniques for managing, migrating, and seeding databases within a mirrored InterSystems IRIS cluster on Kubernetes, ensuring data integrity and high availability from day one.
+pubDate: 2025-11-01
+heroImage: https://placehold.co/1208x201?text=InterSystems+Portfolio
+categories: ["iko", "InterSystems IRIS", "Kubernetes", "Database Management", "Migration", "Mirroring"]
+communityLink: https://community.intersystems.com/post/iko-plus-database-management-migration-or-day-1-seeding-your-mirrored-iriscluster
+draft: false
+---
+
+In this installment of **IKO Plus**, we're tackling the critical task of **Database Management**. Specifically, how do you handle migrations or "Day 1" seeding of your data into a brand new, mirrored InterSystems IrisCluster on Kubernetes?
+
+### The Challenge: Initial Data Seeding
+
+When you spin up a mirrored cluster with the IKO, you get a clean slate. But most real-world scenarios require moving existing data into this new environment. Traditionally, this involved complex manual steps—moving `.dat` files, mounting PVCs, and configuring mirroring.
+
+### Step 1: Storage Configuration
+
+We start by ensuring our storage classes are correctly defined to support the performance and persistence requirements of our database.
+
+![Storage Class Definition](https://community.intersystems.com/sites/default/files/inline/images/images/image(12095).png)
+
+Once defined, we can verify that our Persistent Volume Claims (PVCs) are correctly provisioned and ready for data.
+
+![PVC Status Check](https://community.intersystems.com/sites/default/files/inline/images/images/image(12096).png)
+
+### Step 2: Seeding the Databases
+
+The IKO simplifies the process of creating and mirroring databases. We define our databases in the `IrisCluster` manifest, and the operator ensures they are created and added to the mirror set across all members.
+
+![Mirror Databases View](https://community.intersystems.com/sites/default/files/inline/images/images/image(12098).png)
+
+Are they mirrored? 🎉 They ARE!
+
+![Mirror Check Success](https://community.intersystems.com/sites/default/files/inline/images/images/image(12100).png)
+
+### Step 3: Verifying the Topology
+
+We can also check if our ECP (Enterprise Cache Protocol) clients are correctly connected to our new mirrored data members.
+
+![ECP Client Connection](https://community.intersystems.com/sites/default/files/inline/images/images/image(12102).png)
+
+### Attestation: The Force in Action
+
+Let's prove the data is flowing correctly across the entire cluster. We'll set a global on the Primary member:
+
+![Setting a Global](https://community.intersystems.com/sites/default/files/inline/images/images/image(12101).png)
+
+```cls
+Set ^MayTheForce="Be With You"
+```
+
+Now, we use a simple script to loop through all pods in the namespace and verify the global exists on every member—primary, backup, async DR, and even accessible via the compute nodes.
+
+```bash
+# seedmirrorcheck.sh snippet
+for pod in $(kubectl get pods -o jsonpath='{.items[*].metadata.name}'); do
+  kubectl exec "$pod" -- iris session IRIS -U ENSDEMO "ZWRITE ^MayTheForce"
+done
+```
+
+The results are solid:
+
+![Mirror Seeding Verification Results](https://community.intersystems.com/sites/default/files/inline/images/images/image(12103).png)
+
+- ✅ **Primary**: Persisted
+- ✅ **Backup**: Persisted
+- ✅ **Async DR**: Persisted
+- ✅ **Compute**: Accessible
+
+🎉 The force is definitely with us.
+
+### Summary
+
+Seeding data into a mirrored IRIS cluster on Kubernetes doesn't have to be a "square dance" of manual steps. By leveraging the IKO's declarative management, you can ensure your databases are correctly provisioned, mirrored, and synchronized across your entire global topology from day one.
+
+```cls
+Set ^iFind="Your Lack of Faith Disturbing"
+```
+
+Stay tuned for more IKO Plus!

@@ -1,0 +1,64 @@
+---
+title: "IKO Plus: VIP in Kubernetes on IrisClusters"
+description: Implementing Virtual IP (VIP) functionality in a Kubernetes environment for InterSystems IRIS clusters, providing seamless failover and consistent access for clients during primary member transitions.
+pubDate: 2025-11-14
+heroImage: https://placehold.co/1208x201?text=InterSystems+Portfolio
+categories: ["iko", "InterSystems IRIS", "Kubernetes", "Networking", "VIP", "High Availability"]
+communityLink: https://community.intersystems.com/post/iko-plus-vip-kubernetes-irisclusters
+draft: false
+---
+
+In the world of InterSystems IRIS mirroring, the **Virtual IP (VIP)** is a cornerstone of high availability. It provides a single, consistent IP address that always points to the current primary member. But in Kubernetes, where IPs are ephemeral and managed by services, how do we implement a true VIP?
+
+### The Challenge: Kubernetes vs. Traditional VIPs
+
+Kubernetes Services (like `LoadBalancer`) provide a stable entry point, but they don't always align perfectly with the "gratuitous ARP" behavior that IRIS expects for its VIP. We want a solution that works natively with the IKO and provides the same experience as traditional bare-metal or VM deployments.
+
+### The Solution: Kube-vip
+
+**Kube-vip** provides a high-availability and load-balancing solution for Kubernetes clusters. It can manage a virtual IP address and associate it with specific nodes or pods, making it perfect for our IRIS mirroring needs.
+
+### Step 1: Deploying Kube-vip
+
+We deploy Kube-vip as a DaemonSet in our cluster. We configure it to monitor our IRIS pods and manage the specified VIP.
+
+![Kube-vip Configuration](https://community.intersystems.com/sites/default/files/inline/images/images/image(12151).png)
+
+Once deployed, we can see the Kube-vip pods running across our nodes:
+
+![Kube-vip DaemonSet Running](https://community.intersystems.com/sites/default/files/inline/images/images/image(12152).png)
+
+### Step 2: Assigning the VIP
+
+We specify the desired VIP in our configuration. Kube-vip will ensure this IP is assigned to the node currently hosting the primary IRIS member.
+
+![VIP Assigned to Node](https://community.intersystems.com/sites/default/files/inline/images/images/image(12153).png)
+
+### Step 3: Testing Failover
+
+The real test of a VIP is what happens during a failover. We'll run a continuous `curl` loop against our management portal via the VIP while triggering a mirror failover.
+
+```yaml
+# Test pod definition
+apiVersion: v1
+kind: Pod
+metadata:
+  name: curl-test
+spec:
+  containers:
+    - name: curl-loop
+      image: curlimages/curl:8.10.1
+      command: ["/bin/sh", "-c", "while true; do curl -sk -o /dev/null -w '%{http_code}\n' https://192.168.1.152:52774/; sleep 5; done"]
+```
+
+Watch the magic as the VIP moves seamlessly from the old primary to the new primary with minimal disruption:
+
+![VIP Failover Demo](https://community.intersystems.com/sites/default/files/inline/images/screen_capture_select-area_20251112065143_anim_preview.jpg)
+
+🎉 Success! We have a true, functional VIP in Kubernetes.
+
+### Summary
+
+By leveraging **Kube-vip** alongside the **InterSystems Kubernetes Operator**, we can bring traditional high-availability patterns into the cloud-native era. This ensures that clients and integrations always have a reliable, consistent way to reach the primary IRIS member, regardless of where it's currently running in the cluster.
+
+Onward and Upward! The networking ninja strikes again.

@@ -1,0 +1,73 @@
+---
+title: "Export InterSystems IRIS Data to BigQuery on Google Cloud Platform"
+description: Step-by-step guide to exporting data from InterSystems IRIS to Google BigQuery, leveraging GCS as a staging area and utilizing the BigQuery console and SDK for large-scale data warehousing.
+pubDate: 2019-11-15
+heroImage: https://community.intersystems.com/sites/default/files/inline/images/iris2bq-ra_0.png
+categories: ["BigQuery", "InterSystems IRIS", "GCP", "Google Cloud", "Data Export", "Analytics"]
+communityLink: https://community.intersystems.com/post/export-intersystems-iris-data-bigquery-google-cloud-platform
+draft: false
+---
+
+Google BigQuery is a powerful, serverless data warehouse that enables super-fast SQL queries using the processing power of Google's infrastructure. For InterSystems IRIS users, moving data into BigQuery opens up advanced analytics, machine learning, and long-term data warehousing capabilities.
+
+### The Strategy: Staging through GCS
+
+The most efficient way to load large volumes of data into BigQuery is to first export the data from InterSystems IRIS to **Google Cloud Storage (GCS)** as a CSV or JSON file, and then import it into BigQuery.
+
+### Step 1: Exporting from IRIS
+
+We start by running an export routine in InterSystems IRIS. This can be done via SQL or ObjectScript, generating a flat file containing the data you wish to analyze.
+
+![IRIS SQL Export](https://community.intersystems.com/sites/default/files/inline/images/sql.png)
+
+```objectscript
+// Simple ObjectScript Export Example
+set file = "/tmp/my_data.csv"
+open file:("NW"):0
+use file
+&sql(DECLARE C1 CURSOR FOR SELECT Name, Age FROM MyTable)
+&sql(OPEN C1)
+for {
+    &sql(FETCH C1 INTO :name, :age)
+    quit:SQLCODE
+    write name, ",", age, !
+}
+&sql(CLOSE C1)
+close file
+```
+
+### Step 2: Uploading to Google Cloud Storage
+
+Once the file is generated, we push it to a GCS bucket using the `gsutil` command-line tool.
+
+```bash
+# Uploading to GCS
+gsutil cp /tmp/my_data.csv gs://my-analytical-bucket/exports/
+```
+
+![GCS File Tree](https://community.intersystems.com/sites/default/files/inline/images/tree_1.png)
+
+### Step 3: Importing into BigQuery
+
+Now we can tell BigQuery to ingest the data from GCS. This can be done through the Google Cloud Console or the `bq` command-line tool.
+
+#### Using the BigQuery SDK (Automated)
+
+```bash
+# BigQuery Load Command
+bq load --source_format=CSV --autodetect my_dataset.my_table gs://my-analytical-bucket/exports/my_data.csv
+```
+
+![BigQuery Load Execution](https://community.intersystems.com/sites/default/files/inline/images/run.png)
+
+### Step 4: Analysis and Insights
+
+With the data successfully loaded, you can now run lightning-fast SQL queries against your InterSystems data directly within the BigQuery interface.
+
+![BigQuery Console Analysis](https://community.intersystems.com/sites/default/files/inline/images/bigquery.png)
+
+### Conclusion
+
+Exporting data from InterSystems IRIS to Google BigQuery provides a scalable path for advanced healthcare and business analytics. By leveraging GCS as a staging area, you can efficiently move massive datasets and begin deriving insights using Google's world-class data warehousing tools.
+
+Happy querying!

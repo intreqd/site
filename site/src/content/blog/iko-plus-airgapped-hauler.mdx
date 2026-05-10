@@ -1,0 +1,100 @@
+---
+title: "IKO Plus: Launching Airgapped IrisClusters with Hauler"
+description: Deploying InterSystems IRIS in highly secure, airgapped environments using Hauler for local registry management, artifact distribution, and secure dependency handling.
+pubDate: 2025-10-21
+heroImage: https://placehold.co/1208x201?text=InterSystems+Portfolio
+categories: ["iko", "InterSystems IRIS", "Kubernetes", "Security", "Airgap", "Hauler"]
+communityLink: https://community.intersystems.com/post/iko-plus-launching-airgapped-irisclusters-hauler
+draft: false
+---
+
+In many enterprise environments, security is paramount. This often means running in "airgapped" environments—networks with no direct access to the public internet. But how do you deploy a modern, containerized data platform like InterSystems IRIS when you can't reach `containers.intersystems.com`?
+
+Enter **Hauler**.
+
+### What is Hauler?
+
+Hauler is a tool designed to simplify the process of gathering and distributing artifacts (images, charts, files) for airgapped environments. It allows you to "haul" your dependencies from the internet into a local registry that your Kubernetes cluster can reach.
+
+![Hauler Introduction](https://community.intersystems.com/sites/default/files/inline/images/images/image(12017).png)
+
+### The Workflow
+
+1. **Define**: List the images and Helm charts you need.
+2. **Haul**: Fetch them to a local machine with internet access.
+3. **Save**: Package them into a portable bundle.
+4. **Serve**: Transport the bundle to the airgapped environment and serve them via a local registry.
+
+### Step 1: Defining Artifacts
+
+We define our InterSystems artifacts in a simple YAML manifest.
+
+![Defining Artifacts](https://community.intersystems.com/sites/default/files/inline/images/images/image(12019).png)
+
+```yaml
+# hauler-manifest.yaml
+apiVersion: hauler.cattle.io/v1
+kind: Manifest
+metadata:
+  name: iko-airgap
+spec:
+  images:
+    - name: containers.intersystems.com/intersystems/iris-operator-amd:3.8.42.100
+    - name: containers.intersystems.com/intersystems/irishealth-community:2025.1
+```
+
+### Step 2: Hauling the Data
+
+Run the haul command to fetch everything.
+
+![Fetching Artifacts](https://community.intersystems.com/sites/default/files/inline/images/images/image(12020).png)
+
+```bash
+hauler store sync -f hauler-manifest.yaml
+```
+
+### Step 3: Serving the Local Registry
+
+Once inside the airgapped environment, we use Hauler to serve these artifacts.
+
+![Serving Local Registry](https://community.intersystems.com/sites/default/files/inline/images/images/Clipboard_2025-10-21-14-53-58.png)
+
+```bash
+hauler store serve registry
+```
+
+### Step 4: Deploying with IKO
+
+Now we just point our `values.yaml` and `IrisCluster.yaml` to our local registry IP (in this case, `172.17.0.1:31337`).
+
+![Pulling from Local Registry](https://community.intersystems.com/sites/default/files/inline/images/images/image(12021).png)
+
+```yaml
+# values.yaml
+operator:
+  image:
+    registry: 172.17.0.1:31337
+    repository: intersystems/iris-operator-amd
+    tag: 3.8.42.100
+
+# iriscluster.yaml
+spec:
+  topology:
+    data:
+      image: 172.17.0.1:31337/intersystems/irishealth-community:2025.1
+```
+
+### The Result
+
+And just like that, we have a running `IrisCluster` and Operator that were provisioned from a local, airgapped Hauler registry!
+
+![Airgapped Cluster Running](https://community.intersystems.com/sites/default/files/inline/images/images/Clipboard_2025-10-21-15-08-47.png)
+
+```bash
+kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{" => "}{range .spec.containers[*]}{.image}{" "}{end}{"\n"}{end}'
+
+airgapped-iris-data-0 => 172.17.0.1:31337/intersystems/irishealth-community:2025.1 
+iko-iris-operator-amd-5d679956db-pkbmg => 172.17.0.1:31337/intersystems/iris-operator-amd:3.8.42.100 
+```
+
+🙌 Mission accomplished. Airgap is no longer a barrier to using the InterSystems Kubernetes Operator.

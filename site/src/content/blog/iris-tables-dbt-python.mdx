@@ -1,0 +1,193 @@
+---
+title: "IRIS Tables in dbt (Data Build Tool) with Python"
+description: A Quick start to include InterSystems IRIS Tables in Data Build Tool using Python, leveraging the sqlalchemy-iris plugin and DuckDB as a source.
+pubDate: 2023-08-21
+heroImage: https://community.intersystems.com/sites/default/files/inline/images/dbt-iris.png
+categories: ["dbt", "InterSystems IRIS", "Python", "DuckDB", "SQLAlchemy", "Data Modeling"]
+communityLink: https://community.intersystems.com/post/iris-tables-dbt-data-build-tool-python
+draft: false
+---
+
+## Summary
+A Quick start to include InterSystems IRIS Tables in Data Build Tool (dbt) using Python. It uses the `sqlalchemy` plugin with `sqlalchemy-iris` which enables the iris strategy for **DuckDB** as a source for a dbt project.
+
+> **EDIT:** If you stumbled here from Google for "iris dbt", your best bet is to checkout [dbt-iris](https://github.com/caretdev/dbt-iris) for the native adapter implementation that follows dbt guidelines.
+
+I'm out of town for the [Python meetup in Cambridge](https://www.meetup.com/boston-intersystems-developers-meetup/events/295027034/), but will submit to the [InterSystems Python Programming Contest 2023](https://community.intersystems.com/post/intersystems-python-programming-contest-2023). This is my virtual hail to the event through the community.
+
+## Disclaimers
+*   I am unsure this solution is the best path to accomplish things, but it is a tested path.
+*   I am not a dbt expert, but use `dbt-core` in CI/CD pipelines daily.
+
+## Props
+Made possible by [SQLAlchemy-iris](https://openexchange.intersystems.com/package/sqlalchemy-iris) by [Dmitry Maslennikov](https://openexchange.intersystems.com/user/Dmitry%20Maslennikov/YpNBvnDkky3FetRt6rPnhxRjjwM) and a follow-up [post](https://community.intersystems.com/post/sqlalchemy-easiest-way-use-python-and-sql-iriss-databases) by [Heloisa Paiva](https://community.intersystems.com/user/heloisa-paiva). Also, DuckDB is fun software—wicked fast, and essentially a data lake for your `/tmp` folder. Ducks are cool, Geese are not.
+
+## Setup
+*   Deploy IRIS Cloud SQL
+*   Python Environment
+*   GitHub Repository
+*   dbt Configuration
+*   Validate Setup
+
+We used InterSystems IRIS Cloud SQL through the Early Access Program to demonstrate this. It provisioned fast, and avoiding local Docker makes for a happy brogrammer.
+
+![IRIS Cloud SQL](https://community.intersystems.com/sites/default/files/inline/images/dbt-iris-cloud-sql.png)
+
+For the tables referenced below, I used DBeaver to create a Table `Persons` in the `SQLUser` schema and loaded it with data.
+
+![DBeaver Table](https://community.intersystems.com/sites/default/files/inline/images/dbt-dbeaver.png)
+
+## Python Environment
+Install the necessary packages. I am running Python 3.8:
+
+```bash
+pip install dbt-core
+pip install dbt-duckdb
+pip install sqlalchemy-iris
+```
+
+## dbt Configuration
+Inside your project folder, initialize dbt:
+
+```bash
+dbt init iris_project
+```
+
+### Profiles
+Setup your profile in `~/.dbt/profiles.yml`. Construct your SQLAlchemy URI from your IRIS Cloud SQL connectivity details:
+
+```yaml
+dbt_iris_profile:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      database: dbt
+      schema: dev
+      path: /tmp/dbt.duckdb
+      plugins:
+        - module: sqlalchemy
+          alias: sql
+          config:
+            connection_url: "iris://SQLAdmin:MyPassword@k8s-dbt-iris-xxxx.elb.us-east-1.amazonaws.com:1972/USER"
+```
+
+![Cloud Connectivity](https://community.intersystems.com/sites/default/files/inline/images/dbt-iris-cloud-connectivity.png)
+
+### Project Configuration
+Modify `dbt_project.yml` in the root of the project:
+
+```yaml
+name: 'iris_project'
+version: '1.0.0'
+config-version: 2
+
+profile: 'dbt_iris_profile'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  iris_project:
+    example:
+      +materialized: view
+
+vars:
+  db_name: sql
+```
+
+### Schema Declaration
+Declare your models in `models/schema.yml`:
+
+```yaml
+version: 2
+
+models:
+  - name: my_first_dbt_model
+    description: "A starter dbt model"
+    columns:
+      - name: id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+
+sources:
+  - name: dbt_iris_source
+    database: dbt
+    schema: SQLUser
+    tables:
+      - name: Persons
+        identifier: Persons
+        config:
+          plugin: sql
+          save_mode: overwrite
+          query: "SELECT * FROM SQLUser.Persons"
+```
+
+### Python Model
+Create a Python model in `models/Persons.py`:
+
+```python
+def model(dbt, session):
+    dbt.config(materialized="table")
+    persons_df = dbt.source("dbt_iris_source", "Persons")
+    return persons_df
+```
+
+## Execution & Validation
+Now, test the connection to IRIS:
+
+```bash
+dbt debug
+```
+
+![dbt Debug](https://community.intersystems.com/sites/default/files/inline/images/dbt-debug.png)
+
+If all goes well, run the project:
+
+```bash
+dbt run
+```
+
+![dbt Run](https://community.intersystems.com/sites/default/files/inline/images/dbt-run.png)
+
+Generate the documentation to see the data lineage and schema:
+
+```bash
+dbt generate docs
+dbt serve docs
+```
+
+![dbt Docs](https://community.intersystems.com/sites/default/files/inline/images/dbt-docs.png)
+
+You can verify the data was pulled into the local DuckDB by querying it directly:
+
+```bash
+duckdb /tmp/dbt.duckdb "SELECT * FROM dev.Persons LIMIT 5"
+```
+
+![DuckDB CLI](https://community.intersystems.com/sites/default/files/inline/images/duckdb-cli.png)
+
+## Why dbt?
+dbt (Data Build Tool) allows you to:
+*   **Share the Project**: Beyond GitHub, it provides a standard way to share tribal knowledge.
+*   **Lineage & Documentation**: Keeps the documentation alongside the code.
+*   **Testing**: Brings the testing rigor of software engineering to data projects.
+
+## Resources
+*   [Learn through Problems (dbt Discourse)](https://discourse.getdbt.com/t/problem-querying-duckdb-database/7604)
+*   [dbt-duckdb Guide](https://github.com/jwills/dbt-duckdb)
+*   [Python Models in dbt](https://docs.getdbt.com/docs/build/python-models)
+*   [dbt-iris Native Adapter](https://github.com/caretdev/dbt-iris)
+
+---
+[Check the related application on InterSystems Open Exchange](https://openexchange.intersystems.com/package/dbt-duckdb-iris)

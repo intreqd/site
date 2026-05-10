@@ -1,0 +1,66 @@
+---
+title: "Cloud Services - JDBC SQL Shell (sqlline)"
+description: Using sqlline, a powerful Java-based SQL shell, to connect to and manage InterSystems Cloud SQL deployments via JDBC with full TLS support and federated query capabilities.
+pubDate: 2025-11-20
+heroImage: https://placehold.co/1208x201?text=InterSystems+Portfolio
+categories: ["JDBC", "InterSystems IRIS", "Cloud SQL", "sqlline", "SQL", "Containerization"]
+communityLink: https://community.intersystems.com/post/cloud-services-jdbc-sql-shell-sqlline
+draft: false
+---
+
+![sqlline Banner](https://community.intersystems.com/sites/default/files/inline/images/images/image(12194).png)
+
+Managing multiple cloud database deployments requires a flexible and powerful command-line interface. While there are many SQL clients available, **sqlline** stands out for its simplicity, Java-based portability, and advanced features like federated queries. In this post, we'll look at how to package sqlline with the InterSystems JDBC driver for easy use against InterSystems Cloud SQL.
+
+### Why sqlline?
+
+sqlline is a shell for issuing SQL to relational databases via JDBC. It's lightweight and supports a wide range of commands for managing sessions, logging, and even connecting to multiple databases simultaneously.
+
+![sqlline GitHub Stats](https://ondemand.bannerbear.com/signedurl/5kBNAm9EpN1VKXb4Yo/image.jpg?modifications=W3sibmFtZSI6InJlcG8iLCJ0ZXh0IjoianVsaWFuaHlkZSAvICpzcWxsaW5lKiJ9LHsibmFtZSI6ImRlc2MiLCJ0ZXh0IjoiU2hlbGwgZm9yIGlzc3VpbmcgU1FMIHRvIHJlbGF0aW9uYWwgZGF0YWJhc2VzIHZpYSBKREJDIn0seyJuYW1lIjoiYXZhdGFyNSIsImltYWdlX3VybCI6Imh0dHBzOi8vYXZhdGFycy5naXRodWJ1c2VyY29udGVudC5jb20vdS83NDYyNT92PTQifSx7Im5hbWUiOiJhdmF0YXI0IiwiaW1hZ2VfdXJsIjoiaHR0cHM6Ly9hdmF0YXJzLmdpdGh1YnVzZXJjb250ZW50LmNvbS91LzE1MDg2NzIwP3Y9NCJ9LHsibmFtZSI6ImRlc2MiLCJ0ZXh0IjoiU2hlbGwgZm9yIGlzc3VpbmcgU1FMIHRvIHJlbGF0aW9uYWwgZGF0YWJhc2VzIHZpYSBKREJDIn0seyJuYW1lIjoiYXZhdGFyNSIsImltYWdlX3VybCI6Imh0dHBzOi8vYXZhdGFycy5naXRodWJ1c2VyY29udGVudC5jb20vdS83NDYyNT92PTQifSx7Im5hbWUiOiJhdmF0YXI0IiwiaW1hZ2VfdXJsIjoiaHR0cHM6Ly9hdmF0YXJzLmdpdGh1YnVzZXJjb250ZW50LmNvbS91LzE1MDg2NzIwP3Y9NCJ9LHsibmFtZSI6ImF2YXRhcjMiLCJpbWFnZV91cmwiOiJodHRwczovL2F2YXRhcnMuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3UvMzg4NzgwMT92PTQifSx7Im5hbWUiOiJhdmF0YXIyIiwiaW1hZ2VfdXJsIjoiaHR0cHM6Ly9hdmF0YXJzLmdpdGh1YnVzZXJjb250ZW50LmNvbS91LzQwMzE3ND92PTQifSx7Im5hbWUiOiJhdmF0YXIxIiwiaW1hZ2VfdXJsIjoiaHR0cHM6Ly9hdmF0YXJzLmdpdGh1YnVzZXJjb250ZW50LmNvbS91LzExMzA1NTM_dj00In0seyJuYW1lIjoiY29udHJpYnV0b3JzIiwidGV4dCI6IjM2IENvbnRyaWJ1dG9ycyJ9LHsibmFtZSI6InN0YXJzIiwidGV4dCI6IjY0NSJ9XQ&s=d6b0daee54c39da6e581de18c254396891ec210a28d2799a17b474e8af8b7752)
+
+### Building the Shell Container
+
+Packaging the shell as a Docker container ensures that all dependencies (including the specific JDBC driver and TLS certificates) are always available and correctly configured.
+
+```bash
+# Build the container
+cd isc-cloud-jdbc-sql-shell
+docker build -t isc-cloud-jdbc-sql-shell .
+```
+
+### Usage Examples
+
+#### Session Logging
+
+You can easily log your entire session to a file for auditing or debugging.
+
+```sql
+-- Start logging to a local file
+!set script /output/debug_omop_jdbc.log
+```
+
+![Logging Session](https://community.intersystems.com/sites/default/files/inline/images/images/image(12196).png)
+
+#### Federated SQL
+
+One of the most "earth shattering" features is the ability to connect to multiple deployments at once. By using the `!connect` command, you can add multiple sources and even run queries against `!all` of them.
+
+![Federated Query Result](https://community.intersystems.com/sites/default/files/inline/images/images/image(12198).png)
+
+#### Direct Management
+
+Creating schemas and copying tables across deployments becomes a straightforward task from the shell.
+
+```bash
+# Example Output
+ISC > CREATE SCHEMA OMOPCDM54BAK;
+No rows affected (0.091 seconds)
+ISC > CREATE TABLE OMOPCDM54BAK.person AS SELECT * FROM OMOPCDM54.person;
+1,101,000 rows affected (5.84 seconds)
+```
+
+![Portal Validation](https://community.intersystems.com/sites/default/files/inline/images/images/image(12197).png)
+
+### Conclusion
+
+The combination of **sqlline** and the InterSystems JDBC driver provides a high-performance, developer-friendly way to manage your cloud data deployments. Whether you're doing local development or orchestrating multi-cloud migrations, this SQL shell is an essential tool in your belt. 🎉

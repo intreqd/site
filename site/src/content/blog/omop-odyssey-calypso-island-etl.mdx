@@ -1,0 +1,55 @@
+---
+title: "OMOP Odyssey - FHIR® to OMOP ETL (Calypso’s Island)"
+description: Deep diving into the FHIR to OMOP ETL process on "Calypso's Island," exploring filtering, terminology mapping, and large-scale data loading using the InterSystems OMOP Cloud Service.
+pubDate: 2025-09-05
+heroImage: https://placehold.co/1208x201?text=InterSystems+Portfolio
+categories: ["OMOP", "InterSystems IRIS", "FHIR", "ETL", "Data Transformation", "Healthcare"]
+communityLink: https://community.intersystems.com/post/omop-odyssey-fhir%C2%AE-omop-etl-calypso%E2%80%99s-island
+draft: false
+---
+
+![OMOP Odyssey Calypso](https://community.intersystems.com/sites/default/files/inline/images/images/image(10764).png)
+
+Welcome to **Calypso's Island**. Here, we're diving deep into the heart of the OMOP Odyssey: the **ETL (Extract, Transform, Load)** process. We're taking clinical data in FHIR format and transforming it into the analytical-ready OMOP Common Data Model.
+
+### The Source: Synthea & InterSystems FHIR
+
+We're using a fork of Synthea to generate realistic synthetic patient data, which is then loaded into our InterSystems FHIR Server.
+
+![Synthea Fork](https://socialify.git.ci/dmitry-zasypkin/synthea-ndjson/image?custom_description=Synthea+fork+and+sanitizer++to+use+with+InterSystems+FHIR%C2%AE+Workloads&description=1&forks=1&issues=1&language=1&logo=https%3A%2F%2Fdt-cdn.net%2Fhub%2Flogos%2Fintersystems-iris-remote-1.png&name=1&owner=1&pattern=Signal&pulls=1&stargazers=1&theme=Light)
+
+### The ETL Pipeline
+
+The InterSystems OMOP Cloud Service handles the heavy lifting of the transformation. It extracts the FHIR resources, applies the necessary mappings, and loads them into our target OMOP CDM.
+
+![ETL Pipeline Overview](https://community.intersystems.com/sites/default/files/inline/images/images/image(10703).png)
+
+### Filtering and Privacy
+
+Even though OMOP is designed for pseudo-anonymization, some organizations need stricter controls. The service provides robust filtering options to exclude specific tables or fields from the transformation.
+
+![Filtering Options](https://community.intersystems.com/sites/default/files/inline/images/images/image(10733).png)
+
+### Terminology Mapping
+
+A critical part of any OMOP ETL is the terminology mapping. You can extend the standard OMOP vocabularies by uploading custom CSVs to your deployment's S3 bucket.
+
+![Terminology Mapping Header](https://community.intersystems.com/sites/default/files/inline/images/images/image(10735).png)
+
+### Large Scale Loading
+
+Let's put the service to the test. We're simulating a run across all US states with a randomized population of 100-200 patients per state. The service handles this with impressive speed, even on a trial spec.
+
+![Large Scale Load Progress](https://community.intersystems.com/sites/default/files/inline/images/images/image(10737).png)
+
+### Verifying the Data in RStudio
+
+Now, back to the OHDSI world. We can use RStudio to peak at our newly transformed data and ensure everything is where it should be.
+
+![RStudio Data Peek](https://community.intersystems.com/sites/default/files/inline/images/images/image(10738).png)
+
+This OMOP CDM is now a fully operational Death Star of analytical power! The journey through Calypso's Island is complete.
+
+![Calypso's Island Summary](https://community.intersystems.com/sites/default/files/inline/images/images/image(10714).png)
+
+Stay tuned for the next stage of the **OMOP Odyssey**.
