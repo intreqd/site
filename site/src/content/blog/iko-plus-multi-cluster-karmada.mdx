@@ -1,57 +1,185 @@
 ---
 title: "IKO Plus: Multi-Cluster IrisClusters Propagated with Karmada"
-description: Scaling InterSystems IRIS across multiple Kubernetes clusters using Karmada for centralized management, resource propagation, and cross-cluster governance.
-pubDate: 2025-10-24
-heroImage: https://placehold.co/1208x201?text=InterSystems+Portfolio
-categories: ["iko", "InterSystems IRIS", "Kubernetes", "Karmada", "Multi-Cluster"]
+description: Leveraging Karmada as a multi-cluster control plane to propagate InterSystems IrisClusters across multiple Kubernetes environments for high availability and disaster recovery.
+pubDate: 2024-10-19
+heroImage: https://community.intersystems.com/sites/default/files/inline/images/images/image(12000).png
+categories: ["InterSystems IRIS", "Kubernetes", "IKO", "Karmada", "Multi-Cluster", "High Availability"]
 communityLink: https://community.intersystems.com/post/iko-plus-multi-cluster-irisclusters-propogated-karmada
 draft: false
 ---
 
-In this installment of the **IKO Plus** series, we are looking at **Karmada** (Kubernetes Armada). If you are managing InterSystems IRIS across dozens or even hundreds of Kubernetes clusters, you need a way to centralize management and propagate resources reliably.
+![Secrets Sync Diagram](https://community.intersystems.com/sites/default/files/inline/images/images/image(12014).png)
 
-### Why Karmada?
+### Kamino for IrisClusters
 
-Karmada allows you to run your cloud-native applications across multiple Kubernetes clusters and clouds, with no changes to your applications. It provides:
-- **Centralized Management**: One control plane to rule them all.
-- **Resource Propagation**: Define a resource once, and Karmada ensures it exists where it should.
-- **Cross-Cluster Governance**: Ensure compliance across your entire fleet.
+If you are in the business of building robust High Availability, Disaster Recovery, or simply stamping out multiple environments rapidly and consistently, [Karmada](https://karmada.io/) may just be the engine powering your [Cloning Facility](https://starwars.fandom.com/wiki/Kamino).
 
-### The Setup
+I lost the clone war with [KubeAdmiral](https://kubeadmiral.io/) but won the pod race with [Karmada](https://karmada.io/) and want to pay it forward. This is a multi-cluster solution for Day 0 provisioning and Day 1 management of Kubernetes objects, `IrisCluster` included.
 
-We have our "host" cluster where Karmada is installed, and we want to join our regional clusters.
+---
 
-### Joining and Propagating
+## The Star Wars Analogy (Required)
 
-First, we join our member clusters to the Karmada control plane.
+Boba Fett's genetics were prepared on Kamino, triggering numerous clones deployed across the galaxy—Endor, Tatooine, even the Death Star. Each clone evolved on its own but retained the base genetic footprint. This is the essence of Karmada: deploying resources to meet HA/DR, stretched, or purposeful environments with a single declaration.
 
-![Joining Clusters to Karmada](https://community.intersystems.com/sites/default/files/inline/images/images/image(12010).png)
+### Practical Use Case: Multi-Cluster Secrets
+If you're a "Kubehead" and manually sync secrets like this:
+```bash
+kubectl --context source get secret shhhh-secret -o yaml | kubectl --context target apply -f -
+```
 
-Now, let's propagate our stretched cluster configuration from a previous post to a new target cluster in GCP.
+Karmada automates this across your entire fleet.
 
-![Karmada Propagation Demo](https://community.intersystems.com/sites/default/files/inline/images/kooha-2025-10-19-17-25-50_anim_preview.jpg)
+---
 
-The second cluster is now available for business in Google Cloud Platform as a stretched cluster.
+## The Goal
+Provision a pair of clusters, configure Karmada on one (`ikofett`), and join the second (`ikoclone`) to the control plane. We will then provision an `IrisCluster` on the Karmada control plane and propagate it to the member cluster, followed by a third stretched cluster on GCP.
 
-![Stretched Cluster in GCP](https://community.intersystems.com/sites/default/files/inline/images/images/image(12011).png)
+## Step 1: Provision Clusters
+Create two clusters in Kind and install the Cilium CNI.
 
-### Propagation Policies
+**clusters.sh**
+```bash
+cat <<EOF | kind create cluster --name ikofett --config=-
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+- role: worker
+networking:
+  disableDefaultCNI: true
+EOF
 
-The magic happens in the `PropagationPolicy`. To get an `IrisCluster` out to a new region, we simply edit the policy to include the new target `k8s`.
+cat <<EOF | kind create cluster --name ikoclone --config=-
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+- role: worker
+networking:
+  disableDefaultCNI: true
+EOF
 
-![Editing Propagation Policy](https://community.intersystems.com/sites/default/files/inline/images/images/image(12012).png)
+kind get kubeconfig --name ikoclone > ikoclone.kubeconfig
+kind get kubeconfig --name ikofett > ikofett.kubeconfig
 
-And there you have it: a clone of the `IrisCluster` out on GCP, managed centrally.
+# Install Cilium
+KUBECONFIGS=("ikoclone.kubeconfig" "ikofett.kubeconfig")
+for cfg in "${KUBECONFIGS[@]}"; do
+  cilium install --version v1.18.0 --kubeconfig "$cfg"
+done
+```
 
-![IRIS Cluster Clone on GCP](https://community.intersystems.com/sites/default/files/inline/images/images/image(12013).png)
+### Install IKO
+IKO must exist on all clusters to handle the `IrisCluster` CRD.
+```bash
+for cfg in "${KUBECONFIGS[@]}"; do
+  helm install iko iris-operator/ --kubeconfig "$cfg"
+done
+```
 
-### Summary & Advanced Features
+---
 
-Karmada scratches the surface of what's possible with multi-cluster management. Advanced users can explore:
-- **Overrides**: Customize resources per joined cluster (e.g., different storage classes).
-- **Networking**: Integrate with Submariner for cross-cluster pod-to-pod communication.
-- **Push vs. Pull**: Choose the configuration style that fits your workflow.
+## Step 2: Install Karmada
+Deploy Karmada via Helm on the `ikofett` cluster.
+```bash
+helm repo add karmada-charts https://raw.githubusercontent.com/karmada-io/karmada/master/charts
+helm --namespace karmada-system upgrade -i karmada karmada-charts/karmada --version=1.15 --create-namespace --kubeconfig ikofett.kubeconfig
+```
 
-[![Karmada GitHub](https://gh-card.dev/repos/karmada-io/karmada.png)](https://karmada.io/)
+![Cluster Interaction Diagram](https://community.intersystems.com/sites/default/files/inline/images/images/image(11911).png)
 
-Scaling InterSystems IRIS is no longer a cluster-by-cluster manual effort. With Karmada and the IKO, you have a true "Armada" of data platforms at your fingertips.
+### Important: Networking & Kubeconfigs
+You now have 3 kubeconfigs: `ikofett`, `ikoclone`, and the newly generated `ikokamino` for the Karmada API.
+
+![Karmada Networking](https://community.intersystems.com/sites/default/files/inline/images/images/image(12003).png)
+![Additional Kubeconfig](https://community.intersystems.com/sites/default/files/inline/images/images/image(12004).png)
+
+---
+
+## Step 3: Join Cluster & Prep CRDs
+Join the `ikoclone` cluster to the Karmada control plane and install the `IrisCluster` CRD into the Karmada API.
+
+```bash
+# Export CRDs from member to Karmada control plane
+kubectl --kubeconfig ikofett.kubeconfig get crd irisclusters.intersystems.com -o yaml > ikocrds.yaml
+kubectl create -f ikocrds.yaml --kubeconfig ikokamino.kubeconfig
+
+# Join the clone
+kubectl karmada --kubeconfig ikokamino.kubeconfig join ikoclone --cluster-kubeconfig=ikoclone.kubeconfig
+```
+![Join Success](https://community.intersystems.com/sites/default/files/inline/images/images/image(12006).png)
+
+---
+
+## Step 4: Propagate IrisCluster
+
+### 1. The Template (DNA)
+Deploy the `IrisCluster` to Karmada. This stores the definition but doesn't deploy a workload yet.
+
+**federated-iris.yaml**
+```yaml
+apiVersion: intersystems.com/v1alpha1
+kind: IrisCluster
+metadata:
+  name: federated-iris
+spec:
+  topology:
+    data:
+      image: containers.intersystems.com/intersystems/iris-community:2025.1
+      serviceTemplate:
+        spec:
+          type: LoadBalancer
+```
+![Federated Iris Stub](https://community.intersystems.com/sites/default/files/inline/images/images/image(12007).png)
+
+### 2. The Propagation Policy
+Tell Karmada where to send the "clone."
+
+**policy.yaml**
+```yaml
+apiVersion: policy.karmada.io/v1alpha1
+kind: PropagationPolicy
+metadata:
+  name: iriscluster-propagate
+spec:
+  resourceSelectors:
+    - apiVersion: intersystems.com/v1alpha1
+      kind: IrisCluster
+  placement:
+    clusterAffinity:
+      clusterNames:
+        - ikoclone
+```
+![Propagation Policy Applied](https://community.intersystems.com/sites/default/files/inline/images/images/image(12008).png)
+
+On the `ikoclone` cluster, the `IrisCluster` spins up automatically!
+
+![Clone Spun Up](https://community.intersystems.com/sites/default/files/inline/images/images/image(12009).png)
+
+---
+
+## Joining the Galaxy (GCP)
+We can now join our stretched GCP cluster (from [this post](https://community.intersystems.com/post/iko-plus-stretched-cross-cloud-cross-regional-iriscluster-tailscale)) and update the policy to deploy there too.
+
+![Join GCP Cluster](https://community.intersystems.com/sites/default/files/inline/images/images/image(12010).png)
+![GCP Stretched Cluster Result](https://community.intersystems.com/sites/default/files/inline/images/images/image(12011).png)
+
+Update the `PropagationPolicy` to include the GCP cluster:
+![Edit Policy](https://community.intersystems.com/sites/default/files/inline/images/images/image(12012).png)
+
+🎉 Now you have another clone out on GCP!
+
+![Final GCP Result](https://community.intersystems.com/sites/default/files/inline/images/images/image(12013).png)
+
+---
+
+**Advanced Features to Explore:**
+- Overrides on resources per joined cluster
+- Networking integration with Submariner
+- PUSH vs PULL configuration models
+
+**Related Reading:**
+- [IKO Plus: Stretched Cross-Cloud IrisCluster](https://community.intersystems.com/post/iko-plus-stretched-cross-cloud-cross-regional-iriscluster-tailscale)
+- [IKO Plus: Operator Works From Home](https://community.intersystems.com/post/iko-plus-operator-works-home-iriscluster-provisioning-across-kubernetes-clusters)
+- [Project Sveltos](https://sveltos.projectsveltos.io)

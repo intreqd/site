@@ -1,81 +1,212 @@
 ---
 title: "IKO Plus: Database Management, Migration, or Day 1 Seeding your Mirrored IrisCluster"
 description: Techniques for managing, migrating, and seeding databases within a mirrored InterSystems IRIS cluster on Kubernetes, ensuring data integrity and high availability from day one.
-pubDate: 2025-11-01
-heroImage: https://placehold.co/1208x201?text=InterSystems+Portfolio
-categories: ["iko", "InterSystems IRIS", "Kubernetes", "Database Management", "Migration", "Mirroring"]
+pubDate: 2024-11-01
+heroImage: https://community.intersystems.com/sites/default/files/inline/images/images/image(12073).png
+categories: ["InterSystems IRIS", "Kubernetes", "IKO", "Database Management", "Migration", "Mirroring"]
 communityLink: https://community.intersystems.com/post/iko-plus-database-management-migration-or-day-1-seeding-your-mirrored-iriscluster
 draft: false
 ---
 
-In this installment of **IKO Plus**, we're tackling the critical task of **Database Management**. Specifically, how do you handle migrations or "Day 1" seeding of your data into a brand new, mirrored InterSystems IrisCluster on Kubernetes?
+![Kind Cluster Nodes](https://community.intersystems.com/sites/default/files/inline/images/images/image(12089).png)
 
-### The Challenge: Initial Data Seeding
+### Mirror Your Database Across the Galaxy with Seeding
 
-When you spin up a mirrored cluster with the IKO, you get a clean slate. But most real-world scenarios require moving existing data into this new environment. Traditionally, this involved complex manual steps—moving `.dat` files, mounting PVCs, and configuring mirroring.
+Hello `cpf` fans! This walkthrough explores using the "seed" capability in IRIS to provision an entire IrisCluster mirror, 4 maps wide, with compute starting from an `IRIS.DAT` in a galaxy far, far away.
 
-### Step 1: Storage Configuration
+This is incredibly powerful if you have a successful monolithic implementation and want to scale it to the outer rim using Kubernetes and the InterSystems Kubernetes Operator (IKO). Even though my midichlorian count is admittedly low, I've seen hardcore Caché hackers shovel around DATs, compact/shrink them, and update ZROUTINES. This same approach can help shrink and secure your containerized workloads too.
 
-We start by ensuring our storage classes are correctly defined to support the performance and persistence requirements of our database.
+---
 
-![Storage Class Definition](https://community.intersystems.com/sites/default/files/inline/images/images/image(12095).png)
+## The Mission
 
-Once defined, we can verify that our Persistent Volume Claims (PVCs) are correctly provisioned and ready for data.
+I'll show you how I built an `IrisCluster` that pulls an `IRIS.DAT` file from an arbitrary location via an `initContainer` and uses it to "seed" a mirrored database throughout its topology.
 
-![PVC Status Check](https://community.intersystems.com/sites/default/files/inline/images/images/image(12096).png)
+I used a repository I visit annually: [@Guillaume Rongier](https://community.intersystems.com/user/guillaume-rongier7183)'s [InstallSamples](https://github.com/grongierisc/InstallSamples), which features a committed `IRIS.DAT`.
 
-### Step 2: Seeding the Databases
+🌱 This will be the seed for our IrisCluster.
 
-The IKO simplifies the process of creating and mirroring databases. We define our databases in the `IrisCluster` manifest, and the operator ensures they are created and added to the mirror set across all members.
+### Provisioning the Cluster
+First, I provision a quick Kind cluster with 5 worker nodes, install Cilium as the CNI, and deploy the IKO. Then, I label the nodes with Star Wars planet names.
 
-![Mirror Databases View](https://community.intersystems.com/sites/default/files/inline/images/images/image(12098).png)
-
-Are they mirrored? 🎉 They ARE!
-
-![Mirror Check Success](https://community.intersystems.com/sites/default/files/inline/images/images/image(12100).png)
-
-### Step 3: Verifying the Topology
-
-We can also check if our ECP (Enterprise Cache Protocol) clients are correctly connected to our new mirrored data members.
-
-![ECP Client Connection](https://community.intersystems.com/sites/default/files/inline/images/images/image(12102).png)
-
-### Attestation: The Force in Action
-
-Let's prove the data is flowing correctly across the entire cluster. We'll set a global on the Primary member:
-
-![Setting a Global](https://community.intersystems.com/sites/default/files/inline/images/images/image(12101).png)
-
-```cls
-Set ^MayTheForce="Be With You"
-```
-
-Now, we use a simple script to loop through all pods in the namespace and verify the global exists on every member—primary, backup, async DR, and even accessible via the compute nodes.
-
+**ikoseedcluster.sh**
 ```bash
-# seedmirrorcheck.sh snippet
-for pod in $(kubectl get pods -o jsonpath='{.items[*].metadata.name}'); do
-  kubectl exec "$pod" -- iris session IRIS -U ENSDEMO "ZWRITE ^MayTheForce"
+cat <<EOF | kind create cluster --name ikoseed --config=-
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+- role: worker
+- role: worker
+- role: worker
+- role: worker
+- role: worker
+networking:
+  disableDefaultCNI: true
+EOF
+
+kind get kubeconfig --name ikoseed > ikoseed.kubeconfig
+cilium install --version v1.18.0 --kubeconfig ikoseed.kubeconfig
+cilium status --wait --kubeconfig ikoseed.kubeconfig
+helm install iko iris-operator/ --kubeconfig ikoseed.kubeconfig
+
+# Label the planets
+planets=(tatooine coruscant hoth naboo endor)
+i=0
+for node in $(kubectl get nodes --no-headers --kubeconfig ikoseed.kubeconfig | awk '/worker/{print $1}'); do
+  planet=${planets[$i]}
+  kubectl label node "$node" topology.kubernetes.io/zone="$planet" --overwrite --kubeconfig ikoseed.kubeconfig
+  echo "$node → zone=$planet"
+  i=$(( (i+1) % ${#planets[@]} ))
 done
 ```
 
-The results are solid:
+I now have a happy Kubernetes cluster, nodes labelled as `tatooine`, `coruscant`, `hoth`, `naboo`, and `endor`.
 
-![Mirror Seeding Verification Results](https://community.intersystems.com/sites/default/files/inline/images/images/image(12103).png)
+![Planet Labels](https://community.intersystems.com/sites/default/files/inline/images/images/image(12090).png)
 
-- ✅ **Primary**: Persisted
-- ✅ **Backup**: Persisted
-- ✅ **Async DR**: Persisted
-- ✅ **Compute**: Accessible
+---
 
-🎉 The force is definitely with us.
+## IrisCluster Topology
 
-### Summary
+Here is the topology declaration, including the critical `initContainer` and `seed` configuration.
 
-Seeding data into a mirrored IRIS cluster on Kubernetes doesn't have to be a "square dance" of manual steps. By leveraging the IKO's declarative management, you can ensure your databases are correctly provisioned, mirrored, and synchronized across your entire global topology from day one.
-
-```cls
-Set ^iFind="Your Lack of Faith Disturbing"
+**iriscluster.yaml**
+```yaml
+apiVersion: intersystems.com/v1alpha1
+kind: IrisCluster
+metadata:
+  name: ikoplus-seed-sweenx12
+  namespace: ikoplus
+spec:
+  imagePullSecrets:
+    - name: containers-pull-secret
+  licenseKeySecret:
+    name: license-key-secret
+  volumes:
+    - name: airgapdir
+      emptyDir: {}
+  topology:
+    data:
+      image: containers.intersystems.com/intersystems/irishealth:2025.1
+      mirrorMap: primary,backup,drasync,rwrasync
+      mirrored: true
+      volumeMounts:
+        - name: airgapdir
+          mountPath: /airgapdir
+      irisDatabases:
+        - name: SAMPLES
+          directory: /irissys/data/IRIS/mgr/SAMPLES
+          mirrored: true
+          ecp: true
+          seed: /airgapdir/
+          logicalOnly: false
+      preferredZones:
+        - tatooine
+        - coruscant
+        - hoth
+        - naboo
+      initContainers:
+        - name: init-grongierisc-samples
+          image: debian:bookworm-slim
+          command:
+            - sh
+            - -c
+            - |
+              echo "Retrieving Samples from @grongierisc's repository..."
+              apt-get update && apt-get install -y curl
+              cd /airgapdir
+              curl -L https://media.githubusercontent.com/media/grongierisc/InstallSamples/refs/heads/master/samples/IRIS.DAT --output IRIS.DAT
+              chmod -R 777 /airgapdir
+              chown -R 51773:51773 /airgapdir
+          volumeMounts:
+            - name: airgapdir
+              mountPath: /airgapdir
+          securityContext:
+            runAsUser: 0
+    compute:
+      image: containers.intersystems.com/intersystems/irishealth:2025.1
+      replicas: 1
+      preferredZones:
+        - endor
 ```
 
-Stay tuned for more IKO Plus!
+### How Seeding Works
+The `init-container` retrieves the database from GitHub and places it in `/airgapdir/IRIS.DAT`. In the `IrisCluster` spec, we tell the operator to use this as a seed:
+
+```yaml
+      irisDatabases:
+        - name: SAMPLES
+          directory: /irissys/data/IRIS/mgr/SAMPLES
+          seed: /airgapdir/
+```
+
+Under the hood, IKO generates a `cpf` merge with an `Actions` directive to handle the heavy seeding:
+
+```ini
+[Actions]
+CreateDatabase:Name=SAMPLES,Directory=/irissys/data/IRIS/mgr,Seed=/airgapdir
+CreateNamespace:Name=ENSDEMO,Globals=SAMPLES,Routines=SAMPLES,Interop=1
+```
+
+---
+
+## Deployment & Attestation
+
+Applying the configuration:
+```bash
+kubectl apply -f iriscluster.yaml -n ikoplus
+```
+
+![Mirror Party Result](https://community.intersystems.com/sites/default/files/inline/images/images/image(12094).png)
+
+After a few minutes, the cluster comes to life. I pulled up the **Mirroring Monitor** to see if our seeded database "SAMPLES" made it to the party.
+
+![Mirroring Monitor](https://community.intersystems.com/sites/default/files/inline/images/images/Clipboard_2025-10-31-15-32-00.png)
+
+🎉 It DID!
+
+I also verified the filesystem on the pods to ensure the `DAT` is in all the right places.
+
+![Filesystem Check](https://community.intersystems.com/sites/default/files/inline/images/images/image(12098).png)
+
+And the ECP client (compute node) is successfully connected:
+
+![ECP Connection](https://community.intersystems.com/sites/default/files/inline/images/images/image(12100).png)
+
+### Testing Replication Across the Galaxy
+I wrote a global on the Primary mirror and then looped over the topology to ensure it mirrored correctly.
+
+**seedmirrorcheck.sh**
+```bash
+#!/bin/bash
+export KUBECONFIG=ikoseed.kubeconfig
+NAMESPACE=${1:-ikoplus}
+CMD='iris session IRIS -U ENSDEMO -B <<EOF
+ZWRITE ^MayTheForce
+HALT
+EOF'
+
+for pod in $(kubectl get pods -n "$NAMESPACE" -o jsonpath='{.items[*].metadata.name}'); do
+  echo "---- Pod: $pod ----"
+  kubectl -n "$NAMESPACE" exec "$pod" -- /bin/sh -c "$CMD"
+done
+```
+
+![Global Mirror Check](https://community.intersystems.com/sites/default/files/inline/images/images/image(12101).png)
+
+The results are solid:
+- ✅ **Primary** (Persisted)
+- ✅ **Backup** (Persisted)
+- ✅ **DRAsync** (Persisted)
+- ✅ **RWRAsync** (Persisted)
+- ✅ **Compute** (Accessible via ECP)
+
+🎉 The Force is with us!
+
+---
+
+**Related Reading:**
+- [IKO Plus: Operator Works From Home](https://community.intersystems.com/post/iko-plus-operator-works-home-iriscluster-provisioning-across-kubernetes-clusters)
+- [IKO Plus: VIP in Kubernetes on IrisClusters](https://community.intersystems.com/post/iko-plus-vip-kubernetes-irisclusters)
+- [InterSystems Documentation: CreateDatabase CPF Reference](https://docs.intersystems.com/iris20252/csp/docbook/Doc.View.cls?KEY=RACS_createdatabase)

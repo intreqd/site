@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="de"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="shortcut icon" href="/favicon.ico"><link rel="sitemap" href="/sitemap-index.xml"><meta name="generator" content="Astro v6.2.1"><title>IKO Plus: Multi-Cluster IrisClusters Propagated with Karmada</title><link rel="canonical" href="https://www.integrationrequired.com/blog/iko-plus-multi-cluster-karmada"><meta name="description" content="Scaling InterSystems IRIS across multiple Kubernetes clusters using Karmada for centralized management, resource propagation, and cross-cluster governance."><meta name="robots" content="index, follow"><meta property="og:title" content="IKO Plus: Multi-Cluster IrisClusters Propagated with Karmada"><meta property="og:type" content="website"><meta property="og:image" content="https://www.integrationrequired.com/opengraph.jpg"><meta property="og:url" content="https://www.integrationrequired.com/blog/iko-plus-multi-cluster-karmada"><meta property="og:image:url" content="https://www.integrationrequired.com/opengraph.jpg"><meta property="og:image:alt" content="IKO Plus: Multi-Cluster IrisClusters Propagated with Karmada"><meta name="twitter:card" content="summary_large_image"><!--
+<!DOCTYPE html><html lang="de"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="shortcut icon" href="/favicon.ico"><link rel="sitemap" href="/sitemap-index.xml"><meta name="generator" content="Astro v6.2.1"><title>IKO Plus: Multi-Cluster IrisClusters Propagated with Karmada</title><link rel="canonical" href="https://www.integrationrequired.com/blog/iko-plus-multi-cluster-karmada"><meta name="description" content="Leveraging Karmada as a multi-cluster control plane to propagate InterSystems IrisClusters across multiple Kubernetes environments for high availability and disaster recovery."><meta name="robots" content="index, follow"><meta property="og:title" content="IKO Plus: Multi-Cluster IrisClusters Propagated with Karmada"><meta property="og:type" content="website"><meta property="og:image" content="https://www.integrationrequired.com/opengraph.jpg"><meta property="og:url" content="https://www.integrationrequired.com/blog/iko-plus-multi-cluster-karmada"><meta property="og:image:url" content="https://www.integrationrequired.com/opengraph.jpg"><meta property="og:image:alt" content="IKO Plus: Multi-Cluster IrisClusters Propagated with Karmada"><meta name="twitter:card" content="summary_large_image"><!--
       Fonts flow:
       1. astro.config.mjs registers the font and exposes `--font-inter`.
       2. <Font /> loads that configured family into the page head.
@@ -28,7 +28,7 @@
         gtag('js', new Date());
         gtag('config', 'G-48J9E1212D');
       });
-    </script><link rel="stylesheet" href="/_astro/Layout.BHu6V9Rs.css"><script type="module" src="/_astro/page.CQhogMj7.js"></script></head> <body> <!-- Skip-to-content: first focusable element on the page.
+    </script><link rel="stylesheet" href="/_astro/Layout.p7_wMwRU.css"><script type="module" src="/_astro/page.CQhogMj7.js"></script></head> <body> <!-- Skip-to-content: first focusable element on the page.
          Hidden until keyboard-focused so sighted users never see it.
          Screen readers and keyboard users tab to it and jump past the nav. --> <a href="#main-content" class="skip-to-content">Skip to content</a> <div x-data="{ open: false }" x-on:astro:page-load.document="open = false" @keydown.escape.window="open = false" data-astro-cid-ri6uxye2> <header class="border-b border-base-300 bg-base-100" data-astro-cid-ri6uxye2> <div class="max-w-screen-xl mx-auto px-5">  <nav class="navbar min-h-20 px-0" data-astro-cid-ri6uxye2> <div class="navbar-start" data-astro-cid-ri6uxye2> <a href="/" class="btn btn-ghost px-0 hover:bg-transparent" data-astro-cid-ri6uxye2> <img src="/logo_black.png" alt="Your Site" class="h-[60px] w-auto object-contain transition-transform duration-300 hover:scale-105 logo-light" data-astro-cid-ri6uxye2> <img src="/logo_white.png" alt="Your Site" class="h-[60px] w-auto object-contain transition-transform duration-300 hover:scale-105 logo-dark" data-astro-cid-ri6uxye2> </a> </div>  <div class="navbar-end gap-2" data-astro-cid-ri6uxye2> <div class="hidden md:flex gap-2 items-center" data-astro-cid-ri6uxye2> <a class="btn btn-sm bg-[#003A9B] border-[#003A9B] text-white hover:bg-[#002b75] hover:border-[#002b75] flex items-center gap-2" href="https://www.indeed.com/employers/login" target="_blank" rel="noopener noreferrer" data-astro-cid-ri6uxye2> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" data-astro-cid-ri6uxye2><path d="M11.566 21.5633v-8.762c.2553.0231.5009.0346.758.0346 1.2225 0 2.3739-.3206 3.3506-.8928v9.6182c0 .8219-.1957 1.4287-.5757 1.8338-.378.4033-.8808.6049-1.491.6049-.6007 0-1.0766-.2016-1.468-.6183-.3781-.4032-.5739-1.01-.5739-1.8184zM11.589.5659c2.5447-.8929 5.4424-.8449 7.6186.987.405.3687.8673.8334 1.0515 1.3806.2207.6913-.7695-.073-.9057-.167-.71-.4532-1.4182-.8334-2.2127-1.0946C12.8614.3873 8.8122 2.709 6.2945 6.315c-1.0516 1.5939-1.7367 3.2721-2.299 5.1174-.0614.2017-.1094.4647-.2207.6413-.1113.2036-.048-.5453-.048-.5702.0845-.7623.2438-1.4997.4414-2.237C5.3292 5.3375 7.897 2.0655 11.5891.5658zm4.9281 7.0587c0 1.6686-1.353 3.0224-3.0205 3.0224-1.6677 0-3.0186-1.3538-3.0186-3.0224 0-1.6687 1.351-3.0224 3.0186-3.0224 1.6676 0 3.0205 1.3518 3.0205 3.0224Z" data-astro-cid-ri6uxye2></path></svg>
 Indeed
@@ -55,42 +55,138 @@ LinkedIn
 Github
 </a> <a class="btn bg-[#f57c00] border-[#f57c00] text-white hover:bg-[#e65100] hover:border-[#e65100] w-full flex items-center gap-2" href="https://www.brightstreetgroup.com" target="_blank" rel="noopener noreferrer" @click="open = false" data-astro-cid-ri6uxye2> <img src="/bsg-favicon.png" alt="BSG Logo" class="w-5 h-5 rounded-sm brightness-0 invert" data-astro-cid-ri6uxye2>
 Brightstreet Group
-</a> </div> </div> </div> <main id="main-content">  <div class="max-w-screen-xl mx-auto px-5 pt-6 sm:pt-8 lg:pt-12 pb-12 sm:pb-16 lg:pb-24">  <article class="max-w-3xl"> <header class="space-y-4"> <a href="/blog" class="link link-hover text-sm text-base-content/60">← All posts</a> <div class="mt-2 overflow-hidden rounded-box"> <img src="/_astro/1208x201_18dbNC.webp" alt="IKO Plus: Multi-Cluster IrisClusters Propagated with Karmada" loading="lazy" decoding="async" width="1200" height="600" class="w-full object-cover"> </div> <div class="space-y-2"> <h1 class="text-2xl font-bold tracking-tight sm:text-3xl">IKO Plus: Multi-Cluster IrisClusters Propagated with Karmada</h1> <div class="flex flex-wrap items-center gap-3"> <p class="text-sm text-base-content/60"> <time datetime="2025-10-24T00:00:00.000Z"> October 23, 2025 </time>  </p> <div class="flex flex-wrap gap-1"> <span class="badge badge-primary badge-sm badge-outline">iko</span><span class="badge badge-primary badge-sm badge-outline">InterSystems IRIS</span><span class="badge badge-primary badge-sm badge-outline">Kubernetes</span><span class="badge badge-primary badge-sm badge-outline">Karmada</span><span class="badge badge-primary badge-sm badge-outline">Multi-Cluster</span> </div> <a href="https://community.intersystems.com/post/iko-plus-multi-cluster-irisclusters-propogated-karmada" target="_blank" rel="noopener noreferrer" class="badge badge-secondary badge-sm badge-outline link-hover flex items-center gap-1">
+</a> </div> </div> </div> <main id="main-content">  <div class="max-w-screen-xl mx-auto px-5 pt-6 sm:pt-8 lg:pt-12 pb-12 sm:pb-16 lg:pb-24">  <article class="max-w-3xl"> <header class="space-y-4"> <a href="/blog" class="link link-hover text-sm text-base-content/60">← All posts</a> <div class="mt-2 overflow-hidden rounded-box"> <img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12000).png" alt="IKO Plus: Multi-Cluster IrisClusters Propagated with Karmada" loading="lazy" decoding="async" width="1200" height="600" class="w-full object-cover"> </div> <div class="space-y-2"> <h1 class="text-2xl font-bold tracking-tight sm:text-3xl">IKO Plus: Multi-Cluster IrisClusters Propagated with Karmada</h1> <div class="flex flex-wrap items-center gap-3"> <p class="text-sm text-base-content/60"> <time datetime="2024-10-19T00:00:00.000Z"> October 18, 2024 </time>  </p> <div class="flex flex-wrap gap-1"> <span class="badge badge-primary badge-sm badge-outline">InterSystems IRIS</span><span class="badge badge-primary badge-sm badge-outline">Kubernetes</span><span class="badge badge-primary badge-sm badge-outline">IKO</span><span class="badge badge-primary badge-sm badge-outline">Karmada</span><span class="badge badge-primary badge-sm badge-outline">Multi-Cluster</span><span class="badge badge-primary badge-sm badge-outline">High Availability</span> </div> <a href="https://community.intersystems.com/post/iko-plus-multi-cluster-irisclusters-propogated-karmada" target="_blank" rel="noopener noreferrer" class="badge badge-secondary badge-sm badge-outline link-hover flex items-center gap-1">
 Community
 <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> </a> </div> </div> </header> <!--
       daisyUI recommends using Tailwind utilities for layout and the Typography
       plugin for rich text. `prose` gives Markdown content predictable defaults
       without maintaining a custom article stylesheet in the starter.
-    --> <div class="prose prose-neutral mt-10 max-w-none prose-a:link prose-img:rounded-box"> <p>In this installment of the <strong>IKO Plus</strong> series, we are looking at <strong>Karmada</strong> (Kubernetes Armada). If you are managing InterSystems IRIS across dozens or even hundreds of Kubernetes clusters, you need a way to centralize management and propagate resources reliably.</p>
-<h3 id="why-karmada">Why Karmada?</h3>
-<p>Karmada allows you to run your cloud-native applications across multiple Kubernetes clusters and clouds, with no changes to your applications. It provides:</p>
+    --> <div class="prose prose-neutral mt-10 max-w-none prose-a:link prose-img:rounded-box"> <p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12014).png" alt="Secrets Sync Diagram"/></p>
+<h3 id="kamino-for-irisclusters">Kamino for IrisClusters</h3>
+<p>If you are in the business of building robust High Availability, Disaster Recovery, or simply stamping out multiple environments rapidly and consistently, <a href="https://karmada.io/">Karmada</a> may just be the engine powering your <a href="https://starwars.fandom.com/wiki/Kamino">Cloning Facility</a>.</p>
+<p>I lost the clone war with <a href="https://kubeadmiral.io/">KubeAdmiral</a> but won the pod race with <a href="https://karmada.io/">Karmada</a> and want to pay it forward. This is a multi-cluster solution for Day 0 provisioning and Day 1 management of Kubernetes objects, <code>IrisCluster</code> included.</p>
+<hr/>
+<h2 id="the-star-wars-analogy-required">The Star Wars Analogy (Required)</h2>
+<p>Boba Fett’s genetics were prepared on Kamino, triggering numerous clones deployed across the galaxy—Endor, Tatooine, even the Death Star. Each clone evolved on its own but retained the base genetic footprint. This is the essence of Karmada: deploying resources to meet HA/DR, stretched, or purposeful environments with a single declaration.</p>
+<h3 id="practical-use-case-multi-cluster-secrets">Practical Use Case: Multi-Cluster Secrets</h3>
+<p>If you’re a “Kubehead” and manually sync secrets like this:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">kubectl</span><span style="color:#79B8FF"> --context</span><span style="color:#9ECBFF"> source</span><span style="color:#9ECBFF"> get</span><span style="color:#9ECBFF"> secret</span><span style="color:#9ECBFF"> shhhh-secret</span><span style="color:#79B8FF"> -o</span><span style="color:#9ECBFF"> yaml</span><span style="color:#F97583"> |</span><span style="color:#B392F0"> kubectl</span><span style="color:#79B8FF"> --context</span><span style="color:#9ECBFF"> target</span><span style="color:#9ECBFF"> apply</span><span style="color:#79B8FF"> -f</span><span style="color:#9ECBFF"> -</span></span></code></pre>
+<p>Karmada automates this across your entire fleet.</p>
+<hr/>
+<h2 id="the-goal">The Goal</h2>
+<p>Provision a pair of clusters, configure Karmada on one (<code>ikofett</code>), and join the second (<code>ikoclone</code>) to the control plane. We will then provision an <code>IrisCluster</code> on the Karmada control plane and propagate it to the member cluster, followed by a third stretched cluster on GCP.</p>
+<h2 id="step-1-provision-clusters">Step 1: Provision Clusters</h2>
+<p>Create two clusters in Kind and install the Cilium CNI.</p>
+<p><strong>clusters.sh</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">cat</span><span style="color:#F97583"> &lt;&lt;</span><span style="color:#9ECBFF">EOF</span><span style="color:#F97583"> |</span><span style="color:#B392F0"> kind</span><span style="color:#9ECBFF"> create</span><span style="color:#9ECBFF"> cluster</span><span style="color:#79B8FF"> --name</span><span style="color:#9ECBFF"> ikofett</span><span style="color:#79B8FF"> --config=-</span></span>
+<span class="line"><span style="color:#9ECBFF">kind: Cluster</span></span>
+<span class="line"><span style="color:#9ECBFF">apiVersion: kind.x-k8s.io/v1alpha4</span></span>
+<span class="line"><span style="color:#9ECBFF">nodes:</span></span>
+<span class="line"><span style="color:#9ECBFF">- role: control-plane</span></span>
+<span class="line"><span style="color:#9ECBFF">- role: worker</span></span>
+<span class="line"><span style="color:#9ECBFF">networking:</span></span>
+<span class="line"><span style="color:#9ECBFF">  disableDefaultCNI: true</span></span>
+<span class="line"><span style="color:#9ECBFF">EOF</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">cat</span><span style="color:#F97583"> &lt;&lt;</span><span style="color:#9ECBFF">EOF</span><span style="color:#F97583"> |</span><span style="color:#B392F0"> kind</span><span style="color:#9ECBFF"> create</span><span style="color:#9ECBFF"> cluster</span><span style="color:#79B8FF"> --name</span><span style="color:#9ECBFF"> ikoclone</span><span style="color:#79B8FF"> --config=-</span></span>
+<span class="line"><span style="color:#9ECBFF">kind: Cluster</span></span>
+<span class="line"><span style="color:#9ECBFF">apiVersion: kind.x-k8s.io/v1alpha4</span></span>
+<span class="line"><span style="color:#9ECBFF">nodes:</span></span>
+<span class="line"><span style="color:#9ECBFF">- role: control-plane</span></span>
+<span class="line"><span style="color:#9ECBFF">- role: worker</span></span>
+<span class="line"><span style="color:#9ECBFF">networking:</span></span>
+<span class="line"><span style="color:#9ECBFF">  disableDefaultCNI: true</span></span>
+<span class="line"><span style="color:#9ECBFF">EOF</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">kind</span><span style="color:#9ECBFF"> get</span><span style="color:#9ECBFF"> kubeconfig</span><span style="color:#79B8FF"> --name</span><span style="color:#9ECBFF"> ikoclone</span><span style="color:#F97583"> &gt;</span><span style="color:#9ECBFF"> ikoclone.kubeconfig</span></span>
+<span class="line"><span style="color:#B392F0">kind</span><span style="color:#9ECBFF"> get</span><span style="color:#9ECBFF"> kubeconfig</span><span style="color:#79B8FF"> --name</span><span style="color:#9ECBFF"> ikofett</span><span style="color:#F97583"> &gt;</span><span style="color:#9ECBFF"> ikofett.kubeconfig</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Install Cilium</span></span>
+<span class="line"><span style="color:#E1E4E8">KUBECONFIGS</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&quot;ikoclone.kubeconfig&quot;</span><span style="color:#9ECBFF"> &quot;ikofett.kubeconfig&quot;</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">for</span><span style="color:#E1E4E8"> cfg </span><span style="color:#F97583">in</span><span style="color:#9ECBFF"> &quot;${</span><span style="color:#E1E4E8">KUBECONFIGS</span><span style="color:#9ECBFF">[</span><span style="color:#F97583">@</span><span style="color:#9ECBFF">]}&quot;</span><span style="color:#E1E4E8">; </span><span style="color:#F97583">do</span></span>
+<span class="line"><span style="color:#B392F0">  cilium</span><span style="color:#9ECBFF"> install</span><span style="color:#79B8FF"> --version</span><span style="color:#9ECBFF"> v1.18.0</span><span style="color:#79B8FF"> --kubeconfig</span><span style="color:#9ECBFF"> &quot;</span><span style="color:#E1E4E8">$cfg</span><span style="color:#9ECBFF">&quot;</span></span>
+<span class="line"><span style="color:#F97583">done</span></span></code></pre>
+<h3 id="install-iko">Install IKO</h3>
+<p>IKO must exist on all clusters to handle the <code>IrisCluster</code> CRD.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F97583">for</span><span style="color:#E1E4E8"> cfg </span><span style="color:#F97583">in</span><span style="color:#9ECBFF"> &quot;${</span><span style="color:#E1E4E8">KUBECONFIGS</span><span style="color:#9ECBFF">[</span><span style="color:#F97583">@</span><span style="color:#9ECBFF">]}&quot;</span><span style="color:#E1E4E8">; </span><span style="color:#F97583">do</span></span>
+<span class="line"><span style="color:#B392F0">  helm</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> iko</span><span style="color:#9ECBFF"> iris-operator/</span><span style="color:#79B8FF"> --kubeconfig</span><span style="color:#9ECBFF"> &quot;</span><span style="color:#E1E4E8">$cfg</span><span style="color:#9ECBFF">&quot;</span></span>
+<span class="line"><span style="color:#F97583">done</span></span></code></pre>
+<hr/>
+<h2 id="step-2-install-karmada">Step 2: Install Karmada</h2>
+<p>Deploy Karmada via Helm on the <code>ikofett</code> cluster.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">helm</span><span style="color:#9ECBFF"> repo</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> karmada-charts</span><span style="color:#9ECBFF"> https://raw.githubusercontent.com/karmada-io/karmada/master/charts</span></span>
+<span class="line"><span style="color:#B392F0">helm</span><span style="color:#79B8FF"> --namespace</span><span style="color:#9ECBFF"> karmada-system</span><span style="color:#9ECBFF"> upgrade</span><span style="color:#79B8FF"> -i</span><span style="color:#9ECBFF"> karmada</span><span style="color:#9ECBFF"> karmada-charts/karmada</span><span style="color:#79B8FF"> --version=1.15</span><span style="color:#79B8FF"> --create-namespace</span><span style="color:#79B8FF"> --kubeconfig</span><span style="color:#9ECBFF"> ikofett.kubeconfig</span></span></code></pre>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11911).png" alt="Cluster Interaction Diagram"/></p>
+<h3 id="important-networking--kubeconfigs">Important: Networking &amp; Kubeconfigs</h3>
+<p>You now have 3 kubeconfigs: <code>ikofett</code>, <code>ikoclone</code>, and the newly generated <code>ikokamino</code> for the Karmada API.</p>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12003).png" alt="Karmada Networking"/>
+<img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12004).png" alt="Additional Kubeconfig"/></p>
+<hr/>
+<h2 id="step-3-join-cluster--prep-crds">Step 3: Join Cluster &amp; Prep CRDs</h2>
+<p>Join the <code>ikoclone</code> cluster to the Karmada control plane and install the <code>IrisCluster</code> CRD into the Karmada API.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># Export CRDs from member to Karmada control plane</span></span>
+<span class="line"><span style="color:#B392F0">kubectl</span><span style="color:#79B8FF"> --kubeconfig</span><span style="color:#9ECBFF"> ikofett.kubeconfig</span><span style="color:#9ECBFF"> get</span><span style="color:#9ECBFF"> crd</span><span style="color:#9ECBFF"> irisclusters.intersystems.com</span><span style="color:#79B8FF"> -o</span><span style="color:#9ECBFF"> yaml</span><span style="color:#F97583"> &gt;</span><span style="color:#9ECBFF"> ikocrds.yaml</span></span>
+<span class="line"><span style="color:#B392F0">kubectl</span><span style="color:#9ECBFF"> create</span><span style="color:#79B8FF"> -f</span><span style="color:#9ECBFF"> ikocrds.yaml</span><span style="color:#79B8FF"> --kubeconfig</span><span style="color:#9ECBFF"> ikokamino.kubeconfig</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Join the clone</span></span>
+<span class="line"><span style="color:#B392F0">kubectl</span><span style="color:#9ECBFF"> karmada</span><span style="color:#79B8FF"> --kubeconfig</span><span style="color:#9ECBFF"> ikokamino.kubeconfig</span><span style="color:#9ECBFF"> join</span><span style="color:#9ECBFF"> ikoclone</span><span style="color:#79B8FF"> --cluster-kubeconfig=ikoclone.kubeconfig</span></span></code></pre>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12006).png" alt="Join Success"/></p>
+<hr/>
+<h2 id="step-4-propagate-iriscluster">Step 4: Propagate IrisCluster</h2>
+<h3 id="1-the-template-dna">1. The Template (DNA)</h3>
+<p>Deploy the <code>IrisCluster</code> to Karmada. This stores the definition but doesn’t deploy a workload yet.</p>
+<p><strong>federated-iris.yaml</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">apiVersion</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">intersystems.com/v1alpha1</span></span>
+<span class="line"><span style="color:#85E89D">kind</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">IrisCluster</span></span>
+<span class="line"><span style="color:#85E89D">metadata</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">federated-iris</span></span>
+<span class="line"><span style="color:#85E89D">spec</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  topology</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    data</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">      image</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">containers.intersystems.com/intersystems/iris-community:2025.1</span></span>
+<span class="line"><span style="color:#85E89D">      serviceTemplate</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">        spec</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">          type</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">LoadBalancer</span></span></code></pre>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12007).png" alt="Federated Iris Stub"/></p>
+<h3 id="2-the-propagation-policy">2. The Propagation Policy</h3>
+<p>Tell Karmada where to send the “clone.”</p>
+<p><strong>policy.yaml</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">apiVersion</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">policy.karmada.io/v1alpha1</span></span>
+<span class="line"><span style="color:#85E89D">kind</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">PropagationPolicy</span></span>
+<span class="line"><span style="color:#85E89D">metadata</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">iriscluster-propagate</span></span>
+<span class="line"><span style="color:#85E89D">spec</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  resourceSelectors</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">    - </span><span style="color:#85E89D">apiVersion</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">intersystems.com/v1alpha1</span></span>
+<span class="line"><span style="color:#85E89D">      kind</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">IrisCluster</span></span>
+<span class="line"><span style="color:#85E89D">  placement</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    clusterAffinity</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">      clusterNames</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#9ECBFF">ikoclone</span></span></code></pre>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12008).png" alt="Propagation Policy Applied"/></p>
+<p>On the <code>ikoclone</code> cluster, the <code>IrisCluster</code> spins up automatically!</p>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12009).png" alt="Clone Spun Up"/></p>
+<hr/>
+<h2 id="joining-the-galaxy-gcp">Joining the Galaxy (GCP)</h2>
+<p>We can now join our stretched GCP cluster (from <a href="https://community.intersystems.com/post/iko-plus-stretched-cross-cloud-cross-regional-iriscluster-tailscale">this post</a>) and update the policy to deploy there too.</p>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12010).png" alt="Join GCP Cluster"/>
+<img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12011).png" alt="GCP Stretched Cluster Result"/></p>
+<p>Update the <code>PropagationPolicy</code> to include the GCP cluster:
+<img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12012).png" alt="Edit Policy"/></p>
+<p>🎉 Now you have another clone out on GCP!</p>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12013).png" alt="Final GCP Result"/></p>
+<hr/>
+<p><strong>Advanced Features to Explore:</strong></p>
 <ul>
-<li><strong>Centralized Management</strong>: One control plane to rule them all.</li>
-<li><strong>Resource Propagation</strong>: Define a resource once, and Karmada ensures it exists where it should.</li>
-<li><strong>Cross-Cluster Governance</strong>: Ensure compliance across your entire fleet.</li>
+<li>Overrides on resources per joined cluster</li>
+<li>Networking integration with Submariner</li>
+<li>PUSH vs PULL configuration models</li>
 </ul>
-<h3 id="the-setup">The Setup</h3>
-<p>We have our “host” cluster where Karmada is installed, and we want to join our regional clusters.</p>
-<h3 id="joining-and-propagating">Joining and Propagating</h3>
-<p>First, we join our member clusters to the Karmada control plane.</p>
-<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12010).png" alt="Joining Clusters to Karmada"/></p>
-<p>Now, let’s propagate our stretched cluster configuration from a previous post to a new target cluster in GCP.</p>
-<p><img src="https://community.intersystems.com/sites/default/files/inline/images/kooha-2025-10-19-17-25-50_anim_preview.jpg" alt="Karmada Propagation Demo"/></p>
-<p>The second cluster is now available for business in Google Cloud Platform as a stretched cluster.</p>
-<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12011).png" alt="Stretched Cluster in GCP"/></p>
-<h3 id="propagation-policies">Propagation Policies</h3>
-<p>The magic happens in the <code>PropagationPolicy</code>. To get an <code>IrisCluster</code> out to a new region, we simply edit the policy to include the new target <code>k8s</code>.</p>
-<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12012).png" alt="Editing Propagation Policy"/></p>
-<p>And there you have it: a clone of the <code>IrisCluster</code> out on GCP, managed centrally.</p>
-<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12013).png" alt="IRIS Cluster Clone on GCP"/></p>
-<h3 id="summary--advanced-features">Summary &amp; Advanced Features</h3>
-<p>Karmada scratches the surface of what’s possible with multi-cluster management. Advanced users can explore:</p>
+<p><strong>Related Reading:</strong></p>
 <ul>
-<li><strong>Overrides</strong>: Customize resources per joined cluster (e.g., different storage classes).</li>
-<li><strong>Networking</strong>: Integrate with Submariner for cross-cluster pod-to-pod communication.</li>
-<li><strong>Push vs. Pull</strong>: Choose the configuration style that fits your workflow.</li>
-</ul>
-<p><a href="https://karmada.io/"><img src="https://gh-card.dev/repos/karmada-io/karmada.png" alt="Karmada GitHub"/></a></p>
-<p>Scaling InterSystems IRIS is no longer a cluster-by-cluster manual effort. With Karmada and the IKO, you have a true “Armada” of data platforms at your fingertips.</p> </div> </article>  </div>  </main> <footer class="mt-5 mb-20"> <p class="text-center text-sm text-base-content/60"> <a class="btn btn-outline btn-xs border-base-300 text-base-content/60 hover:text-primary hover:border-primary px-3 transition-all duration-300" href="/imprint">
+<li><a href="https://community.intersystems.com/post/iko-plus-stretched-cross-cloud-cross-regional-iriscluster-tailscale">IKO Plus: Stretched Cross-Cloud IrisCluster</a></li>
+<li><a href="https://community.intersystems.com/post/iko-plus-operator-works-home-iriscluster-provisioning-across-kubernetes-clusters">IKO Plus: Operator Works From Home</a></li>
+<li><a href="https://sveltos.projectsveltos.io">Project Sveltos</a></li>
+</ul> </div> </article>  </div>  </main> <footer class="mt-5 mb-20"> <p class="text-center text-sm text-base-content/60"> <a class="btn btn-outline btn-xs border-base-300 text-base-content/60 hover:text-primary hover:border-primary px-3 transition-all duration-300" href="/imprint">
 Legal, Tax, Insurance
 </a>  <span class="block sm:inline"> © 2015-2026 Integration Required, LLC</span> </p>  </footer> </body></html>

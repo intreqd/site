@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="de"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="shortcut icon" href="/favicon.ico"><link rel="sitemap" href="/sitemap-index.xml"><meta name="generator" content="Astro v6.2.1"><title>IKO Plus: Secrets Management for IRIS Clusters with External Secrets Operator</title><link rel="canonical" href="https://www.integrationrequired.com/blog/iko-plus-secrets-management-eso"><meta name="description" content="Securely managing sensitive data like passwords, certificates, and API keys for InterSystems IRIS clusters using the External Secrets Operator and cloud secret managers like Google Secret Manager or AWS Secrets Manager."><meta name="robots" content="index, follow"><meta property="og:title" content="IKO Plus: Secrets Management for IRIS Clusters with External Secrets Operator"><meta property="og:type" content="website"><meta property="og:image" content="https://www.integrationrequired.com/opengraph.jpg"><meta property="og:url" content="https://www.integrationrequired.com/blog/iko-plus-secrets-management-eso"><meta property="og:image:url" content="https://www.integrationrequired.com/opengraph.jpg"><meta property="og:image:alt" content="IKO Plus: Secrets Management for IRIS Clusters with External Secrets Operator"><meta name="twitter:card" content="summary_large_image"><!--
+<!DOCTYPE html><html lang="de"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="shortcut icon" href="/favicon.ico"><link rel="sitemap" href="/sitemap-index.xml"><meta name="generator" content="Astro v6.2.1"><title>IKO Plus: Shhhhhhhhh - Secrets Management for IRIS Clusters with External Secrets Operator</title><link rel="canonical" href="https://www.integrationrequired.com/blog/iko-plus-secrets-eso"><meta name="description" content="Integrating External Secrets Operator (ESO) with InterSystems IrisClusters to manage sensitive data using external providers like Google Secret Manager, AWS Secrets Manager, and Azure Key Vault."><meta name="robots" content="index, follow"><meta property="og:title" content="IKO Plus: Shhhhhhhhh - Secrets Management for IRIS Clusters with External Secrets Operator"><meta property="og:type" content="website"><meta property="og:image" content="https://www.integrationrequired.com/opengraph.jpg"><meta property="og:url" content="https://www.integrationrequired.com/blog/iko-plus-secrets-eso"><meta property="og:image:url" content="https://www.integrationrequired.com/opengraph.jpg"><meta property="og:image:alt" content="IKO Plus: Shhhhhhhhh - Secrets Management for IRIS Clusters with External Secrets Operator"><meta name="twitter:card" content="summary_large_image"><!--
       Fonts flow:
       1. astro.config.mjs registers the font and exposes `--font-inter`.
       2. <Font /> loads that configured family into the page head.
@@ -28,7 +28,7 @@
         gtag('js', new Date());
         gtag('config', 'G-48J9E1212D');
       });
-    </script><link rel="stylesheet" href="/_astro/Layout.BHu6V9Rs.css"><script type="module" src="/_astro/page.CQhogMj7.js"></script></head> <body> <!-- Skip-to-content: first focusable element on the page.
+    </script><link rel="stylesheet" href="/_astro/Layout.p7_wMwRU.css"><script type="module" src="/_astro/page.CQhogMj7.js"></script></head> <body> <!-- Skip-to-content: first focusable element on the page.
          Hidden until keyboard-focused so sighted users never see it.
          Screen readers and keyboard users tab to it and jump past the nav. --> <a href="#main-content" class="skip-to-content">Skip to content</a> <div x-data="{ open: false }" x-on:astro:page-load.document="open = false" @keydown.escape.window="open = false" data-astro-cid-ri6uxye2> <header class="border-b border-base-300 bg-base-100" data-astro-cid-ri6uxye2> <div class="max-w-screen-xl mx-auto px-5">  <nav class="navbar min-h-20 px-0" data-astro-cid-ri6uxye2> <div class="navbar-start" data-astro-cid-ri6uxye2> <a href="/" class="btn btn-ghost px-0 hover:bg-transparent" data-astro-cid-ri6uxye2> <img src="/logo_black.png" alt="Your Site" class="h-[60px] w-auto object-contain transition-transform duration-300 hover:scale-105 logo-light" data-astro-cid-ri6uxye2> <img src="/logo_white.png" alt="Your Site" class="h-[60px] w-auto object-contain transition-transform duration-300 hover:scale-105 logo-dark" data-astro-cid-ri6uxye2> </a> </div>  <div class="navbar-end gap-2" data-astro-cid-ri6uxye2> <div class="hidden md:flex gap-2 items-center" data-astro-cid-ri6uxye2> <a class="btn btn-sm bg-[#003A9B] border-[#003A9B] text-white hover:bg-[#002b75] hover:border-[#002b75] flex items-center gap-2" href="https://www.indeed.com/employers/login" target="_blank" rel="noopener noreferrer" data-astro-cid-ri6uxye2> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" data-astro-cid-ri6uxye2><path d="M11.566 21.5633v-8.762c.2553.0231.5009.0346.758.0346 1.2225 0 2.3739-.3206 3.3506-.8928v9.6182c0 .8219-.1957 1.4287-.5757 1.8338-.378.4033-.8808.6049-1.491.6049-.6007 0-1.0766-.2016-1.468-.6183-.3781-.4032-.5739-1.01-.5739-1.8184zM11.589.5659c2.5447-.8929 5.4424-.8449 7.6186.987.405.3687.8673.8334 1.0515 1.3806.2207.6913-.7695-.073-.9057-.167-.71-.4532-1.4182-.8334-2.2127-1.0946C12.8614.3873 8.8122 2.709 6.2945 6.315c-1.0516 1.5939-1.7367 3.2721-2.299 5.1174-.0614.2017-.1094.4647-.2207.6413-.1113.2036-.048-.5453-.048-.5702.0845-.7623.2438-1.4997.4414-2.237C5.3292 5.3375 7.897 2.0655 11.5891.5658zm4.9281 7.0587c0 1.6686-1.353 3.0224-3.0205 3.0224-1.6677 0-3.0186-1.3538-3.0186-3.0224 0-1.6687 1.351-3.0224 3.0186-3.0224 1.6676 0 3.0205 1.3518 3.0205 3.0224Z" data-astro-cid-ri6uxye2></path></svg>
 Indeed
@@ -55,35 +55,86 @@ LinkedIn
 Github
 </a> <a class="btn bg-[#f57c00] border-[#f57c00] text-white hover:bg-[#e65100] hover:border-[#e65100] w-full flex items-center gap-2" href="https://www.brightstreetgroup.com" target="_blank" rel="noopener noreferrer" @click="open = false" data-astro-cid-ri6uxye2> <img src="/bsg-favicon.png" alt="BSG Logo" class="w-5 h-5 rounded-sm brightness-0 invert" data-astro-cid-ri6uxye2>
 Brightstreet Group
-</a> </div> </div> </div> <main id="main-content">  <div class="max-w-screen-xl mx-auto px-5 pt-6 sm:pt-8 lg:pt-12 pb-12 sm:pb-16 lg:pb-24">  <article class="max-w-3xl"> <header class="space-y-4"> <a href="/blog" class="link link-hover text-sm text-base-content/60">← All posts</a> <div class="mt-2 overflow-hidden rounded-box"> <img src="/_astro/1208x201_18dbNC.webp" alt="IKO Plus: Secrets Management for IRIS Clusters with External Secrets Operator" loading="lazy" decoding="async" width="1200" height="600" class="w-full object-cover"> </div> <div class="space-y-2"> <h1 class="text-2xl font-bold tracking-tight sm:text-3xl">IKO Plus: Secrets Management for IRIS Clusters with External Secrets Operator</h1> <div class="flex flex-wrap items-center gap-3"> <p class="text-sm text-base-content/60"> <time datetime="2025-11-20T00:00:00.000Z"> November 19, 2025 </time>  </p> <div class="flex flex-wrap gap-1"> <span class="badge badge-primary badge-sm badge-outline">iko</span><span class="badge badge-primary badge-sm badge-outline">InterSystems IRIS</span><span class="badge badge-primary badge-sm badge-outline">Kubernetes</span><span class="badge badge-primary badge-sm badge-outline">Security</span><span class="badge badge-primary badge-sm badge-outline">Secrets Management</span><span class="badge badge-primary badge-sm badge-outline">ESO</span> </div> <a href="https://community.intersystems.com/post/iko-plus-shhhhhhhhh-secrets-management-iris-clusters-external-secrets-operator" target="_blank" rel="noopener noreferrer" class="badge badge-secondary badge-sm badge-outline link-hover flex items-center gap-1">
+</a> </div> </div> </div> <main id="main-content">  <div class="max-w-screen-xl mx-auto px-5 pt-6 sm:pt-8 lg:pt-12 pb-12 sm:pb-16 lg:pb-24">  <article class="max-w-3xl"> <header class="space-y-4"> <a href="/blog" class="link link-hover text-sm text-base-content/60">← All posts</a> <div class="mt-2 overflow-hidden rounded-box"> <img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12152).png" alt="IKO Plus: Shhhhhhhhh - Secrets Management for IRIS Clusters with External Secrets Operator" loading="lazy" decoding="async" width="1200" height="600" class="w-full object-cover"> </div> <div class="space-y-2"> <h1 class="text-2xl font-bold tracking-tight sm:text-3xl">IKO Plus: Shhhhhhhhh - Secrets Management for IRIS Clusters with External Secrets Operator</h1> <div class="flex flex-wrap items-center gap-3"> <p class="text-sm text-base-content/60"> <time datetime="2024-11-04T00:00:00.000Z"> November 3, 2024 </time>  </p> <div class="flex flex-wrap gap-1"> <span class="badge badge-primary badge-sm badge-outline">InterSystems IRIS</span><span class="badge badge-primary badge-sm badge-outline">Kubernetes</span><span class="badge badge-primary badge-sm badge-outline">IKO</span><span class="badge badge-primary badge-sm badge-outline">Security</span><span class="badge badge-primary badge-sm badge-outline">ESO</span><span class="badge badge-primary badge-sm badge-outline">Secrets Management</span> </div> <a href="https://community.intersystems.com/post/iko-plus-shhhhhhhhh-secrets-management-iris-clusters-external-secrets-operator" target="_blank" rel="noopener noreferrer" class="badge badge-secondary badge-sm badge-outline link-hover flex items-center gap-1">
 Community
 <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> </a> </div> </div> </header> <!--
       daisyUI recommends using Tailwind utilities for layout and the Typography
       plugin for rich text. `prose` gives Markdown content predictable defaults
       without maintaining a custom article stylesheet in the starter.
-    --> <div class="prose prose-neutral mt-10 max-w-none prose-a:link prose-img:rounded-box"> <p>In this installment of <strong>IKO Plus</strong>, we’re talking about <strong>Secrets Management</strong>. Shhhhhhhhh! 🤫 Dealing with passwords, certificates, and API keys in Kubernetes can be a security nightmare if not handled correctly. We want to avoid hardcoding secrets in our manifests or keeping them in plain-text Kubernetes secrets.</p>
-<h3 id="the-solution-external-secrets-operator-eso">The Solution: External Secrets Operator (ESO)</h3>
-<p>The <strong>External Secrets Operator</strong> integrates Kubernetes with external secret management systems like Google Secret Manager, AWS Secrets Manager, or HashiCorp Vault. It reads information from a external API and automatically injects the values into a Kubernetes Secret.</p>
-<h3 id="step-1-defining-the-secret-store">Step 1: Defining the Secret Store</h3>
-<p>First, we define a <code>SecretStore</code> that tells ESO how to connect to our cloud secret manager (in this case, Google Secret Manager).</p>
-<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#6A737D"># secretstore.yaml snippet</span></span>
-<span class="line"><span style="color:#85E89D">apiVersion</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">external-secrets.io/v1beta1</span></span>
+    --> <div class="prose prose-neutral mt-10 max-w-none prose-a:link prose-img:rounded-box"> <p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12153).png" alt="ESO Providers Matrix"/></p>
+<h3 id="now-under-heavy-rotation-your-iriscluster-secrets">Now Under Heavy Rotation, Your IrisCluster Secrets</h3>
+<p>A few days before <a href="https://events.linuxfoundation.org/kubecon-cloudnativecon-north-america/">Kubecon</a>, the <a href="https://external-secrets.io/">external-secrets-operator</a> went <a href="https://external-secrets.io/latest/provider/aws-secrets-manager/">GA with 1.0.0</a> and is set to ride shotgun for Kubernetes Secrets Management, putting Vault in the backseat.</p>
+<p>You can glance at the <a href="https://external-secrets.io/latest/provider/aws-secrets-manager/">Providers list</a> and immediately understand that you can leave the “which Secrets Manager” conversation to others while you do your job utilizing external secrets on your IrisCluster workloads. By my count, with the operator and a single <code>IrisCluster</code>, you can easily have a fistful of secrets of different types, even under a single tenant.</p>
+<hr/>
+<h2 id="the-mission">The Mission</h2>
+<p>Let’s generate a pull secret in <strong>Google Cloud Secret Manager</strong> for use with the IKO image from <code>containers.intersystems.com</code> and use ESO to resolve it into our cluster.</p>
+<h3 id="step-1-cluster-setup">Step 1: Cluster Setup</h3>
+<p>Stand up a <a href="https://k0sproject.io/">k0s</a> cluster for local use:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># Download and install k0s</span></span>
+<span class="line"><span style="color:#B392F0">curl</span><span style="color:#79B8FF"> -sSLf</span><span style="color:#9ECBFF"> https://get.k0s.sh</span><span style="color:#F97583"> |</span><span style="color:#B392F0"> sudo</span><span style="color:#9ECBFF"> sh</span></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> k0s</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> controller</span><span style="color:#79B8FF"> --single</span></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> k0s</span><span style="color:#9ECBFF"> start</span></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> k0s</span><span style="color:#9ECBFF"> status</span></span></code></pre>
+<h3 id="step-2-the-secret">Step 2: The Secret</h3>
+<p>Generate a Docker secret and jam it into Google Cloud Secret Manager.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># Enable Secret Manager in GCP</span></span>
+<span class="line"><span style="color:#B392F0">gcloud</span><span style="color:#9ECBFF"> auth</span><span style="color:#9ECBFF"> login</span></span>
+<span class="line"><span style="color:#B392F0">gcloud</span><span style="color:#9ECBFF"> config</span><span style="color:#9ECBFF"> set</span><span style="color:#9ECBFF"> project</span><span style="color:#9ECBFF"> ikoplus</span></span>
+<span class="line"><span style="color:#B392F0">gcloud</span><span style="color:#9ECBFF"> services</span><span style="color:#9ECBFF"> enable</span><span style="color:#9ECBFF"> secretmanager.googleapis.com</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Create the docker secret</span></span>
+<span class="line"><span style="color:#B392F0">docker</span><span style="color:#9ECBFF"> login</span><span style="color:#79B8FF"> -u=</span><span style="color:#9ECBFF">&quot;ron.sweeney@integrationrequired.com&quot;</span><span style="color:#9ECBFF"> containers.intersystems.com</span></span>
+<span class="line"><span style="color:#6A737D"># This creates config.json locally</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Upload to GCP</span></span>
+<span class="line"><span style="color:#B392F0">gcloud</span><span style="color:#9ECBFF"> secrets</span><span style="color:#9ECBFF"> create</span><span style="color:#9ECBFF"> ikoplus-eso-gcp</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  --project=</span><span style="color:#9ECBFF">&quot;ikoplus&quot;</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  --replication-policy=</span><span style="color:#9ECBFF">&quot;automatic&quot;</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  --data-file=./config.json</span></span></code></pre>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/image_18_0.png" alt="GCP Secret Manager Dashboard"/></p>
+<hr/>
+<h2 id="step-3-install-external-secrets-operator-eso">Step 3: Install External Secrets Operator (ESO)</h2>
+<p>Deploy ESO via Helm:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">helm</span><span style="color:#9ECBFF"> repo</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> external-secrets</span><span style="color:#9ECBFF"> https://charts.external-secrets.io</span></span>
+<span class="line"><span style="color:#B392F0">helm</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> external-secrets</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  external-secrets/external-secrets</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  -n</span><span style="color:#9ECBFF"> external-secrets</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  --create-namespace</span></span></code></pre>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12155).png" alt="Headlamp ESO Status"/></p>
+<p>Give it a minute to figure itself out, and when you are done you should have a total of 12 pods or so across 3 deployments in namespace “external-secrets”.</p>
+<hr/>
+<h2 id="step-4-provision-a-secretstore">Step 4: Provision a SecretStore</h2>
+<p>A <code>SecretStore</code> is the custom resource that defines the communication line to the provider (GCP in our case).</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># Create a K8s secret containing your GCP Service Account key</span></span>
+<span class="line"><span style="color:#B392F0">kubectl</span><span style="color:#79B8FF"> -n</span><span style="color:#9ECBFF"> ikoplus</span><span style="color:#9ECBFF"> create</span><span style="color:#9ECBFF"> secret</span><span style="color:#9ECBFF"> generic</span><span style="color:#9ECBFF"> gcp-sm-credentials</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  --from-file=secret-access-credentials=ikoplus-key.json</span></span></code></pre>
+<p><strong>gcpsm-secretstore.yaml</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">apiVersion</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">external-secrets.io/v1</span></span>
 <span class="line"><span style="color:#85E89D">kind</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">SecretStore</span></span>
 <span class="line"><span style="color:#85E89D">metadata</span><span style="color:#E1E4E8">:</span></span>
 <span class="line"><span style="color:#85E89D">  name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">gcp-sm-store</span></span>
+<span class="line"><span style="color:#85E89D">  namespace</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">ikoplus</span></span>
 <span class="line"><span style="color:#85E89D">spec</span><span style="color:#E1E4E8">:</span></span>
 <span class="line"><span style="color:#85E89D">  provider</span><span style="color:#E1E4E8">:</span></span>
 <span class="line"><span style="color:#85E89D">    gcpsm</span><span style="color:#E1E4E8">:</span></span>
-<span class="line"><span style="color:#85E89D">      projectID</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">my-gcp-project</span></span></code></pre>
-<h3 id="step-2-creating-an-externalsecret">Step 2: Creating an ExternalSecret</h3>
-<p>Next, we create an <code>ExternalSecret</code> resource. This tells ESO which specific secret to fetch from the cloud and what the target Kubernetes secret should be named.</p>
-<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12156).png" alt="ESO in Headlamp"/></p>
-<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#6A737D"># externalsecret.yaml</span></span>
-<span class="line"><span style="color:#85E89D">apiVersion</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">external-secrets.io/v1beta1</span></span>
+<span class="line"><span style="color:#85E89D">      projectID</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">ikoplus</span></span>
+<span class="line"><span style="color:#85E89D">      auth</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">        secretRef</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">          secretAccessKeySecretRef</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">            name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">gcp-sm-credentials</span></span>
+<span class="line"><span style="color:#85E89D">            key</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">secret-access-credentials</span></span></code></pre>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/image_15_0.png" alt="SecretStore Configuration"/></p>
+<hr/>
+<h2 id="step-5-create-externalsecret">Step 5: Create ExternalSecret</h2>
+<p>Now, link the <a href="https://external-secrets.io/main/api/externalsecret/">ExternalSecret</a> to a plain ‘ol Kubernetes secret.</p>
+<p><strong>externalsecret-dockerconfig.yaml</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">apiVersion</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">external-secrets.io/v1</span></span>
 <span class="line"><span style="color:#85E89D">kind</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">ExternalSecret</span></span>
 <span class="line"><span style="color:#85E89D">metadata</span><span style="color:#E1E4E8">:</span></span>
 <span class="line"><span style="color:#85E89D">  name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">external-containers-pull-secret</span></span>
+<span class="line"><span style="color:#85E89D">  namespace</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">ikoplus</span></span>
 <span class="line"><span style="color:#85E89D">spec</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  refreshInterval</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">1h</span></span>
 <span class="line"><span style="color:#85E89D">  secretStoreRef</span><span style="color:#E1E4E8">:</span></span>
 <span class="line"><span style="color:#85E89D">    name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">gcp-sm-store</span></span>
 <span class="line"><span style="color:#85E89D">    kind</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">SecretStore</span></span>
@@ -97,20 +148,23 @@ Community
 <span class="line"><span style="color:#E1E4E8">    - </span><span style="color:#85E89D">secretKey</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">dockerconfig</span></span>
 <span class="line"><span style="color:#85E89D">      remoteRef</span><span style="color:#E1E4E8">:</span></span>
 <span class="line"><span style="color:#85E89D">        key</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">ikoplus-eso-gcp</span></span></code></pre>
-<h3 id="step-3-integrating-with-iko">Step 3: Integrating with IKO</h3>
-<p>Now we simply update our IKO Helm chart <code>values.yaml</code> to use the secret that ESO is managing for us.</p>
-<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#6A737D"># values.yaml</span></span>
-<span class="line"><span style="color:#85E89D">imagePullSecrets</span><span style="color:#E1E4E8">:</span></span>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12158).png" alt="Headlamp Custom Resources List"/></p>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12156).png" alt="ExternalSecret Details"/></p>
+<hr/>
+<h2 id="step-6-deploy-iriscluster">Step 6: Deploy IrisCluster</h2>
+<p>Update the IKO Helm Chart values to point to the secret managed by ESO:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">imagePullSecrets</span><span style="color:#E1E4E8">:</span></span>
 <span class="line"><span style="color:#E1E4E8">  - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">containers-pull-secret</span></span></code></pre>
-<h3 id="attestation-successful-secret-propagation">Attestation: Successful Secret Propagation</h3>
-<p>When we deploy, we can see that the IKO is successfully pulling images using the secret that was resolved from Google Cloud Platform by ESO!</p>
-<p><img src="https://community.intersystems.com/sites/default/files/inline/images/image_15_0.png" alt="Successful Image Pull"/></p>
-<p>And we can verify that the ExternalSecret is in a synchronized state:</p>
-<p><img src="https://community.intersystems.com/sites/default/files/inline/images/image_16_0.png" alt="ESO Synchronized Status"/></p>
-<p>🎉 Now you have somewhere to <em>stash</em> that password <em>hash</em>!</p>
-<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12154).png" alt="Stash and Hash"/></p>
-<h3 id="summary">Summary</h3>
-<p>The <strong>External Secrets Operator</strong> is a powerful tool for any production IRIS workload on Kubernetes. It allows you to leverage the full security and auditing capabilities of cloud secret managers while keeping your Kubernetes deployments clean and declarative.</p>
-<p>Stay tuned for more IKO Plus!</p> </div> </article>  </div>  </main> <footer class="mt-5 mb-20"> <p class="text-center text-sm text-base-content/60"> <a class="btn btn-outline btn-xs border-base-300 text-base-content/60 hover:text-primary hover:border-primary px-3 transition-all duration-300" href="/imprint">
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12154).png" alt="Successful Image Pull Logs"/></p>
+<p>🎉 <strong>Successful Pull!</strong> The pod used <code>containers-pull-secret</code>, which was dynamically synchronized from Google Cloud Secret Manager by the External Secrets Operator.</p>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12160).png" alt="Terminal Attestation Logs"/></p>
+<p>Now you have somewhere to stash that <a href="https://pidtoo.github.io/gitops_iko_slides/gitops_iko#/19">password hash</a>!</p>
+<hr/>
+<p><strong>Related Reading:</strong></p>
+<ul>
+<li><a href="https://community.intersystems.com/post/iko-plus-vip-kubernetes-irisclusters">IKO Plus: VIP in Kubernetes on IrisClusters</a></li>
+<li><a href="https://community.intersystems.com/post/iko-plus-hssys-mirroring-iko">IKO Plus: HSSYS Mirroring with IKO</a></li>
+<li><a href="https://opencollective.com/external-secrets-org">External Secrets Operator Org</a></li>
+</ul> </div> </article>  </div>  </main> <footer class="mt-5 mb-20"> <p class="text-center text-sm text-base-content/60"> <a class="btn btn-outline btn-xs border-base-300 text-base-content/60 hover:text-primary hover:border-primary px-3 transition-all duration-300" href="/imprint">
 Legal, Tax, Insurance
 </a>  <span class="block sm:inline"> © 2015-2026 Integration Required, LLC</span> </p>  </footer> </body></html>
