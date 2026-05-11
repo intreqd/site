@@ -2,7 +2,7 @@
 title: "IKO Plus: Launching Airgapped IrisClusters with Hauler"
 description: Deploying InterSystems IRIS in highly secure, airgapped environments using Hauler for local registry management, artifact distribution, and secure dependency handling.
 pubDate: 2025-10-21
-heroImage: https://placehold.co/1208x201?text=InterSystems+Portfolio
+heroImage: https://community.intersystems.com/sites/default/files/inline/images/images/image(12017).png
 categories: ["iko", "InterSystems IRIS", "Kubernetes", "Security", "Airgap", "Hauler"]
 communityLink: https://community.intersystems.com/post/iko-plus-launching-airgapped-irisclusters-hauler
 draft: false
@@ -10,13 +10,13 @@ draft: false
 
 In many enterprise environments, security is paramount. This often means running in "airgapped" environments—networks with no direct access to the public internet. But how do you deploy a modern, containerized data platform like InterSystems IRIS when you can't reach `containers.intersystems.com`?
 
+![Defining Artifacts](https://community.intersystems.com/sites/default/files/inline/images/images/image(12019).png)
+
 Enter **Hauler**.
 
 ### What is Hauler?
 
 Hauler is a tool designed to simplify the process of gathering and distributing artifacts (images, charts, files) for airgapped environments. It allows you to "haul" your dependencies from the internet into a local registry that your Kubernetes cluster can reach.
-
-![Hauler Introduction](https://community.intersystems.com/sites/default/files/inline/images/images/image(12017).png)
 
 ### The Workflow
 
@@ -29,7 +29,7 @@ Hauler is a tool designed to simplify the process of gathering and distributing 
 
 We define our InterSystems artifacts in a simple YAML manifest.
 
-![Defining Artifacts](https://community.intersystems.com/sites/default/files/inline/images/images/image(12019).png)
+
 
 ```yaml
 # hauler-manifest.yaml

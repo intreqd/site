@@ -55,46 +55,122 @@ LinkedIn
 Github
 </a> <a class="btn bg-[#f57c00] border-[#f57c00] text-white hover:bg-[#e65100] hover:border-[#e65100] w-full flex items-center gap-2" href="https://www.brightstreetgroup.com" target="_blank" rel="noopener noreferrer" @click="open = false" data-astro-cid-ri6uxye2> <img src="/bsg-favicon.png" alt="BSG Logo" class="w-5 h-5 rounded-sm brightness-0 invert" data-astro-cid-ri6uxye2>
 Brightstreet Group
-</a> </div> </div> </div> <main id="main-content">  <div class="max-w-screen-xl mx-auto px-5 pt-6 sm:pt-8 lg:pt-12 pb-12 sm:pb-16 lg:pb-24">  <article class="max-w-3xl"> <header class="space-y-4"> <a href="/blog" class="link link-hover text-sm text-base-content/60">← All posts</a> <div class="mt-2 overflow-hidden rounded-box"> <img src="/_astro/1208x201_18dbNC.webp" alt="IKO Plus: Operator Works From Home - IrisCluster Provisioning Across Kubernetes Clusters" loading="lazy" decoding="async" width="1200" height="600" class="w-full object-cover"> </div> <div class="space-y-2"> <h1 class="text-2xl font-bold tracking-tight sm:text-3xl">IKO Plus: Operator Works From Home - IrisCluster Provisioning Across Kubernetes Clusters</h1> <div class="flex flex-wrap items-center gap-3"> <p class="text-sm text-base-content/60"> <time datetime="2025-10-24T00:00:00.000Z"> October 23, 2025 </time>  </p> <div class="flex flex-wrap gap-1"> <span class="badge badge-primary badge-sm badge-outline">iko</span><span class="badge badge-primary badge-sm badge-outline">InterSystems IRIS</span><span class="badge badge-primary badge-sm badge-outline">Kubernetes</span><span class="badge badge-primary badge-sm badge-outline">Remote Management</span><span class="badge badge-primary badge-sm badge-outline">Operator Patterns</span> </div> <a href="https://community.intersystems.com/post/iko-plus-operator-works-home-iriscluster-provisioning-across-kubernetes-clusters" target="_blank" rel="noopener noreferrer" class="badge badge-secondary badge-sm badge-outline link-hover flex items-center gap-1">
+</a> </div> </div> </div> <main id="main-content">  <div class="max-w-screen-xl mx-auto px-5 pt-6 sm:pt-8 lg:pt-12 pb-12 sm:pb-16 lg:pb-24">  <article class="max-w-3xl"> <header class="space-y-4"> <a href="/blog" class="link link-hover text-sm text-base-content/60">← All posts</a> <div class="mt-2 overflow-hidden rounded-box"> <img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12035).png" alt="IKO Plus: Operator Works From Home - IrisCluster Provisioning Across Kubernetes Clusters" loading="lazy" decoding="async" width="1200" height="600" class="w-full object-cover"> </div> <div class="space-y-2"> <h1 class="text-2xl font-bold tracking-tight sm:text-3xl">IKO Plus: Operator Works From Home - IrisCluster Provisioning Across Kubernetes Clusters</h1> <div class="flex flex-wrap items-center gap-3"> <p class="text-sm text-base-content/60"> <time datetime="2024-10-24T00:00:00.000Z"> October 23, 2024 </time>  </p> <div class="flex flex-wrap gap-1"> <span class="badge badge-primary badge-sm badge-outline">InterSystems IRIS</span><span class="badge badge-primary badge-sm badge-outline">Kubernetes</span><span class="badge badge-primary badge-sm badge-outline">IKO</span><span class="badge badge-primary badge-sm badge-outline">Remote Management</span><span class="badge badge-primary badge-sm badge-outline">Operator Patterns</span> </div> <a href="https://community.intersystems.com/post/iko-plus-operator-works-home-iriscluster-provisioning-across-kubernetes-clusters" target="_blank" rel="noopener noreferrer" class="badge badge-secondary badge-sm badge-outline link-hover flex items-center gap-1">
 Community
 <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> </a> </div> </div> </header> <!--
       daisyUI recommends using Tailwind utilities for layout and the Typography
       plugin for rich text. `prose` gives Markdown content predictable defaults
       without maintaining a custom article stylesheet in the starter.
-    --> <div class="prose prose-neutral mt-10 max-w-none prose-a:link prose-img:rounded-box"> <p>In this installment of <strong>IKO Plus</strong>, we’re exploring a “Work From Home” (WFH) pattern for the InterSystems Kubernetes Operator. Typically, the operator runs inside the same cluster as the <code>IrisCluster</code> it manages. But what if you wanted one operator to manage clusters across your entire organization?</p>
-<h3 id="the-concept-decoupled-provisioning">The Concept: Decoupled Provisioning</h3>
-<p>The goal is to have the IKO running in a “Home” cluster (e.g., a management cluster) while it provisions and manages <code>IrisCluster</code> resources in a “Work” cluster (e.g., production or staging).</p>
-<h3 id="step-1-install-iko-at-home-">Step 1: Install IKO at HOME 🏠</h3>
-<p>We install the IKO using Helm in our management cluster. We need to ensure it has the appropriate kubeconfigs to reach out to other clusters.</p>
-<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/Clipboard_2025-10-22-16-08-14.png" alt="Operator Running at Home"/></p>
-<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#6A737D"># values.yaml snippet for remote management</span></span>
-<span class="line"><span style="color:#85E89D">operator</span><span style="color:#E1E4E8">:</span></span>
-<span class="line"><span style="color:#85E89D">  useKubeapiserverFqdnForAks</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span>
-<span class="line"><span style="color:#85E89D">  healthcheck</span><span style="color:#E1E4E8">:</span></span>
-<span class="line"><span style="color:#85E89D">    enabled</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span></code></pre>
-<h3 id="step-2-install-crds-only-at-work-">Step 2: Install CRDs (only) at WORK 🏢</h3>
-<p>The operator expects the <code>IrisCluster</code> Custom Resource Definitions (CRDs) to exist in the cluster where the resources are defined. However, we don’t want the operator itself running there. We can export the CRDs from home and apply them to work.</p>
-<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/Clipboard_2025-10-22-16-20-22.png" alt="CRDs Loaded at Work"/></p>
-<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># Export from home, apply to work</span></span>
-<span class="line"><span style="color:#B392F0">kubectl</span><span style="color:#9ECBFF"> get</span><span style="color:#9ECBFF"> crd</span><span style="color:#9ECBFF"> irisclusters.intersystems.com</span><span style="color:#79B8FF"> --kubeconfig</span><span style="color:#9ECBFF"> home.kubeconfig</span><span style="color:#79B8FF"> -o</span><span style="color:#9ECBFF"> yaml</span><span style="color:#F97583"> &gt;</span><span style="color:#9ECBFF"> ikocrds.yaml</span></span>
-<span class="line"><span style="color:#B392F0">kubectl</span><span style="color:#9ECBFF"> create</span><span style="color:#79B8FF"> -f</span><span style="color:#9ECBFF"> ikocrds.yaml</span><span style="color:#79B8FF"> --kubeconfig</span><span style="color:#9ECBFF"> work.kubeconfig</span></span></code></pre>
-<h3 id="step-3-remote-provisioning-wfh">Step 3: Remote Provisioning (WFH)</h3>
-<p>Now for the magic. When we apply an <code>IrisCluster</code> manifest to the “Work” cluster, the operator sitting in the “Home” cluster will detect the new resource and begin the provisioning process remotely.</p>
-<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12032).png" alt="Remote Provisioning Logic"/></p>
-<h3 id="the-demo">The Demo</h3>
-<p>Watch as the operator at home plans and schedules the IRIS pods in the remote work cluster.</p>
-<p><img src="https://community.intersystems.com/sites/default/files/inline/images/kooha-2025-10-23-12-51-46_anim_preview.jpg" alt="WFH Provisioning Demo"/></p>
-<p>The operator logs show it actively managing the remote resource:</p>
-<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12034).png" alt="Operator Remote Logs"/></p>
-<p>And the <code>IrisCluster</code> status in the work cluster confirms it’s healthy and managed:</p>
-<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12033).png" alt="IrisCluster Status Work"/></p>
-<p>💥 Mission accomplished. The operator is successfully working from home!</p>
-<h3 id="why-use-this-pattern">Why Use This Pattern?</h3>
+    --> <div class="prose prose-neutral mt-10 max-w-none prose-a:link prose-img:rounded-box"> <p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12030).png" alt="Kind Clusters Provisioned"/></p>
+<h3 id="iko-helm-status-wfh">IKO Helm Status: WFH</h3>
+<p>Here is an option for your headspace if you are designing a multi-cluster architecture and the Operator is an FTE to the design. You can run the Operator from a central Kubernetes cluster (A), and point it to another Kubernetes cluster (B), so that when you apply an <code>IrisCluster</code> to B, the Operator works remotely on A and plans the cluster accordingly on B.</p>
+<p>This design keeps resource heat off the actual workload cluster, spares us some ServiceAccounts/RBAC, and gives us only one operator deployment to worry about so we can concentrate on the IRIS workloads.</p>
+<p>IKO woke up and decided against the commute for work. Using the saved windshield time, IKO upgraded its Helm values on a Kubernetes cluster at home, bounced itself, and went for a run. Once settled back in, inspecting its logs, it could see it had planned many IrisClusters on the Office Kubernetes cluster, all at the cost of its own internet and power.</p>
+<hr/>
+<h2 id="the-setup">The Setup</h2>
+<h3 id="clusters">Clusters</h3>
+<p>Let’s provision two Kind clusters: <code>ikohome</code> and <code>ikowork</code>.</p>
+<p><strong>ikokind.sh</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># Create ikohome cluster</span></span>
+<span class="line"><span style="color:#B392F0">cat</span><span style="color:#F97583"> &lt;&lt;</span><span style="color:#9ECBFF">EOF</span><span style="color:#F97583"> |</span><span style="color:#B392F0"> kind</span><span style="color:#9ECBFF"> create</span><span style="color:#9ECBFF"> cluster</span><span style="color:#79B8FF"> --name</span><span style="color:#9ECBFF"> ikohome</span><span style="color:#79B8FF"> --config=-</span></span>
+<span class="line"><span style="color:#9ECBFF">kind: Cluster</span></span>
+<span class="line"><span style="color:#9ECBFF">apiVersion: kind.x-k8s.io/v1alpha4</span></span>
+<span class="line"><span style="color:#9ECBFF">nodes:</span></span>
+<span class="line"><span style="color:#9ECBFF">- role: control-plane</span></span>
+<span class="line"><span style="color:#9ECBFF">- role: worker</span></span>
+<span class="line"><span style="color:#9ECBFF">networking:</span></span>
+<span class="line"><span style="color:#9ECBFF">  disableDefaultCNI: true</span></span>
+<span class="line"><span style="color:#9ECBFF">EOF</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Create ikowork cluster</span></span>
+<span class="line"><span style="color:#B392F0">cat</span><span style="color:#F97583"> &lt;&lt;</span><span style="color:#9ECBFF">EOF</span><span style="color:#F97583"> |</span><span style="color:#B392F0"> kind</span><span style="color:#9ECBFF"> create</span><span style="color:#9ECBFF"> cluster</span><span style="color:#79B8FF"> --name</span><span style="color:#9ECBFF"> ikowork</span><span style="color:#79B8FF"> --config=-</span></span>
+<span class="line"><span style="color:#9ECBFF">kind: Cluster</span></span>
+<span class="line"><span style="color:#9ECBFF">apiVersion: kind.x-k8s.io/v1alpha4</span></span>
+<span class="line"><span style="color:#9ECBFF">nodes:</span></span>
+<span class="line"><span style="color:#9ECBFF">- role: control-plane</span></span>
+<span class="line"><span style="color:#9ECBFF">- role: worker</span></span>
+<span class="line"><span style="color:#9ECBFF">networking:</span></span>
+<span class="line"><span style="color:#9ECBFF">  disableDefaultCNI: true</span></span>
+<span class="line"><span style="color:#9ECBFF">EOF</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Extract kubeconfigs</span></span>
+<span class="line"><span style="color:#B392F0">kind</span><span style="color:#9ECBFF"> get</span><span style="color:#9ECBFF"> kubeconfig</span><span style="color:#79B8FF"> --name</span><span style="color:#9ECBFF"> ikohome</span><span style="color:#F97583"> &gt;</span><span style="color:#9ECBFF"> ikohome.kubeconfig</span></span>
+<span class="line"><span style="color:#B392F0">kind</span><span style="color:#9ECBFF"> get</span><span style="color:#9ECBFF"> kubeconfig</span><span style="color:#79B8FF"> --name</span><span style="color:#9ECBFF"> ikowork</span><span style="color:#F97583"> &gt;</span><span style="color:#9ECBFF"> ikowork.kubeconfig</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Install Cilium CNI on both</span></span>
+<span class="line"><span style="color:#E1E4E8">KUBECONFIGS</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&quot;ikohome.kubeconfig&quot;</span><span style="color:#9ECBFF"> &quot;ikowork.kubeconfig&quot;</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">for</span><span style="color:#E1E4E8"> cfg </span><span style="color:#F97583">in</span><span style="color:#9ECBFF"> &quot;${</span><span style="color:#E1E4E8">KUBECONFIGS</span><span style="color:#9ECBFF">[</span><span style="color:#F97583">@</span><span style="color:#9ECBFF">]}&quot;</span><span style="color:#E1E4E8">; </span><span style="color:#F97583">do</span></span>
+<span class="line"><span style="color:#79B8FF">  echo</span><span style="color:#9ECBFF"> &quot;&gt;&gt;&gt; Running against kubeconfig: </span><span style="color:#E1E4E8">$cfg</span><span style="color:#9ECBFF">&quot;</span></span>
+<span class="line"><span style="color:#B392F0">  cilium</span><span style="color:#9ECBFF"> install</span><span style="color:#79B8FF"> --version</span><span style="color:#9ECBFF"> v1.18.0</span><span style="color:#79B8FF"> --kubeconfig</span><span style="color:#9ECBFF"> &quot;</span><span style="color:#E1E4E8">$cfg</span><span style="color:#9ECBFF">&quot;</span></span>
+<span class="line"><span style="color:#B392F0">  cilium</span><span style="color:#9ECBFF"> status</span><span style="color:#79B8FF"> --wait</span><span style="color:#79B8FF"> --kubeconfig</span><span style="color:#9ECBFF"> &quot;</span><span style="color:#E1E4E8">$cfg</span><span style="color:#9ECBFF">&quot;</span></span>
+<span class="line"><span style="color:#79B8FF">  echo</span><span style="color:#9ECBFF"> &quot;&gt;&gt;&gt; Finished </span><span style="color:#E1E4E8">$cfg</span><span style="color:#9ECBFF">&quot;</span></span>
+<span class="line"><span style="color:#F97583">done</span></span></code></pre>
+<hr/>
+<h2 id="install-iko-at-home-">Install IKO at HOME 🏠</h2>
+<p>First, we need to make the home cluster aware of the work cluster and load up its kubeconfig as a secret:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">kubectl</span><span style="color:#9ECBFF"> create</span><span style="color:#9ECBFF"> secret</span><span style="color:#9ECBFF"> generic</span><span style="color:#9ECBFF"> work-kubeconfig</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  --from-file=config=ikowork.kubeconfig</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  --kubeconfig</span><span style="color:#9ECBFF"> ikohome.kubeconfig</span></span></code></pre>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12031).png" alt="Secret Created"/></p>
+<p>Now, we need to make two critical changes to the IKO chart to enable “Work From Home” mode:</p>
+<ol>
+<li><strong>Mount</strong> the kubeconfig Secret as a Volume in the Operator.</li>
+<li><strong>Args</strong>: Point the operator to the external kubeconfig in the container arguments (<code>--kubeconfig</code>).</li>
+</ol>
+<h3 id="1-the-mount">1. The Mount</h3>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/Clipboard_2025-10-22-16-08-14.png" alt="Volume Mount Config"/></p>
+<h3 id="2-the-args">2. The Args</h3>
+<p>The arguments to the container are crucial. I tried this with the environment variable <code>KUBECONFIG</code>, but found there is a specific precedence in the <a href="https://github.com/kubernetes-sigs/controller-runtime/blob/main/pkg/client/config/config.go#L76">controller code</a>.</p>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/Clipboard_2025-10-22-16-20-22.png" alt="Container Args Config"/></p>
+<h3 id="full-deploymentyaml-highlights">Full deployment.yaml (Highlights)</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#6A737D"># ...</span></span>
+<span class="line"><span style="color:#85E89D">      containers</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">operator</span></span>
+<span class="line"><span style="color:#85E89D">          image</span><span style="color:#E1E4E8">: {{ </span><span style="color:#9ECBFF">.Values.operator.registry</span><span style="color:#E1E4E8"> }}</span><span style="color:#9ECBFF">/{{ .Values.operator.repository }}:{{ .Values.operator.tag }}</span></span>
+<span class="line"><span style="color:#85E89D">          args</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">            - </span><span style="color:#9ECBFF">run</span></span>
+<span class="line"><span style="color:#E1E4E8">            - </span><span style="color:#9ECBFF">--v={{ .Values.logLevel }}</span></span>
+<span class="line"><span style="color:#E1E4E8">            - </span><span style="color:#9ECBFF">--kubeconfig=/airgap/.kube/config</span></span>
+<span class="line"><span style="color:#6A737D"># ...</span></span>
+<span class="line"><span style="color:#85E89D">          volumeMounts</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">            - </span><span style="color:#85E89D">mountPath</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">/airgap/.kube</span></span>
+<span class="line"><span style="color:#85E89D">              name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">kubeconfig</span></span>
+<span class="line"><span style="color:#85E89D">              readOnly</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span>
+<span class="line"><span style="color:#85E89D">      volumes</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">kubeconfig</span></span>
+<span class="line"><span style="color:#85E89D">          secret</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">            secretName</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">work-kubeconfig</span></span>
+<span class="line"><span style="color:#85E89D">            items</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">              - </span><span style="color:#85E89D">key</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">config</span></span>
+<span class="line"><span style="color:#85E89D">                path</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">config</span></span></code></pre>
+<h3 id="chart-values">Chart Values</h3>
+<p>In <code>values.yaml</code>, I also disabled the mutating and validating webhooks for this remote setup.</p>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12032).png" alt="Values YAML Config"/></p>
+<hr/>
+<h2 id="install-crds-at-work-">Install CRDs at WORK 🏢</h2>
+<p>The operator normally handles CRD installation. For this remote setup, the CRDs must exist in the <strong>Work</strong> cluster, even though the operator is not running there.</p>
+<p>We can pull this maneuver:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># Export CRDs from home (where they are installed)</span></span>
+<span class="line"><span style="color:#B392F0">kubectl</span><span style="color:#9ECBFF"> get</span><span style="color:#9ECBFF"> crd</span><span style="color:#9ECBFF"> irisclusters.intersystems.com</span><span style="color:#79B8FF"> --kubeconfig</span><span style="color:#9ECBFF"> ikohome.kubeconfig</span><span style="color:#79B8FF"> -o</span><span style="color:#9ECBFF"> yaml</span><span style="color:#F97583"> &gt;</span><span style="color:#9ECBFF"> ikocrds.yaml</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Create CRDs at work</span></span>
+<span class="line"><span style="color:#B392F0">kubectl</span><span style="color:#9ECBFF"> create</span><span style="color:#79B8FF"> -f</span><span style="color:#9ECBFF"> ikocrds.yaml</span><span style="color:#79B8FF"> --kubeconfig</span><span style="color:#9ECBFF"> ikowork.kubeconfig</span></span></code></pre>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12034).png" alt="CRD Installation"/></p>
+<hr/>
+<h2 id="final-state-">Final State 💥</h2>
 <ul>
-<li><strong>Centralized Upgrades</strong>: Upgrade your operator in one place for all clusters.</li>
-<li><strong>Resource Efficiency</strong>: Save overhead by not running an operator pod in every single cluster.</li>
-<li><strong>Security</strong>: Keep sensitive credentials (like those needed by the operator) in a single, more secure management cluster.</li>
+<li><strong>IKO</strong> is running at home, not at work.</li>
+<li><strong>CRDs</strong> are loaded at work, but no operator is present.</li>
 </ul>
-<p>Onward and Upward! The K-Ninja strikes again.</p> </div> </article>  </div>  </main> <footer class="mt-5 mb-20"> <p class="text-center text-sm text-base-content/60"> <a class="btn btn-outline btn-xs border-base-300 text-base-content/60 hover:text-primary hover:border-primary px-3 transition-all duration-300" href="/imprint">
+<p>When we apply <code>IrisClusters</code> at work, the operator at home will plan and schedule them remotely.</p>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/kooha-2025-10-23-12-51-46_anim_preview.jpg" alt="Remote Provisioning in Action"/></p>
+<p>It’s alive! The operator has planned many IrisClusters on the Office cluster from its home base.</p>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12033).png" alt="Successful Remote Clusters"/></p>
+<p><strong>Related Reading:</strong></p>
+<ul>
+<li><a href="https://community.intersystems.com/post/iko-plus-launching-airgapped-irisclusters-hauler">IKO Plus: Launching Airgapped IrisClusters with Hauler</a></li>
+<li><a href="https://community.intersystems.com/post/iko-plus-database-management-migration-or-day-1-seeding-your-mirrored-iriscluster">IKO Plus: Database Management, Migration, or Day 1 Seeding</a></li>
+<li><a href="https://github.com/kubernetes-sigs/controller-runtime/blob/main/pkg/client/config/config.go#L76">Controller Runtime Config Precedence</a></li>
+</ul> </div> </article>  </div>  </main> <footer class="mt-5 mb-20"> <p class="text-center text-sm text-base-content/60"> <a class="btn btn-outline btn-xs border-base-300 text-base-content/60 hover:text-primary hover:border-primary px-3 transition-all duration-300" href="/imprint">
 Legal, Tax, Insurance
 </a>  <span class="block sm:inline"> © 2015-2026 Integration Required, LLC</span> </p>  </footer> </body></html>

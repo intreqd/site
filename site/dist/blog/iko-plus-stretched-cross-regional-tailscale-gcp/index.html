@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="de"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="shortcut icon" href="/favicon.ico"><link rel="sitemap" href="/sitemap-index.xml"><meta name="generator" content="Astro v6.2.1"><title>IKO Plus: Stretched Cross Regional IrisCluster with Tailscale on Google Cloud Platform</title><link rel="canonical" href="https://www.integrationrequired.com/blog/iko-plus-stretched-cross-regional-tailscale-gcp"><meta name="description" content="Learn how to deploy a stretched InterSystems IRIS cluster across Google Cloud regions using Tailscale for seamless networking and cross-regional high availability."><meta name="robots" content="index, follow"><meta property="og:title" content="IKO Plus: Stretched Cross Regional IrisCluster with Tailscale on Google Cloud Platform"><meta property="og:type" content="website"><meta property="og:image" content="https://www.integrationrequired.com/opengraph.jpg"><meta property="og:url" content="https://www.integrationrequired.com/blog/iko-plus-stretched-cross-regional-tailscale-gcp"><meta property="og:image:url" content="https://www.integrationrequired.com/opengraph.jpg"><meta property="og:image:alt" content="IKO Plus: Stretched Cross Regional IrisCluster with Tailscale on Google Cloud Platform"><meta name="twitter:card" content="summary_large_image"><!--
+<!DOCTYPE html><html lang="de"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="shortcut icon" href="/favicon.ico"><link rel="sitemap" href="/sitemap-index.xml"><meta name="generator" content="Astro v6.2.1"><title>IKO Plus: Stretched Cross Cloud, Cross Regional IrisCluster with Tailscale</title><link rel="canonical" href="https://www.integrationrequired.com/blog/iko-plus-stretched-cross-regional-tailscale-gcp"><meta name="description" content="Another step in this implementation path, adding cross cloud, cross regional stretched IrisCluster with Mirroring + Disaster Recovery using the InterSystems Kubernetes Operator (IKO) and Tailscale."><meta name="robots" content="index, follow"><meta property="og:title" content="IKO Plus: Stretched Cross Cloud, Cross Regional IrisCluster with Tailscale"><meta property="og:type" content="website"><meta property="og:image" content="https://www.integrationrequired.com/opengraph.jpg"><meta property="og:url" content="https://www.integrationrequired.com/blog/iko-plus-stretched-cross-regional-tailscale-gcp"><meta property="og:image:url" content="https://www.integrationrequired.com/opengraph.jpg"><meta property="og:image:alt" content="IKO Plus: Stretched Cross Cloud, Cross Regional IrisCluster with Tailscale"><meta name="twitter:card" content="summary_large_image"><!--
       Fonts flow:
       1. astro.config.mjs registers the font and exposes `--font-inter`.
       2. <Font /> loads that configured family into the page head.
@@ -55,56 +55,139 @@ LinkedIn
 Github
 </a> <a class="btn bg-[#f57c00] border-[#f57c00] text-white hover:bg-[#e65100] hover:border-[#e65100] w-full flex items-center gap-2" href="https://www.brightstreetgroup.com" target="_blank" rel="noopener noreferrer" @click="open = false" data-astro-cid-ri6uxye2> <img src="/bsg-favicon.png" alt="BSG Logo" class="w-5 h-5 rounded-sm brightness-0 invert" data-astro-cid-ri6uxye2>
 Brightstreet Group
-</a> </div> </div> </div> <main id="main-content">  <div class="max-w-screen-xl mx-auto px-5 pt-6 sm:pt-8 lg:pt-12 pb-12 sm:pb-16 lg:pb-24">  <article class="max-w-3xl"> <header class="space-y-4"> <a href="/blog" class="link link-hover text-sm text-base-content/60">← All posts</a> <div class="mt-2 overflow-hidden rounded-box"> <img src="/_astro/1208x201_18dbNC.webp" alt="IKO Plus: Stretched Cross Regional IrisCluster with Tailscale on Google Cloud Platform" loading="lazy" decoding="async" width="1200" height="600" class="w-full object-cover"> </div> <div class="space-y-2"> <h1 class="text-2xl font-bold tracking-tight sm:text-3xl">IKO Plus: Stretched Cross Regional IrisCluster with Tailscale on Google Cloud Platform</h1> <div class="flex flex-wrap items-center gap-3"> <p class="text-sm text-base-content/60"> <time datetime="2025-10-01T00:00:00.000Z"> September 30, 2025 </time>  </p> <div class="flex flex-wrap gap-1"> <span class="badge badge-primary badge-sm badge-outline">iko</span><span class="badge badge-primary badge-sm badge-outline">InterSystems IRIS</span><span class="badge badge-primary badge-sm badge-outline">Kubernetes</span><span class="badge badge-primary badge-sm badge-outline">Tailscale</span><span class="badge badge-primary badge-sm badge-outline">Google Cloud</span><span class="badge badge-primary badge-sm badge-outline">Networking</span> </div> <a href="https://community.intersystems.com/post/iko-plus-stretched-cross-regional-iriscluster-tailscale-google-cloud-platform" target="_blank" rel="noopener noreferrer" class="badge badge-secondary badge-sm badge-outline link-hover flex items-center gap-1">
+</a> </div> </div> </div> <main id="main-content">  <div class="max-w-screen-xl mx-auto px-5 pt-6 sm:pt-8 lg:pt-12 pb-12 sm:pb-16 lg:pb-24">  <article class="max-w-3xl"> <header class="space-y-4"> <a href="/blog" class="link link-hover text-sm text-base-content/60">← All posts</a> <div class="mt-2 overflow-hidden rounded-box"> <img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11833).png" alt="IKO Plus: Stretched Cross Cloud, Cross Regional IrisCluster with Tailscale" loading="lazy" decoding="async" width="1200" height="600" class="w-full object-cover"> </div> <div class="space-y-2"> <h1 class="text-2xl font-bold tracking-tight sm:text-3xl">IKO Plus: Stretched Cross Cloud, Cross Regional IrisCluster with Tailscale</h1> <div class="flex flex-wrap items-center gap-3"> <p class="text-sm text-base-content/60"> <time datetime="2024-09-30T00:00:00.000Z"> September 29, 2024 </time>  </p> <div class="flex flex-wrap gap-1"> <span class="badge badge-primary badge-sm badge-outline">InterSystems IRIS</span><span class="badge badge-primary badge-sm badge-outline">IKO</span><span class="badge badge-primary badge-sm badge-outline">Tailscale</span><span class="badge badge-primary badge-sm badge-outline">AWS</span><span class="badge badge-primary badge-sm badge-outline">GCP</span><span class="badge badge-primary badge-sm badge-outline">Kubernetes</span> </div> <a href="https://community.intersystems.com/post/iko-plus-stretched-cross-cloud-cross-regional-iriscluster-tailscale" target="_blank" rel="noopener noreferrer" class="badge badge-secondary badge-sm badge-outline link-hover flex items-center gap-1">
 Community
 <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> </a> </div> </div> </header> <!--
       daisyUI recommends using Tailwind utilities for layout and the Typography
       plugin for rich text. `prose` gives Markdown content predictable defaults
       without maintaining a custom article stylesheet in the starter.
-    --> <div class="prose prose-neutral mt-10 max-w-none prose-a:link prose-img:rounded-box"> <p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11786).png" alt="IKO Plus Stretched Cluster"/></p>
-<p>In this installment of the <strong>IKO Plus</strong> series, we are going to get a little bit “stretched.” We’ll look at how to deploy an InterSystems IrisCluster that spans multiple Google Cloud regions (e.g., US and UK) using <strong>Tailscale</strong> to provide a unified, secure overlay network between our Kubernetes clusters.</p>
-<h3 id="the-problem-cross-regional-high-availability">The Problem: Cross-Regional High Availability</h3>
-<p>Traditionally, stretching a database cluster across regions involves complex VPC peering, VPN gateways, and careful CIDR management. We want the performance and simplicity of the InterSystems Kubernetes Operator (IKO) but with the resilience of a multi-region footprint.</p>
-<h3 id="the-solution-tailscale-overlay">The Solution: Tailscale Overlay</h3>
-<p>Tailscale allows us to create a secure, flat mesh network between nodes in different regions without worrying about underlying firewalls or complex routing. By installing Tailscale on our Kubernetes nodes, we can allow the IKO to manage mirror pairs across the Atlantic.</p>
-<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11785).png" alt="Tailscale Overlay Network"/></p>
-<h3 id="the-setup">The Setup</h3>
-<p>We’ll start with two Kubernetes clusters in Google Cloud Platform (GCP):</p>
+    --> <div class="prose prose-neutral mt-10 max-w-none prose-a:link prose-img:rounded-box"> <p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11834).png" alt="IKO Stretched Cluster Banner"/></p>
+<h3 id="another-step-in-this-implementation-path-adding-cross-cloud-cross-regional-stretched-iriscluster-with-mirroring--disaster-recovery-using-the-intersystems-kubernetes-operator-iko-and-tailscale">Another step in this implementation path, adding cross cloud, cross regional stretched IrisCluster with Mirroring + Disaster Recovery using the InterSystems Kubernetes Operator (IKO) and Tailscale</h3>
+<p>Though trivial, I’d like to go multi-cloud with the stretched IrisCluster for a couple of reasons to socialize the power of Wireguard when it supplies the network for a properly zoned IrisCluster by adding another mirror role to Amazon Web Services in the Western United States based datacenter in Oregon.</p>
+<p>Let’s stage the solution check boxes here for the solution and see if we can check them later after we make some changes to the IrisCluster topology.</p>
+<p><strong>Business Continuity calls for:</strong></p>
 <ul>
-<li><strong>Region A</strong>: <code>us-east1</code></li>
-<li><strong>Region B</strong>: <code>europe-west2</code> (UK)</li>
+<li>⬜ High Availability, Implements Mirror</li>
+<li>⬜ Disaster Recovery Instance/Data must be 2500 miles (4000 kilometers) from the closest HA Mirror</li>
+<li>⬜ Disaster Recovery Instance/Data must be hosted by an alternate vendor.</li>
 </ul>
-<p>Each cluster will have Tailscale installed, and we’ll use Tailscale’s subnet routing to expose the pod and service CIDRs to each other.</p>
-<h3 id="iko-topology">IKO Topology</h3>
-<p>Using the IKO, we define a single <code>IrisCluster</code> resource. The magic happens in the <code>topology</code> section where we specify <code>preferredZones</code> to ensure our mirror pair is distributed across our regional footprints.</p>
-<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">apiVersion</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">intersystems.com/v3</span></span>
+<hr/>
+<h2 id="lets-go">Let’s Go</h2>
+<h3 id="as-a-recap">As a recap…</h3>
+<p>We are starting with a stretched IrisCluster between London and the Midwest US on the Google Cloud Platform. The Mirrored roles are located in London (Primary) and Iowa (Backup). The Witness (Arbiter) is located in South Carolina. The Disaster Recovery node is located in London. Now we are adding AWS <code>us-west-2</code> (Oregon) to the mix.</p>
+<p>Existing IrisCluster Compute:</p>
+<h3 id="create-compute-aws">Create Compute (AWS)</h3>
+<p>First, we launch an EC2 instance in AWS <code>us-west-2</code>:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">aws</span><span style="color:#9ECBFF"> ec2</span><span style="color:#9ECBFF"> run-instances</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  --region</span><span style="color:#9ECBFF"> us-west-2</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  --instance-type</span><span style="color:#9ECBFF"> c6i.xlarge</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  --image-id</span><span style="color:#9ECBFF"> ami-03aa99ddf5498ceb9</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  --block-device-mappings</span><span style="color:#9ECBFF"> DeviceName=/dev/sda1,Ebs={VolumeSize=</span><span style="color:#79B8FF">200</span><span style="color:#9ECBFF">}</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  --tag-specifications</span><span style="color:#9ECBFF"> &#39;ResourceType=instance,Tags=[{Key=Name,Value=ikoplus-worker-aws}]&#39;</span></span></code></pre>
+<h3 id="join-your-tailnet">Join Your Tailnet</h3>
+<p>Install Tailscale on the new AWS node and join the tailnet:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">curl</span><span style="color:#79B8FF"> -fsSL</span><span style="color:#9ECBFF"> https://pkgs.tailscale.com/stable/ubuntu/noble.noarmor.gpg</span><span style="color:#F97583"> |</span><span style="color:#B392F0"> sudo</span><span style="color:#9ECBFF"> tee</span><span style="color:#9ECBFF"> /usr/share/keyrings/tailscale-archive-keyring.gpg</span><span style="color:#F97583"> &gt;</span><span style="color:#9ECBFF">/dev/null</span></span>
+<span class="line"><span style="color:#B392F0">curl</span><span style="color:#79B8FF"> -fsSL</span><span style="color:#9ECBFF"> https://pkgs.tailscale.com/stable/ubuntu/noble.tailscale-keyring.list</span><span style="color:#F97583"> |</span><span style="color:#B392F0"> sudo</span><span style="color:#9ECBFF"> tee</span><span style="color:#9ECBFF"> /etc/apt/sources.list.d/tailscale.list</span></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> apt-get</span><span style="color:#9ECBFF"> update</span></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> apt-get</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> tailscale</span></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> tailscale</span><span style="color:#9ECBFF"> up</span></span>
+<span class="line"><span style="color:#B392F0">tailscale</span><span style="color:#9ECBFF"> ip</span><span style="color:#79B8FF"> -4</span></span></code></pre>
+<p>Inspect your Tailnet:
+<img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11851).png" alt="Tailnet Overview"/></p>
+<h3 id="kubernetes-setup">Kubernetes Setup</h3>
+<p>Add the new node to your existing Kubernetes cluster (running across clouds) and label it appropriately:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># on control plane</span></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> k8s</span><span style="color:#9ECBFF"> get-join-token</span><span style="color:#79B8FF"> --worker</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># on our new aws node</span></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> k8s</span><span style="color:#9ECBFF"> join-cluster</span><span style="color:#9ECBFF"> eyJ0b2tlbiI6IiI.....</span></span></code></pre>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11852).png" alt="Kubernetes Nodes"/></p>
+<h3 id="new-zone-to-the-new-node">New Zone to the New Node</h3>
+<p>Add your new zone to the node:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">kubectl</span><span style="color:#9ECBFF"> label</span><span style="color:#9ECBFF"> node</span><span style="color:#9ECBFF"> ip-10-129-0-182.ec2.internal</span><span style="color:#9ECBFF"> topology.kubernetes.io/zone=us-aws</span><span style="color:#79B8FF"> -n</span><span style="color:#9ECBFF"> ikoplus</span></span></code></pre>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11886).png" alt="Labeling AWS Node"/></p>
+<h3 id="update-stretched-iriscluster-topology">Update Stretched IrisCluster Topology</h3>
+<p>Update your <code>IrisCluster</code> YAML to include the new zone and update the <code>mirrorMap</code> to include <code>asyncdr</code>:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">apiVersion</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">intersystems.com/v1beta1</span></span>
 <span class="line"><span style="color:#85E89D">kind</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">IrisCluster</span></span>
 <span class="line"><span style="color:#85E89D">metadata</span><span style="color:#E1E4E8">:</span></span>
-<span class="line"><span style="color:#85E89D">  name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">stretched-iris</span></span>
+<span class="line"><span style="color:#85E89D">  name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">ikoplus-crossregion-1</span></span>
+<span class="line"><span style="color:#85E89D">  namespace</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">ikoplus</span></span>
 <span class="line"><span style="color:#85E89D">spec</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  imagePullSecrets</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">    - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">containers-pull-secret</span></span>
+<span class="line"><span style="color:#85E89D">  licenseKeySecret</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">license-key-secret</span></span>
+<span class="line"><span style="color:#85E89D">  tls</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    webgateway</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">      secret</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">        secretName</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">cert-secret</span></span>
 <span class="line"><span style="color:#85E89D">  topology</span><span style="color:#E1E4E8">:</span></span>
-<span class="line"><span style="color:#85E89D">    dataMaster</span><span style="color:#E1E4E8">:</span></span>
-<span class="line"><span style="color:#85E89D">      preferredZones</span><span style="color:#E1E4E8">: [</span><span style="color:#9ECBFF">&quot;us-east1-a&quot;</span><span style="color:#E1E4E8">]</span></span>
-<span class="line"><span style="color:#85E89D">    dataSlave</span><span style="color:#E1E4E8">:</span></span>
-<span class="line"><span style="color:#85E89D">      preferredZones</span><span style="color:#E1E4E8">: [</span><span style="color:#9ECBFF">&quot;europe-west2-a&quot;</span><span style="color:#E1E4E8">]</span></span></code></pre>
-<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11787).png" alt="IrisCluster Deployment"/></p>
-<h3 id="deploying-the-stretched-cluster">Deploying the Stretched Cluster</h3>
-<p>Once the networking is established, we apply our configuration.</p>
-<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11788).png" alt="Deploying the Cluster"/></p>
-<p>And just like that, the IKO provisions the master in the US and the slave in the UK, with mirroring automatically configured over the Tailscale mesh.</p>
-<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11790).png" alt="Stretched Mirroring Active"/></p>
-<h3 id="checking-our-work">Checking our Work</h3>
-<p>Let’s prove the geo-location by shelling into each pod and running a simple location check.</p>
-<h4 id="us-pod-master">US Pod (Master)</h4>
-<p>🇺🇸
-<img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11791).png" alt="US Location Check"/></p>
-<h4 id="uk-pod-slave">UK Pod (Slave)</h4>
-<p>🇬🇧
-<img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11792).png" alt="UK Location Check"/></p>
-<p>🎤⬇️</p>
-<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11793).png" alt="Mission Accomplished"/></p>
-<h3 id="summary">Summary</h3>
-<p>By combining the <strong>InterSystems Kubernetes Operator</strong> with <strong>Tailscale</strong>, we’ve achieved a true “stretched” database architecture with minimal networking overhead. This setup provides excellent disaster recovery and regional locality for global applications.</p>
-<p>Stay tuned for more! Special thanks to Mark Hayden from InterSystems for his guidance on IKO topology zones.</p> </div> </article>  </div>  </main> <footer class="mt-5 mb-20"> <p class="text-center text-sm text-base-content/60"> <a class="btn btn-outline btn-xs border-base-300 text-base-content/60 hover:text-primary hover:border-primary px-3 transition-all duration-300" href="/imprint">
+<span class="line"><span style="color:#85E89D">    arbiter</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">      image</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">containers.intersystems.com/intersystems/arbiter:2025.1</span></span>
+<span class="line"><span style="color:#85E89D">      podTemplate</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">        metadata</span><span style="color:#E1E4E8">: {}</span></span>
+<span class="line"><span style="color:#85E89D">        spec</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">          resources</span><span style="color:#E1E4E8">: {}</span></span>
+<span class="line"><span style="color:#85E89D">      updateStrategy</span><span style="color:#E1E4E8">: {}</span></span>
+<span class="line"><span style="color:#85E89D">    data</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">      compatibilityVersion</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">2025.1.0</span></span>
+<span class="line"><span style="color:#85E89D">      image</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">containers.intersystems.com/intersystems/irishealth:2025.1</span></span>
+<span class="line"><span style="color:#85E89D">      mirrorMap</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">primary,backup,asyncdr</span></span>
+<span class="line"><span style="color:#85E89D">      mirrored</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span>
+<span class="line"><span style="color:#85E89D">      preferredZones</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#9ECBFF">gcp</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#9ECBFF">uk</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#9ECBFF">us-aws</span></span></code></pre>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11887).png" alt="Updating Topology"/></p>
+<h3 id="attestation">Attestation</h3>
+<p>Verifying the node location via <code>curl ipinfo.io</code>:
+<img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11888).png" alt="Node Attestation"/></p>
+<p>The IKO successfully provisions the Async DR member in AWS. We can verify the location of our pods across the different cloud providers.
+<img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11889).png" alt="Pod Locations"/></p>
+<h3 id="mirror-status">Mirror Status</h3>
+<p>The InterSystems Management Portal confirms the new member is joined as an <strong>Async Member</strong> in the mirror.
+<img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11890).png" alt="IRIS Mirror Status"/></p>
+<hr/>
+<h2 id="foot-guns-lessons-learned">Foot Guns (Lessons Learned)</h2>
+<h3 id="aws">AWS</h3>
+<ul>
+<li>Disabled DNS hostnames in the VPC, added host entries with tailscale IPs.</li>
+<li>Tightened up polling for <code>chronyd</code> for better time synchronization.</li>
+<li>Recreated the VPC to have no NAT gateway, using only IGW for direct connectivity.</li>
+</ul>
+<h3 id="instance">Instance</h3>
+<ul>
+<li>Must enable IP forwarding on the Linux host:</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#79B8FF">echo</span><span style="color:#9ECBFF"> &#39;net.ipv4.ip_forward = 1&#39;</span><span style="color:#F97583"> |</span><span style="color:#B392F0"> sudo</span><span style="color:#9ECBFF"> tee</span><span style="color:#79B8FF"> -a</span><span style="color:#9ECBFF"> /etc/sysctl.d/99-tailscale.conf</span></span>
+<span class="line"><span style="color:#79B8FF">echo</span><span style="color:#9ECBFF"> &#39;net.ipv6.conf.all.forwarding = 1&#39;</span><span style="color:#F97583"> |</span><span style="color:#B392F0"> sudo</span><span style="color:#9ECBFF"> tee</span><span style="color:#79B8FF"> -a</span><span style="color:#9ECBFF"> /etc/sysctl.d/99-tailscale.conf</span></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> sysctl</span><span style="color:#79B8FF"> -p</span><span style="color:#9ECBFF"> /etc/sysctl.d/99-tailscale.conf</span></span></code></pre>
+<h3 id="tailnet">Tailnet</h3>
+<ul>
+<li>Advertise the subnets and accept routes:</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> tailscale</span><span style="color:#9ECBFF"> up</span><span style="color:#79B8FF"> --advertise-routes=10.150.0.0/20</span><span style="color:#79B8FF"> --accept-routes</span></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> tailscale</span><span style="color:#9ECBFF"> up</span><span style="color:#79B8FF"> --advertise-routes=10.154.0.0/20</span><span style="color:#79B8FF"> --accept-routes</span></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> tailscale</span><span style="color:#9ECBFF"> up</span><span style="color:#79B8FF"> --advertise-routes=10.129.0.0/20</span><span style="color:#79B8FF"> --accept-routes</span></span></code></pre>
+<p>Tailnet machines require manual route approval in the console:
+<img src="https://community.intersystems.com/sites/default/files/inline/images/images/Clipboard_2025-09-29-12-53-57.png" alt="Tailscale Route Approval"/></p>
+<hr/>
+<h2 id="we-had-one-job-review">We Had One Job (Review)</h2>
+<p>Let’s check our Business Continuity requirements:</p>
+<ul>
+<li>✅ High Availability, Implements Mirror (Thanks IKO!)</li>
+<li>✅ Disaster Recovery Instance/Data must be 2500 miles (4000 kilometers) from the closest HA Mirror (2544 miles to next DC)</li>
+<li>✅ Disaster Recovery Instance/Data must be hosted by an alternate vendor:</li>
+<li>✅ <img src="https://community.intersystems.com/sites/default/files/inline/images/google-cloud.svg" style="height: 1em; display: inline-block; vertical-align: middle; margin: 0 4px;"/> GCP &amp; <img src="https://community.intersystems.com/sites/default/files/inline/images/amazon_web_services-logo.wine.png" style="height: 1em; display: inline-block; vertical-align: middle; margin: 0 4px;"/> AWS</li>
+</ul>
+<p>Onward and Upward, love the Tailnets!</p>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11891).png" alt="Final Architecture"/></p>
+<p><strong>Related Reading:</strong></p>
+<ul>
+<li><a href="https://docs.intersystems.com/components/csp/docbook/DocBook.UI.Page.cls?KEY=AIKO#AIKO_clusterdef_mirrormap">Using the InterSystems Kubernetes Operator (Version 3.8)</a></li>
+<li><a href="https://community.intersystems.com/post/iko-plus-stretched-cross-regional-iriscluster-tailscale-google-cloud-platform">IKO Plus: Stretched Cross Regional IrisCluster with Tailscale on GCP</a></li>
+<li><a href="https://community.intersystems.com/post/iko-plus-kwok-iriscluster-topology-and-operator-nodepod-simulation-wo-iris">IKO Plus: KWOK IrisCluster Topology and Operator Node/Pod Simulation w/o IRIS</a></li>
+</ul> </div> </article>  </div>  </main> <footer class="mt-5 mb-20"> <p class="text-center text-sm text-base-content/60"> <a class="btn btn-outline btn-xs border-base-300 text-base-content/60 hover:text-primary hover:border-primary px-3 transition-all duration-300" href="/imprint">
 Legal, Tax, Insurance
 </a>  <span class="block sm:inline"> © 2015-2026 Integration Required, LLC</span> </p>  </footer> </body></html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="de"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="shortcut icon" href="/favicon.ico"><link rel="sitemap" href="/sitemap-index.xml"><meta name="generator" content="Astro v6.2.1"><title>IKO Plus: VIP in Kubernetes on IrisClusters</title><link rel="canonical" href="https://www.integrationrequired.com/blog/iko-plus-vip-kubernetes"><meta name="description" content="Implementing Virtual IP (VIP) functionality in a Kubernetes environment for InterSystems IRIS clusters, providing seamless failover and consistent access for clients during primary member transitions."><meta name="robots" content="index, follow"><meta property="og:title" content="IKO Plus: VIP in Kubernetes on IrisClusters"><meta property="og:type" content="website"><meta property="og:image" content="https://www.integrationrequired.com/opengraph.jpg"><meta property="og:url" content="https://www.integrationrequired.com/blog/iko-plus-vip-kubernetes"><meta property="og:image:url" content="https://www.integrationrequired.com/opengraph.jpg"><meta property="og:image:alt" content="IKO Plus: VIP in Kubernetes on IrisClusters"><meta name="twitter:card" content="summary_large_image"><!--
+<!DOCTYPE html><html lang="de"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="shortcut icon" href="/favicon.ico"><link rel="sitemap" href="/sitemap-index.xml"><meta name="generator" content="Astro v6.2.1"><title>IKO Plus: VIP in Kubernetes on IrisClusters</title><link rel="canonical" href="https://www.integrationrequired.com/blog/iko-plus-vip-kubernetes"><meta name="description" content="Power your IrisCluster serviceTemplate with kube-vip. Implementing a Mirror Virtual IP (VIP) for high availability in Kubernetes to provide a stable, single IP address for downstream systems."><meta name="robots" content="index, follow"><meta property="og:title" content="IKO Plus: VIP in Kubernetes on IrisClusters"><meta property="og:type" content="website"><meta property="og:image" content="https://www.integrationrequired.com/opengraph.jpg"><meta property="og:url" content="https://www.integrationrequired.com/blog/iko-plus-vip-kubernetes"><meta property="og:image:url" content="https://www.integrationrequired.com/opengraph.jpg"><meta property="og:image:alt" content="IKO Plus: VIP in Kubernetes on IrisClusters"><meta name="twitter:card" content="summary_large_image"><!--
       Fonts flow:
       1. astro.config.mjs registers the font and exposes `--font-inter`.
       2. <Font /> loads that configured family into the page head.
@@ -55,42 +55,217 @@ LinkedIn
 Github
 </a> <a class="btn bg-[#f57c00] border-[#f57c00] text-white hover:bg-[#e65100] hover:border-[#e65100] w-full flex items-center gap-2" href="https://www.brightstreetgroup.com" target="_blank" rel="noopener noreferrer" @click="open = false" data-astro-cid-ri6uxye2> <img src="/bsg-favicon.png" alt="BSG Logo" class="w-5 h-5 rounded-sm brightness-0 invert" data-astro-cid-ri6uxye2>
 Brightstreet Group
-</a> </div> </div> </div> <main id="main-content">  <div class="max-w-screen-xl mx-auto px-5 pt-6 sm:pt-8 lg:pt-12 pb-12 sm:pb-16 lg:pb-24">  <article class="max-w-3xl"> <header class="space-y-4"> <a href="/blog" class="link link-hover text-sm text-base-content/60">← All posts</a> <div class="mt-2 overflow-hidden rounded-box"> <img src="/_astro/1208x201_18dbNC.webp" alt="IKO Plus: VIP in Kubernetes on IrisClusters" loading="lazy" decoding="async" width="1200" height="600" class="w-full object-cover"> </div> <div class="space-y-2"> <h1 class="text-2xl font-bold tracking-tight sm:text-3xl">IKO Plus: VIP in Kubernetes on IrisClusters</h1> <div class="flex flex-wrap items-center gap-3"> <p class="text-sm text-base-content/60"> <time datetime="2025-11-14T00:00:00.000Z"> November 13, 2025 </time>  </p> <div class="flex flex-wrap gap-1"> <span class="badge badge-primary badge-sm badge-outline">iko</span><span class="badge badge-primary badge-sm badge-outline">InterSystems IRIS</span><span class="badge badge-primary badge-sm badge-outline">Kubernetes</span><span class="badge badge-primary badge-sm badge-outline">Networking</span><span class="badge badge-primary badge-sm badge-outline">VIP</span><span class="badge badge-primary badge-sm badge-outline">High Availability</span> </div> <a href="https://community.intersystems.com/post/iko-plus-vip-kubernetes-irisclusters" target="_blank" rel="noopener noreferrer" class="badge badge-secondary badge-sm badge-outline link-hover flex items-center gap-1">
+</a> </div> </div> </div> <main id="main-content">  <div class="max-w-screen-xl mx-auto px-5 pt-6 sm:pt-8 lg:pt-12 pb-12 sm:pb-16 lg:pb-24">  <article class="max-w-3xl"> <header class="space-y-4"> <a href="/blog" class="link link-hover text-sm text-base-content/60">← All posts</a> <div class="mt-2 overflow-hidden rounded-box"> <img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12135).png" alt="IKO Plus: VIP in Kubernetes on IrisClusters" loading="lazy" decoding="async" width="1200" height="600" class="w-full object-cover"> </div> <div class="space-y-2"> <h1 class="text-2xl font-bold tracking-tight sm:text-3xl">IKO Plus: VIP in Kubernetes on IrisClusters</h1> <div class="flex flex-wrap items-center gap-3"> <p class="text-sm text-base-content/60"> <time datetime="2024-11-12T00:00:00.000Z"> November 11, 2024 </time>  </p> <div class="flex flex-wrap gap-1"> <span class="badge badge-primary badge-sm badge-outline">InterSystems IRIS</span><span class="badge badge-primary badge-sm badge-outline">Kubernetes</span><span class="badge badge-primary badge-sm badge-outline">IKO</span><span class="badge badge-primary badge-sm badge-outline">kube-vip</span><span class="badge badge-primary badge-sm badge-outline">High Availability</span><span class="badge badge-primary badge-sm badge-outline">Mirroring</span> </div> <a href="https://community.intersystems.com/post/iko-plus-vip-kubernetes-irisclusters" target="_blank" rel="noopener noreferrer" class="badge badge-secondary badge-sm badge-outline link-hover flex items-center gap-1">
 Community
 <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> </a> </div> </div> </header> <!--
       daisyUI recommends using Tailwind utilities for layout and the Typography
       plugin for rich text. `prose` gives Markdown content predictable defaults
       without maintaining a custom article stylesheet in the starter.
-    --> <div class="prose prose-neutral mt-10 max-w-none prose-a:link prose-img:rounded-box"> <p>In the world of InterSystems IRIS mirroring, the <strong>Virtual IP (VIP)</strong> is a cornerstone of high availability. It provides a single, consistent IP address that always points to the current primary member. But in Kubernetes, where IPs are ephemeral and managed by services, how do we implement a true VIP?</p>
-<h3 id="the-challenge-kubernetes-vs-traditional-vips">The Challenge: Kubernetes vs. Traditional VIPs</h3>
-<p>Kubernetes Services (like <code>LoadBalancer</code>) provide a stable entry point, but they don’t always align perfectly with the “gratuitous ARP” behavior that IRIS expects for its VIP. We want a solution that works natively with the IKO and provides the same experience as traditional bare-metal or VM deployments.</p>
-<h3 id="the-solution-kube-vip">The Solution: Kube-vip</h3>
-<p><strong>Kube-vip</strong> provides a high-availability and load-balancing solution for Kubernetes clusters. It can manage a virtual IP address and associate it with specific nodes or pods, making it perfect for our IRIS mirroring needs.</p>
-<h3 id="step-1-deploying-kube-vip">Step 1: Deploying Kube-vip</h3>
-<p>We deploy Kube-vip as a DaemonSet in our cluster. We configure it to monitor our IRIS pods and manage the specified VIP.</p>
-<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12151).png" alt="Kube-vip Configuration"/></p>
-<p>Once deployed, we can see the Kube-vip pods running across our nodes:</p>
-<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12152).png" alt="Kube-vip DaemonSet Running"/></p>
-<h3 id="step-2-assigning-the-vip">Step 2: Assigning the VIP</h3>
-<p>We specify the desired VIP in our configuration. Kube-vip will ensure this IP is assigned to the node currently hosting the primary IRIS member.</p>
-<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12153).png" alt="VIP Assigned to Node"/></p>
-<h3 id="step-3-testing-failover">Step 3: Testing Failover</h3>
-<p>The real test of a VIP is what happens during a failover. We’ll run a continuous <code>curl</code> loop against our management portal via the VIP while triggering a mirror failover.</p>
-<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#6A737D"># Test pod definition</span></span>
-<span class="line"><span style="color:#85E89D">apiVersion</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">v1</span></span>
+    --> <div class="prose prose-neutral mt-10 max-w-none prose-a:link prose-img:rounded-box"> <h3 id="power-your-iriscluster-servicetemplate-with-kube-vip">Power your IrisCluster serviceTemplate with <a href="https://kube-vip.io/">kube-vip</a></h3>
+<p>If you’re running IRIS in a mirrored IrisCluster for HA in Kubernetes, the question of providing a Mirror VIP (Virtual IP) becomes relevant. Virtual IP offers a way for downstream systems to interact with IRIS using one IP address. Even when a failover happens, downstream systems can reconnect to the same IP address and continue working.</p>
+<p>The lead-in above was stolen (gaffled, jacked, pilfered) from techniques shared to the community for VIPs across public clouds with IRIS by <a href="https://community.intersystems.com/user/eduard-lebedyuk">@Eduard Lebedyuk</a>.</p>
+<p><strong>Related Articles:</strong> ☁ <a href="https://community.intersystems.com/post/vip-aws">vip-aws</a> | <a href="https://community.intersystems.com/post/vip-gcp">vip-gcp</a> | <a href="https://community.intersystems.com/post/vip-azure">vip-azure</a></p>
+<p>This version strives to solve the same challenges for IRIS on Kubernetes when being deployed via MAAS, on-prem, and possibly yet to be realized using cloud mechanics with Managed Kubernetes Services.</p>
+<hr/>
+<h2 id="the-distraction">The Distraction</h2>
+<p>This walkthrough will highlight <strong>kube-vip</strong>, where it fits into a Mirrored IrisCluster, and enabling “floating IP” for layers 2-4 with the <a href="https://docs.intersystems.com/components/csp/docbook/DocBook.UI.Page.cls?KEY=AIKO#AIKO_clusterdef_serviceTemplate">serviceTemplate</a>. I’ll walk through a quick install of the project, apply it to a Mirrored IrisCluster, and attest that failover against the floating VIP is timely and functional.</p>
+<h3 id="the-ip">The IP</h3>
+<p>Snag an available IPv4 address off your network and set it aside for use as the VIP for the IrisCluster. For this distraction, we value the predictability of a single IP address to support the workload.</p>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12130).png" alt="VIP Selection"/></p>
+<h3 id="kubernetes-cluster">Kubernetes Cluster</h3>
+<p>The cluster itself is running <a href="https://ubuntu.com/kubernetes">Canonical Kubernetes</a> on commodity hardware of 3 physical nodes on a flat 192.x network (home lab).</p>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12129).png" alt="K8s Cluster Overview"/></p>
+<p>You’ll want to do this step through some slick hook to get work done on the node during scheduling for implementing the virtual interface/IP. Hopefully, your nodes will have some consistency with the NIC hardware, making node prep easy. However, my cluster had varying network interfaces, so I virtualized them by aliasing the active NIC to <code>vip0</code> as an interface.</p>
+<p>I ran the following on the nodes to add a virtual NIC to a physical interface and ensure it starts at boot:</p>
+<p><strong>vip0.sh</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D">#!/usr/bin/env bash</span></span>
+<span class="line"><span style="color:#79B8FF">set</span><span style="color:#79B8FF"> -e</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">PARENT_NIC</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">&quot;eno1&quot;</span><span style="color:#6A737D"> # adjust for your hardware</span></span>
+<span class="line"><span style="color:#E1E4E8">VIP_IP</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">&quot;192.168.1.152/32&quot;</span><span style="color:#6A737D"> # available address on our lan</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> bash</span><span style="color:#79B8FF"> -c</span><span style="color:#9ECBFF"> &quot;cat &gt; /etc/systemd/system/vip0.service &lt;&lt;&#39;EOF&#39;</span></span>
+<span class="line"><span style="color:#9ECBFF">[Unit]</span></span>
+<span class="line"><span style="color:#9ECBFF">Description=Virtual interface vip0 for kube-vip</span></span>
+<span class="line"><span style="color:#9ECBFF">After=network-online.target</span></span>
+<span class="line"><span style="color:#9ECBFF">Wants=network-online.target</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#9ECBFF">[Service]</span></span>
+<span class="line"><span style="color:#9ECBFF">Type=oneshot</span></span>
+<span class="line"><span style="color:#9ECBFF">ExecStartPre=-/sbin/ip link delete vip0</span></span>
+<span class="line"><span style="color:#9ECBFF">ExecStart=/sbin/ip link add vip0 link ${</span><span style="color:#E1E4E8">PARENT_NIC</span><span style="color:#9ECBFF">} type macvlan mode bridge</span></span>
+<span class="line"><span style="color:#9ECBFF">ExecStart=/sbin/ip addr add ${</span><span style="color:#E1E4E8">VIP_IP</span><span style="color:#9ECBFF">} dev vip0</span></span>
+<span class="line"><span style="color:#9ECBFF">ExecStart=/sbin/ip link set vip0 up</span></span>
+<span class="line"><span style="color:#9ECBFF">RemainAfterExit=yes</span></span>
+<span class="line"><span style="color:#9ECBFF">ExecStop=/sbin/ip link set vip0 down</span></span>
+<span class="line"><span style="color:#9ECBFF">ExecStop=/sbin/ip link delete vip0</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#9ECBFF">[Install]</span></span>
+<span class="line"><span style="color:#9ECBFF">WantedBy=multi-user.target</span></span>
+<span class="line"><span style="color:#9ECBFF">EOF&quot;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> systemctl</span><span style="color:#9ECBFF"> daemon-reload</span></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> systemctl</span><span style="color:#9ECBFF"> enable</span><span style="color:#9ECBFF"> vip0</span><span style="color:#79B8FF"> --now</span></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> systemctl</span><span style="color:#9ECBFF"> status</span><span style="color:#9ECBFF"> vip0</span><span style="color:#79B8FF"> --no-pager</span></span></code></pre>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/Clipboard_2025-11-11-13-48-38.png" alt="Interface Status"/></p>
+<p>If your commodity network gear lets you know when something new has arrived on the network, you may get something like this:</p>
+<div style="display: flex; justify-content: center;"><img src="https://community.intersystems.com/sites/default/files/inline/images/img_3541.jpg" style="height: 50%; width: 50%;" alt="Home Lab Notification"/></div>
+<hr/>
+<h2 id="what-is-kube-vip">What is kube-vip?</h2>
+<p><a href="https://kube-vip.io/">kube-vip</a> provides a virtual IP (VIP) for Kubernetes workloads, giving them a stable, highly available network address that automatically fails over between nodes—enabling load balancer–like or control plane–style redundancy without an external balancer.</p>
+<p>On each node, kube-vip runs as a container (via a DaemonSet) that participates in a leader-election process using Kubernetes Lease objects. The elected leader binds the VIP directly to a host network interface and advertises it to the surrounding network via ARP.</p>
+<h3 id="installation">Installation</h3>
+<p>The install is dead simple. We will deploy the manifests that support its install as specified on the project’s getting started guide.</p>
+<p><strong>kube-vip.yaml</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">apiVersion</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">v1</span></span>
+<span class="line"><span style="color:#85E89D">kind</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">ServiceAccount</span></span>
+<span class="line"><span style="color:#85E89D">metadata</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">kube-vip</span></span>
+<span class="line"><span style="color:#85E89D">  namespace</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">kube-system</span></span>
+<span class="line"><span style="color:#B392F0">---</span></span>
+<span class="line"><span style="color:#85E89D">apiVersion</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">rbac.authorization.k8s.io/v1</span></span>
+<span class="line"><span style="color:#85E89D">kind</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">ClusterRole</span></span>
+<span class="line"><span style="color:#85E89D">metadata</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">kube-vip</span></span>
+<span class="line"><span style="color:#85E89D">rules</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">  - </span><span style="color:#85E89D">apiGroups</span><span style="color:#E1E4E8">: [</span><span style="color:#9ECBFF">&quot;&quot;</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#85E89D">    resources</span><span style="color:#E1E4E8">: [</span><span style="color:#9ECBFF">&quot;services&quot;</span><span style="color:#E1E4E8">,</span><span style="color:#9ECBFF">&quot;services/status&quot;</span><span style="color:#E1E4E8">,</span><span style="color:#9ECBFF">&quot;endpoints&quot;</span><span style="color:#E1E4E8">,</span><span style="color:#9ECBFF">&quot;nodes&quot;</span><span style="color:#E1E4E8">,</span><span style="color:#9ECBFF">&quot;pods&quot;</span><span style="color:#E1E4E8">,</span><span style="color:#9ECBFF">&quot;configmaps&quot;</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#85E89D">    verbs</span><span style="color:#E1E4E8">: [</span><span style="color:#9ECBFF">&quot;get&quot;</span><span style="color:#E1E4E8">,</span><span style="color:#9ECBFF">&quot;list&quot;</span><span style="color:#E1E4E8">,</span><span style="color:#9ECBFF">&quot;watch&quot;</span><span style="color:#E1E4E8">,</span><span style="color:#9ECBFF">&quot;update&quot;</span><span style="color:#E1E4E8">,</span><span style="color:#9ECBFF">&quot;patch&quot;</span><span style="color:#E1E4E8">,</span><span style="color:#9ECBFF">&quot;create&quot;</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">  - </span><span style="color:#85E89D">apiGroups</span><span style="color:#E1E4E8">: [</span><span style="color:#9ECBFF">&quot;coordination.k8s.io&quot;</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#85E89D">    resources</span><span style="color:#E1E4E8">: [</span><span style="color:#9ECBFF">&quot;leases&quot;</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#85E89D">    verbs</span><span style="color:#E1E4E8">: [</span><span style="color:#9ECBFF">&quot;get&quot;</span><span style="color:#E1E4E8">,</span><span style="color:#9ECBFF">&quot;list&quot;</span><span style="color:#E1E4E8">,</span><span style="color:#9ECBFF">&quot;watch&quot;</span><span style="color:#E1E4E8">,</span><span style="color:#9ECBFF">&quot;create&quot;</span><span style="color:#E1E4E8">,</span><span style="color:#9ECBFF">&quot;update&quot;</span><span style="color:#E1E4E8">,</span><span style="color:#9ECBFF">&quot;patch&quot;</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">  - </span><span style="color:#85E89D">apiGroups</span><span style="color:#E1E4E8">: [</span><span style="color:#9ECBFF">&quot;discovery.k8s.io&quot;</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#85E89D">    resources</span><span style="color:#E1E4E8">: [</span><span style="color:#9ECBFF">&quot;endpointslices&quot;</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#85E89D">    verbs</span><span style="color:#E1E4E8">: [</span><span style="color:#9ECBFF">&quot;get&quot;</span><span style="color:#E1E4E8">,</span><span style="color:#9ECBFF">&quot;list&quot;</span><span style="color:#E1E4E8">,</span><span style="color:#9ECBFF">&quot;watch&quot;</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#B392F0">---</span></span>
+<span class="line"><span style="color:#85E89D">apiVersion</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">rbac.authorization.k8s.io/v1</span></span>
+<span class="line"><span style="color:#85E89D">kind</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">ClusterRoleBinding</span></span>
+<span class="line"><span style="color:#85E89D">metadata</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">kube-vip</span></span>
+<span class="line"><span style="color:#85E89D">roleRef</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  apiGroup</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">rbac.authorization.k8s.io</span></span>
+<span class="line"><span style="color:#85E89D">  kind</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">ClusterRole</span></span>
+<span class="line"><span style="color:#85E89D">  name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">kube-vip</span></span>
+<span class="line"><span style="color:#85E89D">subjects</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">  - </span><span style="color:#85E89D">kind</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">ServiceAccount</span></span>
+<span class="line"><span style="color:#85E89D">    name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">kube-vip</span></span>
+<span class="line"><span style="color:#85E89D">    namespace</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">kube-system</span></span>
+<span class="line"><span style="color:#B392F0">---</span></span>
+<span class="line"><span style="color:#85E89D">apiVersion</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">apps/v1</span></span>
+<span class="line"><span style="color:#85E89D">kind</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">DaemonSet</span></span>
+<span class="line"><span style="color:#85E89D">metadata</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">kube-vip</span></span>
+<span class="line"><span style="color:#85E89D">  namespace</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">kube-system</span></span>
+<span class="line"><span style="color:#85E89D">spec</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  selector</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    matchLabels</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">      app</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">kube-vip</span></span>
+<span class="line"><span style="color:#85E89D">  template</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    metadata</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">      labels</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">        app</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">kube-vip</span></span>
+<span class="line"><span style="color:#85E89D">    spec</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">      serviceAccountName</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">kube-vip</span></span>
+<span class="line"><span style="color:#85E89D">      hostNetwork</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span>
+<span class="line"><span style="color:#85E89D">      tolerations</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#85E89D">operator</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;Exists&quot;</span></span>
+<span class="line"><span style="color:#85E89D">      containers</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">kube-vip</span></span>
+<span class="line"><span style="color:#85E89D">          image</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">ghcr.io/kube-vip/kube-vip:v0.8.0</span></span>
+<span class="line"><span style="color:#85E89D">          args</span><span style="color:#E1E4E8">: [</span><span style="color:#9ECBFF">&quot;manager&quot;</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#85E89D">          securityContext</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">            capabilities</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">              add</span><span style="color:#E1E4E8">: [</span><span style="color:#9ECBFF">&quot;NET_ADMIN&quot;</span><span style="color:#E1E4E8">,</span><span style="color:#9ECBFF">&quot;NET_RAW&quot;</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#85E89D">          env</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">            - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">vip_interface</span></span>
+<span class="line"><span style="color:#85E89D">              value</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;vip0&quot;</span><span style="color:#6A737D"> # Your virtual interface</span></span>
+<span class="line"><span style="color:#E1E4E8">            - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">vip_cidr</span></span>
+<span class="line"><span style="color:#85E89D">              value</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;32&quot;</span></span>
+<span class="line"><span style="color:#E1E4E8">            - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">vip_arp</span></span>
+<span class="line"><span style="color:#85E89D">              value</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;true&quot;</span></span>
+<span class="line"><span style="color:#E1E4E8">            - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">bgp_enable</span></span>
+<span class="line"><span style="color:#85E89D">              value</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;false&quot;</span></span>
+<span class="line"><span style="color:#E1E4E8">            - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">lb_enable</span></span>
+<span class="line"><span style="color:#85E89D">              value</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;true&quot;</span></span>
+<span class="line"><span style="color:#E1E4E8">            - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">svc_enable</span></span>
+<span class="line"><span style="color:#85E89D">              value</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;true&quot;</span></span>
+<span class="line"><span style="color:#E1E4E8">            - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">cp_enable</span></span>
+<span class="line"><span style="color:#85E89D">              value</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;false&quot;</span></span></code></pre>
+<p>Apply it and check the pods:
+<img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12131).png" alt="DaemonSet Status"/></p>
+<hr/>
+<h2 id="iriscluster-configuration">IrisCluster Configuration</h2>
+<p>We’ll use a standard mirrored <code>IrisCluster</code> with a <code>mirrorMap</code> of <code>primary,backup</code>.</p>
+<p><strong>IrisCluster.yaml (abbreviated)</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">apiVersion</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">intersystems.com/v1alpha1</span></span>
+<span class="line"><span style="color:#85E89D">kind</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">IrisCluster</span></span>
+<span class="line"><span style="color:#85E89D">metadata</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">ikoplus-kubevip</span></span>
+<span class="line"><span style="color:#85E89D">  namespace</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">ikoplus</span></span>
+<span class="line"><span style="color:#85E89D">spec</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  imagePullSecrets</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">    - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">containers-pull-secret</span></span>
+<span class="line"><span style="color:#85E89D">  licenseKeySecret</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">license-key-secret</span></span>
+<span class="line"><span style="color:#85E89D">  topology</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    arbiter</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">      image</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">containers.intersystems.com/intersystems/arbiter:2025.1</span></span>
+<span class="line"><span style="color:#85E89D">    data</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">      compatibilityVersion</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">2025.1.0</span></span>
+<span class="line"><span style="color:#85E89D">      image</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">containers.intersystems.com/intersystems/irishealth:2025.1</span></span>
+<span class="line"><span style="color:#85E89D">      mirrorMap</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">primary,backup</span></span>
+<span class="line"><span style="color:#85E89D">      mirrored</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span>
+<span class="line"><span style="color:#85E89D">  serviceTemplate</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    spec</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">      type</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">LoadBalancer</span></span>
+<span class="line"><span style="color:#85E89D">      externalTrafficPolicy</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">Local</span></span></code></pre>
+<p>Apply it:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">kubectl</span><span style="color:#9ECBFF"> apply</span><span style="color:#79B8FF"> -f</span><span style="color:#9ECBFF"> IrisCluster.yaml</span><span style="color:#79B8FF"> -n</span><span style="color:#9ECBFF"> ikoplus</span></span></code></pre>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(12132).png" alt="Mirror Status"/></p>
+<h3 id="annotate-the-service">Annotate the Service</h3>
+<p>This binds the Virtual IP to the Service and triggers kube-vip:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">kubectl</span><span style="color:#9ECBFF"> annotate</span><span style="color:#9ECBFF"> service</span><span style="color:#9ECBFF"> ikoplus-kubevip-data</span><span style="color:#9ECBFF"> kube-vip.io/loadbalancerIPs=&quot;192.168.1.152&quot;</span><span style="color:#79B8FF"> --overwrite</span><span style="color:#79B8FF"> -n</span><span style="color:#9ECBFF"> ikoplus</span></span></code></pre>
+<hr/>
+<h2 id="attestation--failover">Attestation &amp; Failover</h2>
+<p>To test, let’s launch a pod that continually polls the SMP URL using the VIP:</p>
+<p><strong>podviptest.yaml</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">apiVersion</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">v1</span></span>
 <span class="line"><span style="color:#85E89D">kind</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">Pod</span></span>
 <span class="line"><span style="color:#85E89D">metadata</span><span style="color:#E1E4E8">:</span></span>
-<span class="line"><span style="color:#85E89D">  name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">curl-test</span></span>
+<span class="line"><span style="color:#85E89D">  name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">podvip</span></span>
+<span class="line"><span style="color:#85E89D">  namespace</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">ikoplus</span></span>
 <span class="line"><span style="color:#85E89D">spec</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  restartPolicy</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">Always</span></span>
 <span class="line"><span style="color:#85E89D">  containers</span><span style="color:#E1E4E8">:</span></span>
 <span class="line"><span style="color:#E1E4E8">    - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">curl-loop</span></span>
 <span class="line"><span style="color:#85E89D">      image</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">curlimages/curl:8.10.1</span></span>
-<span class="line"><span style="color:#85E89D">      command</span><span style="color:#E1E4E8">: [</span><span style="color:#9ECBFF">&quot;/bin/sh&quot;</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">&quot;-c&quot;</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">&quot;while true; do curl -sk -o /dev/null -w &#39;%{http_code}</span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">&#39; https://192.168.1.152:52774/; sleep 5; done&quot;</span><span style="color:#E1E4E8">]</span></span></code></pre>
-<p>Watch the magic as the VIP moves seamlessly from the old primary to the new primary with minimal disruption:</p>
-<p><img src="https://community.intersystems.com/sites/default/files/inline/images/screen_capture_select-area_20251112065143_anim_preview.jpg" alt="VIP Failover Demo"/></p>
-<p>🎉 Success! We have a true, functional VIP in Kubernetes.</p>
-<h3 id="summary">Summary</h3>
-<p>By leveraging <strong>Kube-vip</strong> alongside the <strong>InterSystems Kubernetes Operator</strong>, we can bring traditional high-availability patterns into the cloud-native era. This ensures that clients and integrations always have a reliable, consistent way to reach the primary IRIS member, regardless of where it’s currently running in the cluster.</p>
-<p>Onward and Upward! The networking ninja strikes again.</p> </div> </article>  </div>  </main> <footer class="mt-5 mb-20"> <p class="text-center text-sm text-base-content/60"> <a class="btn btn-outline btn-xs border-base-300 text-base-content/60 hover:text-primary hover:border-primary px-3 transition-all duration-300" href="/imprint">
+<span class="line"><span style="color:#85E89D">      command</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#9ECBFF">/bin/sh</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#9ECBFF">-c</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#F97583">|</span></span>
+<span class="line"><span style="color:#9ECBFF">          echo &quot;Polling https://192.168.1.152:52774/csp/sys/UtilHome.csp ...&quot;</span></span>
+<span class="line"><span style="color:#9ECBFF">          while true; do</span></span>
+<span class="line"><span style="color:#9ECBFF">            status=$(curl -sk -o /dev/null -w &quot;%{http_code}&quot; https://192.168.1.152:52774/csp/sys/UtilHome.csp)</span></span>
+<span class="line"><span style="color:#9ECBFF">            echo &quot;$(date -u) HTTP $status&quot;</span></span>
+<span class="line"><span style="color:#9ECBFF">            sleep 5</span></span>
+<span class="line"><span style="color:#9ECBFF">          done</span></span></code></pre>
+<h3 id="1-initial-state-primary-on-node-a">1. Initial State (Primary on Node A)</h3>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/Clipboard_2025-11-11-14-34-19.png" alt="Primary Status"/></p>
+<h3 id="2-failover-trigger">2. Failover Trigger</h3>
+<p>We send one of the mirror members “casters up” and watch the VIP take over on the alternate node.</p>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/screen_capture_select-area_20251111145656_anim_preview.jpg" alt="Failover in Action"/></p>
+<h3 id="3-re-attestation">3. Re-Attestation</h3>
+<p>The VIP has successfully floated to the new primary node.</p>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/Clipboard_2025-11-11-14-32-10.png" alt="Post-Failover Status"/></p>
+<p>The curl loop continues with minimal disruption!
+<img src="https://community.intersystems.com/sites/default/files/inline/images/screen_capture_select-area_20251112065143_anim_preview.jpg" alt="Final Attestation"/></p>
+<p>🎉</p>
+<hr/>
+<p><strong>Related Reading:</strong></p>
+<ul>
+<li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GHA_mirror_set_config#GHA_mirror_set_virtualip">InterSystems Documentation: Configuring Mirroring Virtual IP</a></li>
+<li><a href="https://community.intersystems.com/post/iko-plus-database-management-migration-or-day-1-seeding-your-mirrored-iriscluster">IKO Plus: Database Management, Migration, or Day 1 Seeding</a></li>
+<li><a href="https://community.intersystems.com/post/iko-plus-shhhhhhhhh-secrets-management-iris-clusters-external-secrets-operator">IKO Plus: Secrets Management with External Secrets Operator</a></li>
+</ul> </div> </article>  </div>  </main> <footer class="mt-5 mb-20"> <p class="text-center text-sm text-base-content/60"> <a class="btn btn-outline btn-xs border-base-300 text-base-content/60 hover:text-primary hover:border-primary px-3 transition-all duration-300" href="/imprint">
 Legal, Tax, Insurance
 </a>  <span class="block sm:inline"> © 2015-2026 Integration Required, LLC</span> </p>  </footer> </body></html>

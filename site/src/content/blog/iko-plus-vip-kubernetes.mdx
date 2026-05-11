@@ -1,64 +1,269 @@
 ---
 title: "IKO Plus: VIP in Kubernetes on IrisClusters"
-description: Implementing Virtual IP (VIP) functionality in a Kubernetes environment for InterSystems IRIS clusters, providing seamless failover and consistent access for clients during primary member transitions.
-pubDate: 2025-11-14
-heroImage: https://placehold.co/1208x201?text=InterSystems+Portfolio
-categories: ["iko", "InterSystems IRIS", "Kubernetes", "Networking", "VIP", "High Availability"]
+description: Power your IrisCluster serviceTemplate with kube-vip. Implementing a Mirror Virtual IP (VIP) for high availability in Kubernetes to provide a stable, single IP address for downstream systems.
+pubDate: 2024-11-12
+heroImage: https://community.intersystems.com/sites/default/files/inline/images/images/image(12135).png
+categories: ["InterSystems IRIS", "Kubernetes", "IKO", "kube-vip", "High Availability", "Mirroring"]
 communityLink: https://community.intersystems.com/post/iko-plus-vip-kubernetes-irisclusters
 draft: false
 ---
 
-In the world of InterSystems IRIS mirroring, the **Virtual IP (VIP)** is a cornerstone of high availability. It provides a single, consistent IP address that always points to the current primary member. But in Kubernetes, where IPs are ephemeral and managed by services, how do we implement a true VIP?
+### Power your IrisCluster serviceTemplate with [kube-vip](https://kube-vip.io/)
 
-### The Challenge: Kubernetes vs. Traditional VIPs
+If you're running IRIS in a mirrored IrisCluster for HA in Kubernetes, the question of providing a Mirror VIP (Virtual IP) becomes relevant. Virtual IP offers a way for downstream systems to interact with IRIS using one IP address. Even when a failover happens, downstream systems can reconnect to the same IP address and continue working.
 
-Kubernetes Services (like `LoadBalancer`) provide a stable entry point, but they don't always align perfectly with the "gratuitous ARP" behavior that IRIS expects for its VIP. We want a solution that works natively with the IKO and provides the same experience as traditional bare-metal or VM deployments.
+The lead-in above was stolen (gaffled, jacked, pilfered) from techniques shared to the community for VIPs across public clouds with IRIS by [@Eduard Lebedyuk](https://community.intersystems.com/user/eduard-lebedyuk).
 
-### The Solution: Kube-vip
+**Related Articles:** ☁ [vip-aws](https://community.intersystems.com/post/vip-aws) | [vip-gcp](https://community.intersystems.com/post/vip-gcp) | [vip-azure](https://community.intersystems.com/post/vip-azure)
 
-**Kube-vip** provides a high-availability and load-balancing solution for Kubernetes clusters. It can manage a virtual IP address and associate it with specific nodes or pods, making it perfect for our IRIS mirroring needs.
+This version strives to solve the same challenges for IRIS on Kubernetes when being deployed via MAAS, on-prem, and possibly yet to be realized using cloud mechanics with Managed Kubernetes Services.
 
-### Step 1: Deploying Kube-vip
+---
 
-We deploy Kube-vip as a DaemonSet in our cluster. We configure it to monitor our IRIS pods and manage the specified VIP.
+## The Distraction
+This walkthrough will highlight **kube-vip**, where it fits into a Mirrored IrisCluster, and enabling "floating IP" for layers 2-4 with the [serviceTemplate](https://docs.intersystems.com/components/csp/docbook/DocBook.UI.Page.cls?KEY=AIKO#AIKO_clusterdef_serviceTemplate). I'll walk through a quick install of the project, apply it to a Mirrored IrisCluster, and attest that failover against the floating VIP is timely and functional.
 
-![Kube-vip Configuration](https://community.intersystems.com/sites/default/files/inline/images/images/image(12151).png)
+### The IP
+Snag an available IPv4 address off your network and set it aside for use as the VIP for the IrisCluster. For this distraction, we value the predictability of a single IP address to support the workload.
 
-Once deployed, we can see the Kube-vip pods running across our nodes:
+![VIP Selection](https://community.intersystems.com/sites/default/files/inline/images/images/image(12130).png)
 
-![Kube-vip DaemonSet Running](https://community.intersystems.com/sites/default/files/inline/images/images/image(12152).png)
+### Kubernetes Cluster
+The cluster itself is running [Canonical Kubernetes](https://ubuntu.com/kubernetes) on commodity hardware of 3 physical nodes on a flat 192.x network (home lab).
 
-### Step 2: Assigning the VIP
+![K8s Cluster Overview](https://community.intersystems.com/sites/default/files/inline/images/images/image(12129).png)
 
-We specify the desired VIP in our configuration. Kube-vip will ensure this IP is assigned to the node currently hosting the primary IRIS member.
+You'll want to do this step through some slick hook to get work done on the node during scheduling for implementing the virtual interface/IP. Hopefully, your nodes will have some consistency with the NIC hardware, making node prep easy. However, my cluster had varying network interfaces, so I virtualized them by aliasing the active NIC to `vip0` as an interface.
 
-![VIP Assigned to Node](https://community.intersystems.com/sites/default/files/inline/images/images/image(12153).png)
+I ran the following on the nodes to add a virtual NIC to a physical interface and ensure it starts at boot:
 
-### Step 3: Testing Failover
+**vip0.sh**
+```bash
+#!/usr/bin/env bash
+set -e
 
-The real test of a VIP is what happens during a failover. We'll run a continuous `curl` loop against our management portal via the VIP while triggering a mirror failover.
+PARENT_NIC="eno1" # adjust for your hardware
+VIP_IP="192.168.1.152/32" # available address on our lan
 
+sudo bash -c "cat > /etc/systemd/system/vip0.service <<'EOF'
+[Unit]
+Description=Virtual interface vip0 for kube-vip
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStartPre=-/sbin/ip link delete vip0
+ExecStart=/sbin/ip link add vip0 link ${PARENT_NIC} type macvlan mode bridge
+ExecStart=/sbin/ip addr add ${VIP_IP} dev vip0
+ExecStart=/sbin/ip link set vip0 up
+RemainAfterExit=yes
+ExecStop=/sbin/ip link set vip0 down
+ExecStop=/sbin/ip link delete vip0
+
+[Install]
+WantedBy=multi-user.target
+EOF"
+
+sudo systemctl daemon-reload
+sudo systemctl enable vip0 --now
+sudo systemctl status vip0 --no-pager
+```
+
+![Interface Status](https://community.intersystems.com/sites/default/files/inline/images/images/Clipboard_2025-11-11-13-48-38.png)
+
+If your commodity network gear lets you know when something new has arrived on the network, you may get something like this:
+
+<div style="display: flex; justify-content: center;">
+  <img src="https://community.intersystems.com/sites/default/files/inline/images/img_3541.jpg" style="height: 50%; width: 50%;" alt="Home Lab Notification" />
+</div>
+
+---
+
+## What is kube-vip?
+[kube-vip](https://kube-vip.io/) provides a virtual IP (VIP) for Kubernetes workloads, giving them a stable, highly available network address that automatically fails over between nodes—enabling load balancer–like or control plane–style redundancy without an external balancer.
+
+On each node, kube-vip runs as a container (via a DaemonSet) that participates in a leader-election process using Kubernetes Lease objects. The elected leader binds the VIP directly to a host network interface and advertises it to the surrounding network via ARP.
+
+### Installation
+The install is dead simple. We will deploy the manifests that support its install as specified on the project's getting started guide.
+
+**kube-vip.yaml**
 ```yaml
-# Test pod definition
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kube-vip
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kube-vip
+rules:
+  - apiGroups: [""]
+    resources: ["services","services/status","endpoints","nodes","pods","configmaps"]
+    verbs: ["get","list","watch","update","patch","create"]
+  - apiGroups: ["coordination.k8s.io"]
+    resources: ["leases"]
+    verbs: ["get","list","watch","create","update","patch"]
+  - apiGroups: ["discovery.k8s.io"]
+    resources: ["endpointslices"]
+    verbs: ["get","list","watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kube-vip
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kube-vip
+subjects:
+  - kind: ServiceAccount
+    name: kube-vip
+    namespace: kube-system
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: kube-vip
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      app: kube-vip
+  template:
+    metadata:
+      labels:
+        app: kube-vip
+    spec:
+      serviceAccountName: kube-vip
+      hostNetwork: true
+      tolerations:
+        - operator: "Exists"
+      containers:
+        - name: kube-vip
+          image: ghcr.io/kube-vip/kube-vip:v0.8.0
+          args: ["manager"]
+          securityContext:
+            capabilities:
+              add: ["NET_ADMIN","NET_RAW"]
+          env:
+            - name: vip_interface
+              value: "vip0" # Your virtual interface
+            - name: vip_cidr
+              value: "32"
+            - name: vip_arp
+              value: "true"
+            - name: bgp_enable
+              value: "false"
+            - name: lb_enable
+              value: "true"
+            - name: svc_enable
+              value: "true"
+            - name: cp_enable
+              value: "false"
+```
+
+Apply it and check the pods:
+![DaemonSet Status](https://community.intersystems.com/sites/default/files/inline/images/images/image(12131).png)
+
+---
+
+## IrisCluster Configuration
+We'll use a standard mirrored `IrisCluster` with a `mirrorMap` of `primary,backup`.
+
+**IrisCluster.yaml (abbreviated)**
+```yaml
+apiVersion: intersystems.com/v1alpha1
+kind: IrisCluster
+metadata:
+  name: ikoplus-kubevip
+  namespace: ikoplus
+spec:
+  imagePullSecrets:
+    - name: containers-pull-secret
+  licenseKeySecret:
+    name: license-key-secret
+  topology:
+    arbiter:
+      image: containers.intersystems.com/intersystems/arbiter:2025.1
+    data:
+      compatibilityVersion: 2025.1.0
+      image: containers.intersystems.com/intersystems/irishealth:2025.1
+      mirrorMap: primary,backup
+      mirrored: true
+  serviceTemplate:
+    spec:
+      type: LoadBalancer
+      externalTrafficPolicy: Local
+```
+
+Apply it:
+```bash
+kubectl apply -f IrisCluster.yaml -n ikoplus
+```
+
+![Mirror Status](https://community.intersystems.com/sites/default/files/inline/images/images/image(12132).png)
+
+### Annotate the Service
+This binds the Virtual IP to the Service and triggers kube-vip:
+
+```bash
+kubectl annotate service ikoplus-kubevip-data kube-vip.io/loadbalancerIPs="192.168.1.152" --overwrite -n ikoplus
+```
+
+---
+
+## Attestation & Failover
+To test, let's launch a pod that continually polls the SMP URL using the VIP:
+
+**podviptest.yaml**
+```yaml
 apiVersion: v1
 kind: Pod
 metadata:
-  name: curl-test
+  name: podvip
+  namespace: ikoplus
 spec:
+  restartPolicy: Always
   containers:
     - name: curl-loop
       image: curlimages/curl:8.10.1
-      command: ["/bin/sh", "-c", "while true; do curl -sk -o /dev/null -w '%{http_code}\n' https://192.168.1.152:52774/; sleep 5; done"]
+      command:
+        - /bin/sh
+        - -c
+        - |
+          echo "Polling https://192.168.1.152:52774/csp/sys/UtilHome.csp ..."
+          while true; do
+            status=$(curl -sk -o /dev/null -w "%{http_code}" https://192.168.1.152:52774/csp/sys/UtilHome.csp)
+            echo "$(date -u) HTTP $status"
+            sleep 5
+          done
 ```
 
-Watch the magic as the VIP moves seamlessly from the old primary to the new primary with minimal disruption:
+### 1. Initial State (Primary on Node A)
+![Primary Status](https://community.intersystems.com/sites/default/files/inline/images/images/Clipboard_2025-11-11-14-34-19.png)
 
-![VIP Failover Demo](https://community.intersystems.com/sites/default/files/inline/images/screen_capture_select-area_20251112065143_anim_preview.jpg)
+### 2. Failover Trigger
+We send one of the mirror members "casters up" and watch the VIP take over on the alternate node.
 
-🎉 Success! We have a true, functional VIP in Kubernetes.
+![Failover in Action](https://community.intersystems.com/sites/default/files/inline/images/screen_capture_select-area_20251111145656_anim_preview.jpg)
 
-### Summary
+### 3. Re-Attestation
+The VIP has successfully floated to the new primary node.
 
-By leveraging **Kube-vip** alongside the **InterSystems Kubernetes Operator**, we can bring traditional high-availability patterns into the cloud-native era. This ensures that clients and integrations always have a reliable, consistent way to reach the primary IRIS member, regardless of where it's currently running in the cluster.
+![Post-Failover Status](https://community.intersystems.com/sites/default/files/inline/images/images/Clipboard_2025-11-11-14-32-10.png)
 
-Onward and Upward! The networking ninja strikes again.
+The curl loop continues with minimal disruption!
+![Final Attestation](https://community.intersystems.com/sites/default/files/inline/images/screen_capture_select-area_20251112065143_anim_preview.jpg)
+
+🎉
+
+---
+
+**Related Reading:**
+- [InterSystems Documentation: Configuring Mirroring Virtual IP](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GHA_mirror_set_config#GHA_mirror_set_virtualip)
+- [IKO Plus: Database Management, Migration, or Day 1 Seeding](https://community.intersystems.com/post/iko-plus-database-management-migration-or-day-1-seeding-your-mirrored-iriscluster)
+- [IKO Plus: Secrets Management with External Secrets Operator](https://community.intersystems.com/post/iko-plus-shhhhhhhhh-secrets-management-iris-clusters-external-secrets-operator)
