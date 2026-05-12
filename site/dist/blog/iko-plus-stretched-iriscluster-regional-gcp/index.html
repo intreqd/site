@@ -1,0 +1,193 @@
+<!DOCTYPE html><html lang="de"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="shortcut icon" href="/favicon.ico"><link rel="sitemap" href="/sitemap-index.xml"><meta name="generator" content="Astro v6.2.1"><title>IKO Plus: Stretched Cross Regional IrisCluster with Tailscale on Google Cloud Platform</title><link rel="canonical" href="https://www.integrationrequired.com/blog/iko-plus-stretched-iriscluster-regional-gcp"><meta name="description" content="A step by step implementation path to a cross regional stretched IrisCluster with Mirroring using the Intersystems Kubernetes Operator (IKO), Google Cloud Platform, and Tailscale."><meta name="robots" content="index, follow"><meta property="og:title" content="IKO Plus: Stretched Cross Regional IrisCluster with Tailscale on Google Cloud Platform"><meta property="og:type" content="website"><meta property="og:image" content="https://www.integrationrequired.com/opengraph.jpg"><meta property="og:url" content="https://www.integrationrequired.com/blog/iko-plus-stretched-iriscluster-regional-gcp"><meta property="og:image:url" content="https://www.integrationrequired.com/opengraph.jpg"><meta property="og:image:alt" content="IKO Plus: Stretched Cross Regional IrisCluster with Tailscale on Google Cloud Platform"><meta name="twitter:card" content="summary_large_image"><!--
+      Fonts flow:
+      1. astro.config.mjs registers the font and exposes `--font-inter`.
+      2. <Font /> loads that configured family into the page head.
+      3. src/styles/fonts.css maps the variable into Tailwind's `--font-sans`,
+         so DaisyUI components inherit the same font automatically.
+    --><style>@font-face{font-family:Inter-8528d76eb78236d8;src:url("/_astro/fonts/a0cb597d8e3b05e1.woff2") format("woff2");font-display:swap;font-weight:100 900;font-style:normal;}@font-face{font-family:"Inter-8528d76eb78236d8 fallback: Arial";src:local("Arial");font-display:swap;font-weight:100 900;font-style:normal;size-adjust:107.1194%;ascent-override:90.4365%;descent-override:22.518%;line-gap-override:0%;}:root{--font-inter:Inter-8528d76eb78236d8,"Inter-8528d76eb78236d8 fallback: Arial",sans-serif;}</style><link rel="preload" href="/_astro/fonts/a0cb597d8e3b05e1.woff2" as="font" type="font/woff2" crossorigin><!--
+      View Transitions — enables animated, SPA-like page navigation.
+      Remove <ClientRouter /> to revert to standard full-page navigation.
+      Docs: https://docs.astro.build/en/guides/view-transitions/
+    --><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.j56hQv-j.js"></script><!--
+      Theme init — must run before Alpine boots and before first paint to
+      prevent a flash of the wrong theme. Reads localStorage, then falls back
+      to the OS color-scheme preference, then defaults to 'light'.
+      is:inline keeps this script un-bundled so it executes immediately.
+    --><script>
+      (function () {
+        const stored = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = stored || (prefersDark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script><!-- Google tag (gtag.js) --><script async src="https://www.googletagmanager.com/gtag/js?id=G-48J9E1212D"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      
+      document.addEventListener('astro:page-load', () => {
+        gtag('js', new Date());
+        gtag('config', 'G-48J9E1212D');
+      });
+    </script><link rel="stylesheet" href="/_astro/Layout.VautCXXv.css"><script type="module" src="/_astro/page.CQhogMj7.js"></script></head> <body> <!-- Skip-to-content: first focusable element on the page.
+         Hidden until keyboard-focused so sighted users never see it.
+         Screen readers and keyboard users tab to it and jump past the nav. --> <a href="#main-content" class="skip-to-content">Skip to content</a> <div x-data="{ open: false }" x-on:astro:page-load.document="open = false" @keydown.escape.window="open = false" data-astro-cid-ri6uxye2> <header class="border-b border-base-300 bg-base-100" data-astro-cid-ri6uxye2> <div class="max-w-screen-xl mx-auto px-5">  <nav class="navbar min-h-20 px-0" data-astro-cid-ri6uxye2> <div class="navbar-start" data-astro-cid-ri6uxye2> <a href="/" class="btn btn-ghost px-0 hover:bg-transparent" data-astro-cid-ri6uxye2> <img src="/logo_black.png" alt="Your Site" class="h-[60px] w-auto object-contain transition-transform duration-300 hover:scale-105 logo-light" data-astro-cid-ri6uxye2> <img src="/logo_white.png" alt="Your Site" class="h-[60px] w-auto object-contain transition-transform duration-300 hover:scale-105 logo-dark" data-astro-cid-ri6uxye2> </a> </div>  <div class="navbar-end gap-2" data-astro-cid-ri6uxye2> <div class="hidden md:flex gap-2 items-center" data-astro-cid-ri6uxye2> <a class="btn btn-sm bg-[#003A9B] border-[#003A9B] text-white hover:bg-[#002b75] hover:border-[#002b75] flex items-center gap-2" href="https://www.indeed.com/employers/login" target="_blank" rel="noopener noreferrer" data-astro-cid-ri6uxye2> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" data-astro-cid-ri6uxye2><path d="M11.566 21.5633v-8.762c.2553.0231.5009.0346.758.0346 1.2225 0 2.3739-.3206 3.3506-.8928v9.6182c0 .8219-.1957 1.4287-.5757 1.8338-.378.4033-.8808.6049-1.491.6049-.6007 0-1.0766-.2016-1.468-.6183-.3781-.4032-.5739-1.01-.5739-1.8184zM11.589.5659c2.5447-.8929 5.4424-.8449 7.6186.987.405.3687.8673.8334 1.0515 1.3806.2207.6913-.7695-.073-.9057-.167-.71-.4532-1.4182-.8334-2.2127-1.0946C12.8614.3873 8.8122 2.709 6.2945 6.315c-1.0516 1.5939-1.7367 3.2721-2.299 5.1174-.0614.2017-.1094.4647-.2207.6413-.1113.2036-.048-.5453-.048-.5702.0845-.7623.2438-1.4997.4414-2.237C5.3292 5.3375 7.897 2.0655 11.5891.5658zm4.9281 7.0587c0 1.6686-1.353 3.0224-3.0205 3.0224-1.6677 0-3.0186-1.3538-3.0186-3.0224 0-1.6687 1.351-3.0224 3.0186-3.0224 1.6676 0 3.0205 1.3518 3.0205 3.0224Z" data-astro-cid-ri6uxye2></path></svg>
+Indeed
+</a> <a class="btn btn-sm btn-primary flex items-center gap-2" href="https://www.linkedin.com/in/ronsweeney/" target="_blank" rel="noopener noreferrer" data-astro-cid-ri6uxye2> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" data-astro-cid-ri6uxye2><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" data-astro-cid-ri6uxye2></path></svg>
+LinkedIn
+</a> <a class="btn btn-sm btn-outline flex items-center gap-2" href="https://github.com/sween/" target="_blank" rel="noopener noreferrer" data-astro-cid-ri6uxye2> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" data-astro-cid-ri6uxye2><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" data-astro-cid-ri6uxye2></path></svg>
+Github
+</a> <a class="btn btn-sm bg-[#f57c00] border-[#f57c00] text-white hover:bg-[#e65100] hover:border-[#e65100] flex items-center gap-2" href="https://www.brightstreetgroup.com" target="_blank" rel="noopener noreferrer" data-astro-cid-ri6uxye2> <img src="/bsg-favicon.png" alt="BSG Logo" class="w-4 h-4 rounded-sm brightness-0 invert" data-astro-cid-ri6uxye2>
+Brightstreet Group
+</a> </div> <button x-data="{
+    theme: document.documentElement.getAttribute('data-theme') || 'light',
+    toggle() {
+      this.theme = this.theme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', this.theme);
+      localStorage.setItem('theme', this.theme);
+    }
+  }" @click="toggle()" :aria-label="theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'" class="btn btn-ghost btn-square"> <!-- Sun — shown when dark mode is active --> <svg x-show="theme === 'dark'" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5" aria-hidden="true"> <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"></path> </svg> <!-- Moon — shown when light mode is active --> <svg x-show="theme === 'light'" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5" aria-hidden="true"> <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"></path> </svg> </button> <button @click="open = !open" class="btn btn-square btn-ghost md:hidden" aria-label="Open menu" data-astro-cid-ri6uxye2> <svg width="1em" height="1em" data-astro-cid-ri6uxye2="true" data-icon="nav">   <symbol id="ai:local:nav" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></symbol><use href="#ai:local:nav"></use>  </svg> </button> </div> </nav>  </div> </header> <!-- Dedicated mobile overlay layer; kept outside the header/container so it fully covers the viewport. --> <div x-cloak x-show="open" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 z-50 bg-primary md:hidden" data-astro-cid-ri6uxye2> <button @click="open = false" class="btn btn-square btn-ghost absolute top-6 right-6 text-primary-content hover:bg-primary-content/10" aria-label="Close menu" data-astro-cid-ri6uxye2>
+✕
+</button> <div class="flex min-h-full flex-col items-center justify-center gap-6 px-6 text-center" data-astro-cid-ri6uxye2> <a class="btn bg-[#003A9B] border-[#003A9B] text-white hover:bg-[#002b75] hover:border-[#002b75] w-full flex items-center gap-2" href="https://www.indeed.com/employers/login" target="_blank" rel="noopener noreferrer" @click="open = false" data-astro-cid-ri6uxye2> <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" data-astro-cid-ri6uxye2><path d="M11.566 21.5633v-8.762c.2553.0231.5009.0346.758.0346 1.2225 0 2.3739-.3206 3.3506-.8928v9.6182c0 .8219-.1957 1.4287-.5757 1.8338-.378.4033-.8808.6049-1.491.6049-.6007 0-1.0766-.2016-1.468-.6183-.3781-.4032-.5739-1.01-.5739-1.8184zM11.589.5659c2.5447-.8929 5.4424-.8449 7.6186.987.405.3687.8673.8334 1.0515 1.3806.2207.6913-.7695-.073-.9057-.167-.71-.4532-1.4182-.8334-2.2127-1.0946C12.8614.3873 8.8122 2.709 6.2945 6.315c-1.0516 1.5939-1.7367 3.2721-2.299 5.1174-.0614.2017-.1094.4647-.2207.6413-.1113.2036-.048-.5453-.048-.5702.0845-.7623.2438-1.4997.4414-2.237C5.3292 5.3375 7.897 2.0655 11.5891.5658zm4.9281 7.0587c0 1.6686-1.353 3.0224-3.0205 3.0224-1.6677 0-3.0186-1.3538-3.0186-3.0224 0-1.6687 1.351-3.0224 3.0186-3.0224 1.6676 0 3.0205 1.3518 3.0205 3.0224Z" data-astro-cid-ri6uxye2></path></svg>
+Indeed
+</a> <a class="btn btn-primary w-full flex items-center gap-2" href="https://www.linkedin.com/in/ronsweeney/" target="_blank" rel="noopener noreferrer" @click="open = false" data-astro-cid-ri6uxye2> <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" data-astro-cid-ri6uxye2><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" data-astro-cid-ri6uxye2></path></svg>
+LinkedIn
+</a> <a class="btn btn-outline w-full flex items-center gap-2 bg-base-100" href="https://github.com/sween/" target="_blank" rel="noopener noreferrer" @click="open = false" data-astro-cid-ri6uxye2> <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" data-astro-cid-ri6uxye2><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" data-astro-cid-ri6uxye2></path></svg>
+Github
+</a> <a class="btn bg-[#f57c00] border-[#f57c00] text-white hover:bg-[#e65100] hover:border-[#e65100] w-full flex items-center gap-2" href="https://www.brightstreetgroup.com" target="_blank" rel="noopener noreferrer" @click="open = false" data-astro-cid-ri6uxye2> <img src="/bsg-favicon.png" alt="BSG Logo" class="w-5 h-5 rounded-sm brightness-0 invert" data-astro-cid-ri6uxye2>
+Brightstreet Group
+</a> </div> </div> </div> <main id="main-content">  <div class="max-w-screen-xl mx-auto px-5 pt-6 sm:pt-8 lg:pt-12 pb-12 sm:pb-16 lg:pb-24">  <article class="max-w-3xl"> <header class="space-y-4"> <a href="/blog" class="link link-hover text-sm text-base-content/60">← All posts</a> <div class="mt-2 overflow-hidden rounded-box"> <img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11779).png" alt="IKO Plus: Stretched Cross Regional IrisCluster with Tailscale on Google Cloud Platform" loading="lazy" decoding="async" width="1200" height="600" class="w-full object-cover"> </div> <div class="space-y-2"> <h1 class="text-2xl font-bold tracking-tight sm:text-3xl">IKO Plus: Stretched Cross Regional IrisCluster with Tailscale on Google Cloud Platform</h1> <div class="flex flex-wrap items-center gap-3"> <p class="text-sm text-base-content/60"> <time datetime="2025-09-10T00:00:00.000Z"> September 9, 2025 </time>  </p> <div class="flex flex-wrap gap-1"> <span class="badge badge-primary badge-sm badge-outline">IKO</span><span class="badge badge-primary badge-sm badge-outline">Cloud</span><span class="badge badge-primary badge-sm badge-outline">Encryption</span><span class="badge badge-primary badge-sm badge-outline">GCP</span><span class="badge badge-primary badge-sm badge-outline">Kubernetes</span><span class="badge badge-primary badge-sm badge-outline">Mirroring</span><span class="badge badge-primary badge-sm badge-outline">Ubuntu</span> </div> <a href="https://community.intersystems.com/post/iko-plus-stretched-cross-regional-iriscluster-tailscale-google-cloud-platform" target="_blank" rel="noopener noreferrer" class="badge badge-secondary badge-sm badge-outline link-hover flex items-center gap-1">
+Community
+<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> </a> </div> </div> </header> <!--
+      daisyUI recommends using Tailwind utilities for layout and the Typography
+      plugin for rich text. `prose` gives Markdown content predictable defaults
+      without maintaining a custom article stylesheet in the starter.
+    --> <div class="prose prose-neutral mt-10 max-w-none prose-a:link prose-img:rounded-box"> <p>A step by step implementation path to a cross regional <strong>stretched IrisCluster</strong> with Mirroring using the Intersystems Kubernetes Operator (IKO), Google Cloud Platform, and Tailscale.</p>
+<p>I am giving this distraction the code name “Compliment Sandwich” for a reason yet to be realized, but I’d rather the community go right for the jugular shooting holes in a solution that implements wireguard based connectivity for our workloads in general, as I would like to refine it as a fall project leading up to <a href="https://events.linuxfoundation.org/kubecon-cloudnativecon-north-america/">KubeCon in Atlanta</a> and if I miss the mark, Ill get it done before Amsterdam.</p>
+<h2 id="tailscale">Tailscale</h2>
+<p>The journey to wireguard started with <a href="https://docs.cilium.io/en/stable/network/clustermesh/clustermesh/">Cilium</a> for us, with <a href="https://docs.cilium.io/en/stable/network/clustermesh/clustermesh/">ClusterMesh</a> and Node to Node stuff becoming apparent for a two configuration flag to encryption and compliance checkboxes for the workloads. After going down the Wireguard rabbit hole, it lent to aiding the overall divorce from Cloud vendors for $ite to $ite VPN’s and development compute and watching the Super Bowl in Puerto Rico unabated as they say.</p>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11780).png" alt="Diagram"/></p>
+<p><strong>In a paragraph, explain Tailscale</strong>
+<a href="https://tailscale.com/">Tailscale</a> leverages WireGuard as its secure, encrypted tunnel layer, but wraps it in a powerful overlay that handles the hard parts for you. Under the hood, each device runs the WireGuard protocol (specifically a fork of the <a href="https://git.zx2c4.com/wireguard-go">wireguard-go</a> implementation) to establish encrypted point-to-point tunnels. Tailscale’s coordination (control) plane—not part of the tunnel—handles identity-based authentication, key discovery, and automated configuration, allowing devices to connect directly in a peer-to-peer mesh even when behind NATs or firewalls.</p>
+<p><strong>My Version</strong></p>
+<blockquote>
+<p>Tailscale is a clown suit for wireguard-go like Github is for git, that flattens a network of participating devices.</p>
+</blockquote>
+<h2 id="lets-go">Let’s Go</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">gcloud</span><span style="color:#9ECBFF"> config</span><span style="color:#9ECBFF"> set</span><span style="color:#9ECBFF"> project</span><span style="color:#9ECBFF"> ikoplus</span></span></code></pre>
+<h3 id="create-compute">Create Compute</h3>
+<p>In a GCP project “ikoplus” enable, Compute Engine.</p>
+<p>🇺🇸</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">gcloud</span><span style="color:#9ECBFF"> compute</span><span style="color:#9ECBFF"> instances</span><span style="color:#9ECBFF"> create</span><span style="color:#9ECBFF"> cks-master</span><span style="color:#79B8FF"> --zone=us-east4-a</span><span style="color:#79B8FF">  \</span></span>
+<span class="line"><span style="color:#E1E4E8">--machine-type=c2-standard-4  </span><span style="color:#79B8FF">\</span></span>
+<span class="line"><span style="color:#E1E4E8">--image=ubuntu-2404-noble-amd64-v20250530 </span><span style="color:#79B8FF">\</span></span>
+<span class="line"><span style="color:#E1E4E8">--image-project=ubuntu-os-cloud </span><span style="color:#79B8FF">\</span></span>
+<span class="line"><span style="color:#E1E4E8">--boot-disk-size=200GB</span></span></code></pre>
+<p>🇬🇧</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">gcloud</span><span style="color:#9ECBFF"> compute</span><span style="color:#9ECBFF"> instances</span><span style="color:#9ECBFF"> create</span><span style="color:#9ECBFF"> cks-master</span><span style="color:#79B8FF"> --zone=europe-west3-c</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#E1E4E8">--machine-type=c2-standard-4  </span><span style="color:#79B8FF">\</span></span>
+<span class="line"><span style="color:#E1E4E8">--image=ubuntu-2404-noble-amd64-v20250530 </span><span style="color:#79B8FF">\</span></span>
+<span class="line"><span style="color:#E1E4E8">--image-project=ubuntu-os-cloud </span><span style="color:#79B8FF">\</span></span>
+<span class="line"><span style="color:#E1E4E8">--boot-disk-size=200GB</span></span></code></pre>
+<p>Should be looking a little like this in the cloud console.
+<img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11781).png" alt="GCP Console Nodes"/></p>
+<h3 id="add-the-nodes-to-your-tailnet">Add the nodes to your Tailnet</h3>
+<p>Now for <code>region</code> in [ 🇺🇸, 🇬🇧 ]; do</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">curl</span><span style="color:#79B8FF"> -fsSL</span><span style="color:#9ECBFF"> https://pkgs.tailscale.com/stable/ubuntu/noble.noarmor.gpg</span><span style="color:#F97583"> |</span><span style="color:#B392F0"> sudo</span><span style="color:#9ECBFF"> tee</span><span style="color:#9ECBFF"> /usr/share/keyrings/tailscale-archive-keyring.gpg</span><span style="color:#F97583"> &gt;</span><span style="color:#9ECBFF">/dev/null</span></span>
+<span class="line"><span style="color:#B392F0">curl</span><span style="color:#79B8FF"> -fsSL</span><span style="color:#9ECBFF"> https://pkgs.tailscale.com/stable/ubuntu/noble.tailscale-keyring.list</span><span style="color:#F97583"> |</span><span style="color:#B392F0"> sudo</span><span style="color:#9ECBFF"> tee</span><span style="color:#9ECBFF"> /etc/apt/sources.list.d/tailscale.list</span></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> apt-get</span><span style="color:#9ECBFF"> update</span></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> apt-get</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> tailscale</span></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> tailscale</span><span style="color:#9ECBFF"> up</span></span>
+<span class="line"><span style="color:#B392F0">tailscale</span><span style="color:#9ECBFF"> ip</span><span style="color:#79B8FF"> -4</span></span></code></pre>
+<p>You should get a prompt to authenticate your Tailnet:
+<img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11784).png" alt="Tailscale Auth Prompt"/></p>
+<p>And now our tailnet should look like so:
+<img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11783).png" alt="Tailnet Machines"/></p>
+<h3 id="install-kubernetes">Install Kubernetes</h3>
+<p>Using <a href="https://ubuntu.com/kubernetes/install">Canonical k8s</a> (formerly Microk8s), the cluster setup is quite literally a “snap”.
+🇺🇸</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> snap</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> k8s</span><span style="color:#79B8FF"> --classic</span></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> k8s</span><span style="color:#9ECBFF"> bootstrap</span><span style="color:#79B8FF"> --address</span><span style="color:#79B8FF"> 100.127.21.93</span><span style="color:#6A737D"> # use your tailnet address here for kube api</span></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> k8s</span><span style="color:#9ECBFF"> get-join-token</span><span style="color:#79B8FF"> --worker</span></span></code></pre>
+<p>👣 🔫
+Foot gun: before we go to the next step you may or may not hit this but… I was tailing the logs after hitting some TLS issues joining on the next step and found a time drift of over 5 seconds between the two boxes, despite using chrony and Google time synchroniztion. To mitigate this a bit, I made the ntp setup on both nodes a bit more agressive by tweaking the /etc/chrony/chrony.conf with these two directives.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="text"><code><span class="line"><span>maxslewrate 2000</span></span>
+<span class="line"><span>makestep 0.25 0.5</span></span></code></pre>
+<p>🇬🇧</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> snap</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> k8s</span><span style="color:#79B8FF"> --classic</span></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> k8s</span><span style="color:#9ECBFF"> join-cluster</span><span style="color:#9ECBFF"> eyJ0b2tl-tokenfromcommandaboveonmaster</span></span></code></pre>
+<p>Joining the cluster. This may take a few seconds, please wait.</p>
+<p>We should now be able to bask in the glory of a kubernetes cluster with two nodes, over the pond.
+<img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11785).png" alt="K8s Cluster Basking"/></p>
+<h3 id="tailscale-create-oauth-client-and-install-operator">Tailscale: Create OAUTH Client and Install Operator</h3>
+<p>This is a bonus for now, but the operator allows us to expose any service we decorate in the cluster with a tag to the tailscale operator.</p>
+<p>Oauth Client
+<img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11786).png" alt="Oauth Clients Tailscale"/></p>
+<p>Install the Operator</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">helm</span><span style="color:#9ECBFF"> repo</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> tailscale</span><span style="color:#9ECBFF"> https://pkgs.tailscale.com/helmcharts</span></span>
+<span class="line"><span style="color:#B392F0">helm</span><span style="color:#9ECBFF"> repo</span><span style="color:#9ECBFF"> update</span></span>
+<span class="line"><span style="color:#B392F0">helm</span><span style="color:#9ECBFF"> upgrade</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --install</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">    tailscale-operator</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">    tailscale/tailscale-operator</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --namespace=tailscale</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --create-namespace</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --set-string</span><span style="color:#9ECBFF"> oauth.clientId=</span><span style="color:#E1E4E8">${OAUTH_CLIENT_ID} </span><span style="color:#79B8FF">\</span></span>
+<span class="line"><span style="color:#79B8FF">    --set-string</span><span style="color:#9ECBFF"> oauth.clientSecret=</span><span style="color:#E1E4E8">${OAUTH_CLIENT_SECRET} </span><span style="color:#79B8FF">\</span></span>
+<span class="line"><span style="color:#79B8FF">    --set-string</span><span style="color:#9ECBFF"> apiServerProxyConfig.mode=&quot;true&quot;</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --wait</span></span></code></pre>
+<p><img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11789).png" alt="Helm Install Tailscale"/></p>
+<p>Our Tailnet now looks like so, as you can see my laptop is also included in it.
+<img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11787).png" alt="Tailnet Machines Final"/></p>
+<h3 id="install-the-intersystems-kubernetes-operator">Install the InterSystems Kubernetes Operator</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">sween</span><span style="color:#9ECBFF"> @</span><span style="color:#9ECBFF"> fhirwatch-pop-os</span><span style="color:#9ECBFF"> ~/Desktop/ISC/IKO/iris_operator_amd-3.10.1.100-unix/iris_operator_amd-3.10.1.100/chart/iris-operator</span></span>
+<span class="line"><span style="color:#B392F0">└─</span><span style="color:#E1E4E8"> $ </span><span style="color:#9ECBFF">▶</span><span style="color:#9ECBFF"> helm</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> iko</span><span style="color:#9ECBFF"> .</span><span style="color:#79B8FF"> --kubeconfig</span><span style="color:#9ECBFF"> kube.config</span><span style="color:#E1E4E8"> </span></span>
+<span class="line"><span style="color:#B392F0">NAME:</span><span style="color:#9ECBFF"> iko</span></span>
+<span class="line"><span style="color:#B392F0">LAST</span><span style="color:#9ECBFF"> DEPLOYED:</span><span style="color:#9ECBFF"> Tue</span><span style="color:#9ECBFF"> Sep</span><span style="color:#79B8FF">  9</span><span style="color:#9ECBFF"> 14:41:51</span><span style="color:#79B8FF"> 2025</span></span>
+<span class="line"><span style="color:#B392F0">NAMESPACE:</span><span style="color:#9ECBFF"> default</span></span>
+<span class="line"><span style="color:#B392F0">STATUS:</span><span style="color:#9ECBFF"> deployed</span></span>
+<span class="line"><span style="color:#B392F0">REVISION:</span><span style="color:#79B8FF"> 1</span></span>
+<span class="line"><span style="color:#B392F0">TEST</span><span style="color:#9ECBFF"> SUITE:</span><span style="color:#9ECBFF"> None</span></span>
+<span class="line"><span style="color:#B392F0">NOTES:</span></span>
+<span class="line"><span style="color:#B392F0">To</span><span style="color:#9ECBFF"> verify</span><span style="color:#9ECBFF"> that</span><span style="color:#9ECBFF"> InterSystems</span><span style="color:#9ECBFF"> Kubernetes</span><span style="color:#9ECBFF"> Operator</span><span style="color:#9ECBFF"> has</span><span style="color:#9ECBFF"> started,</span><span style="color:#9ECBFF"> run:</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">  kubectl</span><span style="color:#79B8FF"> --namespace=default</span><span style="color:#9ECBFF"> get</span><span style="color:#9ECBFF"> deployments</span><span style="color:#79B8FF"> -l</span><span style="color:#9ECBFF"> &quot;release=iko, app=iris-operator-amd&quot;</span></span></code></pre>
+<h3 id="establish-zones">Establish Zones</h3>
+<p>Important concept, but powerful one is the establishment of zones. At the end of the day, for IKO to do its magic, this simply means that you label the nodes with a zone, and IKO will do its magic to create the mirror set across the zones for the desired state across the pond.</p>
+<p>For this, we created zones “us,uk” and labelled each node accordingly.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">apiVersion</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">v1</span></span>
+<span class="line"><span style="color:#85E89D">kind</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">Node</span></span></code></pre>
+<p>🇺🇸</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="text"><code><span class="line"><span>topology.kubernetes.io/zone: us</span></span></code></pre>
+<p>🇬🇧</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="text"><code><span class="line"><span>topology.kubernetes.io/zone: uk</span></span></code></pre>
+<h3 id="the-stretched-iriscluster">The Stretched IrisCluster</h3>
+<p>The abbreviated IrisCluster resource definition/topology is in the teaser below, but lets call out the cool spots.
+Create an IRIS for Health Mirror, across zones and save me a flight.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">mirrorMap</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">primary,backup</span></span>
+<span class="line"><span style="color:#85E89D">mirrored</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span>
+<span class="line"><span style="color:#85E89D">preferredZones</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">  - </span><span style="color:#9ECBFF">us</span></span>
+<span class="line"><span style="color:#E1E4E8">  - </span><span style="color:#9ECBFF">uk</span></span></code></pre>
+<p>Please secure the web gateways, ecp, superserver, and mirror agents with TLS:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">tls</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  common</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    secret</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">      secretName</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">cert-secret</span></span></code></pre>
+<p>Deploy it!
+<img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11788).png" alt="IKO Deploy"/></p>
+<p>Wooo!
+<img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11790).png" alt="IKO Status Running"/></p>
+<h3 id="checking-our-work">Checking our Work</h3>
+<p>Now lets prove it utilizing curl to indicate our geo location, by flying to the US, shelling into the pod, and running <code>curl ipinfo.io</code>…
+🇺🇸
+<img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11791).png" alt="IP Info US"/></p>
+<p>Then flying back to the UK, shelling into the pod, and running <code>curl ipinfo.io</code>
+🇬🇧
+<img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11792).png" alt="IP Info UK"/></p>
+<p>🎤 ⬇
+<img src="https://community.intersystems.com/sites/default/files/inline/images/images/image(11793).png" alt="Mirror Monitor"/></p>
+<p>So that is it for now, stay tuned for more elaboration on the subject.
+💪 Special thanks to Mark Hayden from ISC for helping me wrap my head around “zones” in an understandable fashion in the IKO topology!</p>
+<p><strong>Check the related InterSystems Documentation Article:</strong> <a href="https://docs.intersystems.com/components/csp/docbook/DocBook.UI.Page.cls?KEY=AIKO#AIKO_clusterdef_preferredZones">Using the InterSystems Kubernetes Operator (Version 3.8) | InterSystems Components and Tools</a></p> </div> </article>  </div>  </main> <footer class="mt-5 mb-20"> <p class="text-center text-sm text-base-content/60"> <a class="btn btn-outline btn-xs border-base-300 text-base-content/60 hover:text-primary hover:border-primary px-3 transition-all duration-300" href="/imprint">
+Legal, Tax, Insurance
+</a>  <span class="block sm:inline"> © 2015-2026 Integration Required, LLC</span> </p>  </footer> </body></html>

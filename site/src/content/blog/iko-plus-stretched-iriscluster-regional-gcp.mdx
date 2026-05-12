@@ -1,0 +1,214 @@
+---
+title: "IKO Plus: Stretched Cross Regional IrisCluster with Tailscale on Google Cloud Platform"
+description: "A step by step implementation path to a cross regional stretched IrisCluster with Mirroring using the Intersystems Kubernetes Operator (IKO), Google Cloud Platform, and Tailscale."
+pubDate: 2025-09-10
+heroImage: https://community.intersystems.com/sites/default/files/inline/images/images/image(11779).png
+categories: ["IKO", "Cloud", "Encryption", "GCP", "Kubernetes", "Mirroring", "Ubuntu"]
+communityLink: https://community.intersystems.com/post/iko-plus-stretched-cross-regional-iriscluster-tailscale-google-cloud-platform
+draft: false
+---
+
+A step by step implementation path to a cross regional **stretched IrisCluster** with Mirroring using the Intersystems Kubernetes Operator (IKO), Google Cloud Platform, and Tailscale.
+
+I am giving this distraction the code name "Compliment Sandwich" for a reason yet to be realized, but I'd rather the community go right for the jugular shooting holes in a solution that implements wireguard based connectivity for our workloads in general, as I would like to refine it as a fall project leading up to [KubeCon in Atlanta](https://events.linuxfoundation.org/kubecon-cloudnativecon-north-america/) and if I miss the mark, Ill get it done before Amsterdam.
+
+## Tailscale
+
+The journey to wireguard started with [Cilium](https://docs.cilium.io/en/stable/network/clustermesh/clustermesh/) for us, with [ClusterMesh](https://docs.cilium.io/en/stable/network/clustermesh/clustermesh/) and Node to Node stuff becoming apparent for a two configuration flag to encryption and compliance checkboxes for the workloads. After going down the Wireguard rabbit hole, it lent to aiding the overall divorce from Cloud vendors for $ite to $ite VPN's and development compute and watching the Super Bowl in Puerto Rico unabated as they say.
+
+![Diagram](https://community.intersystems.com/sites/default/files/inline/images/images/image(11780).png)
+
+**In a paragraph, explain Tailscale**
+[Tailscale](https://tailscale.com/) leverages WireGuard as its secure, encrypted tunnel layer, but wraps it in a powerful overlay that handles the hard parts for you. Under the hood, each device runs the WireGuard protocol (specifically a fork of the [wireguard-go](https://git.zx2c4.com/wireguard-go) implementation) to establish encrypted point-to-point tunnels. Tailscale’s coordination (control) plane—not part of the tunnel—handles identity-based authentication, key discovery, and automated configuration, allowing devices to connect directly in a peer-to-peer mesh even when behind NATs or firewalls.
+
+**My Version**
+> Tailscale is a clown suit for wireguard-go like Github is for git, that flattens a network of participating devices.
+
+## Let's Go
+
+```bash
+gcloud config set project ikoplus
+```
+
+### Create Compute
+
+In a GCP project "ikoplus" enable, Compute Engine.
+
+🇺🇸
+```bash
+gcloud compute instances create cks-master --zone=us-east4-a  \
+--machine-type=c2-standard-4  \
+--image=ubuntu-2404-noble-amd64-v20250530 \
+--image-project=ubuntu-os-cloud \
+--boot-disk-size=200GB
+```
+
+🇬🇧
+```bash
+gcloud compute instances create cks-master --zone=europe-west3-c \
+--machine-type=c2-standard-4  \
+--image=ubuntu-2404-noble-amd64-v20250530 \
+--image-project=ubuntu-os-cloud \
+--boot-disk-size=200GB
+```
+
+Should be looking a little like this in the cloud console.
+![GCP Console Nodes](https://community.intersystems.com/sites/default/files/inline/images/images/image(11781).png)
+
+### Add the nodes to your Tailnet
+
+Now for `region` in [ 🇺🇸, 🇬🇧 ]; do
+
+```bash
+curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/noble.noarmor.gpg | sudo tee /usr/share/keyrings/tailscale-archive-keyring.gpg >/dev/null
+curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/noble.tailscale-keyring.list | sudo tee /etc/apt/sources.list.d/tailscale.list
+sudo apt-get update
+sudo apt-get install tailscale
+sudo tailscale up
+tailscale ip -4
+```
+
+You should get a prompt to authenticate your Tailnet:
+![Tailscale Auth Prompt](https://community.intersystems.com/sites/default/files/inline/images/images/image(11784).png)
+
+And now our tailnet should look like so:
+![Tailnet Machines](https://community.intersystems.com/sites/default/files/inline/images/images/image(11783).png)
+
+### Install Kubernetes
+
+Using [Canonical k8s](https://ubuntu.com/kubernetes/install) (formerly Microk8s), the cluster setup is quite literally a "snap".
+🇺🇸
+```bash
+sudo snap install k8s --classic
+sudo k8s bootstrap --address 100.127.21.93 # use your tailnet address here for kube api
+sudo k8s get-join-token --worker
+```
+
+👣 🔫
+Foot gun: before we go to the next step you may or may not hit this but... I was tailing the logs after hitting some TLS issues joining on the next step and found a time drift of over 5 seconds between the two boxes, despite using chrony and Google time synchroniztion. To mitigate this a bit, I made the ntp setup on both nodes a bit more agressive by tweaking the /etc/chrony/chrony.conf with these two directives.
+
+```text
+maxslewrate 2000
+makestep 0.25 0.5
+```
+
+🇬🇧
+```bash
+sudo snap install k8s --classic
+sudo k8s join-cluster eyJ0b2tl-tokenfromcommandaboveonmaster
+```
+
+Joining the cluster. This may take a few seconds, please wait.
+
+We should now be able to bask in the glory of a kubernetes cluster with two nodes, over the pond.
+![K8s Cluster Basking](https://community.intersystems.com/sites/default/files/inline/images/images/image(11785).png)
+
+### Tailscale: Create OAUTH Client and Install Operator
+
+This is a bonus for now, but the operator allows us to expose any service we decorate in the cluster with a tag to the tailscale operator.
+
+Oauth Client
+![Oauth Clients Tailscale](https://community.intersystems.com/sites/default/files/inline/images/images/image(11786).png)
+
+Install the Operator
+```bash
+helm repo add tailscale https://pkgs.tailscale.com/helmcharts
+helm repo update
+helm upgrade \
+    --install \
+    tailscale-operator \
+    tailscale/tailscale-operator \
+    --namespace=tailscale \
+    --create-namespace \
+    --set-string oauth.clientId=${OAUTH_CLIENT_ID} \
+    --set-string oauth.clientSecret=${OAUTH_CLIENT_SECRET} \
+    --set-string apiServerProxyConfig.mode="true" \
+    --wait
+```
+
+![Helm Install Tailscale](https://community.intersystems.com/sites/default/files/inline/images/images/image(11789).png)
+
+Our Tailnet now looks like so, as you can see my laptop is also included in it.
+![Tailnet Machines Final](https://community.intersystems.com/sites/default/files/inline/images/images/image(11787).png)
+
+### Install the InterSystems Kubernetes Operator
+
+```bash
+sween @ fhirwatch-pop-os ~/Desktop/ISC/IKO/iris_operator_amd-3.10.1.100-unix/iris_operator_amd-3.10.1.100/chart/iris-operator
+└─ $ ▶ helm install iko . --kubeconfig kube.config 
+NAME: iko
+LAST DEPLOYED: Tue Sep  9 14:41:51 2025
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+To verify that InterSystems Kubernetes Operator has started, run:
+
+  kubectl --namespace=default get deployments -l "release=iko, app=iris-operator-amd"
+```
+
+### Establish Zones
+
+Important concept, but powerful one is the establishment of zones. At the end of the day, for IKO to do its magic, this simply means that you label the nodes with a zone, and IKO will do its magic to create the mirror set across the zones for the desired state across the pond.
+
+For this, we created zones "us,uk" and labelled each node accordingly.
+```yaml
+apiVersion: v1
+kind: Node
+```
+
+🇺🇸
+```text
+topology.kubernetes.io/zone: us
+```
+
+🇬🇧
+```text
+topology.kubernetes.io/zone: uk
+```
+
+### The Stretched IrisCluster
+
+The abbreviated IrisCluster resource definition/topology is in the teaser below, but lets call out the cool spots.
+Create an IRIS for Health Mirror, across zones and save me a flight.
+
+```yaml
+mirrorMap: primary,backup
+mirrored: true
+preferredZones:
+  - us
+  - uk
+```
+
+Please secure the web gateways, ecp, superserver, and mirror agents with TLS:
+```yaml
+tls:
+  common:
+    secret:
+      secretName: cert-secret
+```
+
+Deploy it!
+![IKO Deploy](https://community.intersystems.com/sites/default/files/inline/images/images/image(11788).png)
+
+Wooo!
+![IKO Status Running](https://community.intersystems.com/sites/default/files/inline/images/images/image(11790).png)
+
+### Checking our Work
+
+Now lets prove it utilizing curl to indicate our geo location, by flying to the US, shelling into the pod, and running `curl ipinfo.io`...
+🇺🇸
+![IP Info US](https://community.intersystems.com/sites/default/files/inline/images/images/image(11791).png)
+
+Then flying back to the UK, shelling into the pod, and running `curl ipinfo.io`
+🇬🇧
+![IP Info UK](https://community.intersystems.com/sites/default/files/inline/images/images/image(11792).png)
+
+🎤 ⬇
+![Mirror Monitor](https://community.intersystems.com/sites/default/files/inline/images/images/image(11793).png)
+
+So that is it for now, stay tuned for more elaboration on the subject.
+💪 Special thanks to Mark Hayden from ISC for helping me wrap my head around "zones" in an understandable fashion in the IKO topology!
+
+**Check the related InterSystems Documentation Article:** [Using the InterSystems Kubernetes Operator (Version 3.8) | InterSystems Components and Tools](https://docs.intersystems.com/components/csp/docbook/DocBook.UI.Page.cls?KEY=AIKO#AIKO_clusterdef_preferredZones)
