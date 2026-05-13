@@ -1,0 +1,87 @@
+---
+title: "iris-certified*-agents"
+description: "Onboard these InterSystems agents compatible with your model and agentic IDE of choice and speak InterSystems technologies like a protocol droid."
+pubDate: 2026-04-24
+heroImage: "https://community.intersystems.com/sites/default/files/inline-images/image_184.png"
+categories: ["Learning Portal", "InterSystems IRIS", "AI", "Agents", "Claude Code"]
+communityLink: "https://community.intersystems.com/post/iris-certified-agents"
+draft: false
+---
+
+### * iris-certified-agents are not actually certified in anything
+
+Studying for an InterSystems [certification](https://www.intersystems.com/knowledge-hub/certification-program/)? Eliminated your entire staff and need to make good on your commitment to AI to support your workload? New to InterSystems products or building your startup on InterSystems technologies? Onboard these intersystems agents compatible with your model and agentic IDE of choice and speak InterSystems technologies like a protocol droid.
+
+### Quick Start
+
+So if you just want to cut to the chase, go get your agents at [https://github.com/sween/iris-certified-agents](https://github.com/sween/iris-certified-agents)
+
+#### Shop Agents
+
+Browse the roster, grab one, grab all four, or grab one of the other 100+ contributed by the community.
+
+### Install
+
+#### Claude
+Works out of the box with Claude Code
+
+```bash
+# Install all agents to your Claude Code directory
+./scripts/install.sh --tool claude-code
+```
+
+#### Antigravity (Others)
+Need a convert step for others.
+
+```bash
+# Step 1 -- generate integration files for all supported tools
+./scripts/convert.sh 
+
+# Step 2 -- install interactively (auto-detects what you have installed)
+./scripts/install.sh --tool antigravity
+./scripts/install.sh --tool gemini-cli
+```
+
+### Certified Agent Factory
+
+This is how the agents were built (or the sausauge was rolled), feel free to use this on any pattern where the curriculum is available for your RAG call and build specific agents tailored to that certification. I got this done with a fork of the great [msitarzewski/agency-agents](https://github.com/msitarzewski/agency-agents) and the below prompts.
+
+### InterSystems HL7 Interface Specialist
+[InterSystems HL7 Interface Specialist Certification](https://www.intersystems.com/certifications/intersystems-hl7-interface-specialist/)
+
+```text
+activate engineering technical writer and please re-write the intersystems-hl7-interface-specialist.md file to be slightly more technical and include the skills at https://www.intersystems.com/certifications/intersystems-hl7-interface-specialist/ provide basic understanding of hl7 v2 messaging, fhir, and ccda, ideally this agent should act as a technical bridge to implementing hl7 interfaces or fhir solutions and transforming messages to various formats to build solutions.
+```
+
+### InterSystems IRIS Development Professional
+[InterSystems IRIS Development Professional Certification](https://www.intersystems.com/certifications/intersystems-iris-development-professional/)
+
+```text
+activate engineering technical writer and rewrite intersystems-iris-development-professional.md to be completely inline with the skill set involved with this certification track https://www.intersystems.com/certifications/intersystems-iris-development-professional/ please be exceptionally inclusive of intersystems objectscript programming and do not update the structure of the file, just the content
+```
+
+### InterSystems IRIS SQL Specialist
+[InterSystems IRIS SQL Specialist Certification](https://www.intersystems.com/certifications/intersystems-iris-sql-specialist/)
+
+```text
+Please ONLY update and consider intersystems-iris-sql-specialist.md and leave the structure intact, its ok to add examples of dynamic sql or inline sql (be objectscript and sql specific), use the "template-sql" for some hints and also https://www.intersystems.com/certifications/intersystems-iris-sql-specialist/ to build the agent as this is the role and some skills needed to be fulfilled by the agent. Please lean on the technical side and cover SQL, Relational Tables, Indexing, Query Plans
+```
+
+### InterSystems IRIS System Administration Specialist
+[InterSystems IRIS System Administration Specialist Certification](https://www.intersystems.com/certifications/intersystems-iris-system-administration-specialist/)
+
+```text
+update intersystems-iris-system-administrator.md and ONLY consider this contents for the update. We are building an agent that carries out tasks around the InterSystems IRIS/Cache database specific to the skills outlined here: https://www.intersystems.com/certifications/intersystems-iris-system-administration-specialist/ again, please keep the structure intact and just update the content, this is heavy on system administration , System Diagnostics, Backup, High Availability, System Performance, System Security, Mirroring
+```
+
+Activate intersystems development professional and prompt like a boss!
+
+```text
+intersystems development professional
+```
+
+See you at InterSystems Ready 2026! [Summit 2026](https://summit.intersystems.com/event/a67d9da5-72d7-4db2-94c5-361c8b2506f4/summary)
+
+*\*iris-certified-agents are not actually certified in anything (in case you missed it above)*
+
+[Check the related application on InterSystems Open Exchange](https://openexchange.intersystems.com/portal/products/iris-certified-agents)
