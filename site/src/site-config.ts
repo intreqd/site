@@ -1,5 +1,5 @@
 export const siteConfig = {
-  title: "Integration Required | Healthcare Interoperability Engineer",
+  title: "Integration Required | Named Technical Interoperability Engineer",
   description: "Ron Sweeney — Named Technical Interoperability Engineer specializing in FHIR, DICOM, OHDSI/OMOP, and cloud-native healthcare data platforms on InterSystems IRIS and Google Cloud.",
   githubRepo: "sween/iris-certified-agents",
   // Astro validates these public env vars in astro.config.mjs.
