@@ -1,7 +1,7 @@
 export const siteConfig = {
-  title: "Your Site",
-  description: "Minimal Astro site built with Tailwind CSS and DaisyUI.",
-  githubRepo: "aholbreich/astro-tailwind-daisyui-starter",
+  title: "Integration Required | Healthcare Interoperability Engineer",
+  description: "Ron Sweeney — Named Technical Interoperability Engineer specializing in FHIR, DICOM, OHDSI/OMOP, and cloud-native healthcare data platforms on InterSystems IRIS and Google Cloud.",
+  githubRepo: "sween/iris-certified-agents",
   // Astro validates these public env vars in astro.config.mjs.
   site: import.meta.env.PUBLIC_SITE_URL,
   footerText: "Integration Required, LLC",
@@ -29,9 +29,5 @@ export const nav = [
   {
     text: "Blog",
     url: "/blog",
-  },
-  {
-    text: "DaisyUI",
-    url: "/daisyui",
   },
 ];

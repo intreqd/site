@@ -18,7 +18,7 @@ const { title = siteConfig.title, description, image } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="de">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
@@ -68,6 +68,26 @@ const { title = siteConfig.title, description, image } = Astro.props;
         gtag('js', new Date());
         gtag('config', 'G-48J9E1212D');
       });
+    </script>
+    <script type="application/ld+json" is:inline>
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Ron Sweeney",
+      "jobTitle": "Named Technical Interoperability Engineer",
+      "url": "https://www.integrationrequired.com",
+      "email": "hi@integrationrequired.com",
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Integration Required, LLC"
+      },
+      "knowsAbout": ["HL7 FHIR", "DICOM", "OHDSI", "InterSystems IRIS", "Google Cloud", "Kubernetes", "Healthcare Interoperability"],
+      "sameAs": [
+        "https://community.intersystems.com/user/sween",
+        "https://openprofile.dev/profile/ronsween",
+        "https://www.credly.com/users/sween"
+      ]
+    }
     </script>
   </head>
   <body>
