@@ -1,0 +1,443 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><link rel="icon" href="/favicon.ico" sizes="any"><link rel="sitemap" href="/sitemap-index.xml"><meta name="generator" content="Astro v6.2.1"><title>IKO Plus: Multi-Cluster, Cross-Regional ECP Database Access with Cilium Cluster Mesh on Google Cloud Platform</title><link rel="canonical" href="https://www.integrationrequired.com/blog/iko-plus-multi-cluster-cross-regional-ecp-database-access-cilium-cluster-mesh-google-cloud"><meta name="description" content="Virginia's got BIGDATA in IRIS and Iowa wants it. This distraction, &#34;Meshing IrisClusters&#34; with Cilium ClusterMesh, provides database access using the Enterprise Cache Protocol (ECP) from the Eastern Seaboard of the United States to the MidWest on Google Cloud Platform."><meta name="robots" content="index, follow"><meta property="og:title" content="IKO Plus: Multi-Cluster, Cross-Regional ECP Database Access with Cilium Cluster Mesh on Google Cloud Platform"><meta property="og:type" content="website"><meta property="og:image" content="https://www.integrationrequired.com/opengraph.jpg"><meta property="og:url" content="https://www.integrationrequired.com/blog/iko-plus-multi-cluster-cross-regional-ecp-database-access-cilium-cluster-mesh-google-cloud"><meta property="og:image:url" content="https://www.integrationrequired.com/opengraph.jpg"><meta property="og:image:alt" content="IKO Plus: Multi-Cluster, Cross-Regional ECP Database Access with Cilium Cluster Mesh on Google Cloud Platform"><meta name="twitter:card" content="summary_large_image"><!--
+      Fonts flow:
+      1. astro.config.mjs registers the font and exposes `--font-inter`.
+      2. <Font /> loads that configured family into the page head.
+      3. src/styles/fonts.css maps the variable into Tailwind's `--font-sans`,
+         so DaisyUI components inherit the same font automatically.
+    --><style>@font-face{font-family:Inter-8528d76eb78236d8;src:url("/_astro/fonts/a0cb597d8e3b05e1.woff2") format("woff2");font-display:swap;font-weight:100 900;font-style:normal;}@font-face{font-family:"Inter-8528d76eb78236d8 fallback: Arial";src:local("Arial");font-display:swap;font-weight:100 900;font-style:normal;size-adjust:107.1194%;ascent-override:90.4365%;descent-override:22.518%;line-gap-override:0%;}:root{--font-inter:Inter-8528d76eb78236d8,"Inter-8528d76eb78236d8 fallback: Arial",sans-serif;}</style><link rel="preload" href="/_astro/fonts/a0cb597d8e3b05e1.woff2" as="font" type="font/woff2" crossorigin><!--
+      View Transitions — enables animated, SPA-like page navigation.
+      Remove <ClientRouter /> to revert to standard full-page navigation.
+      Docs: https://docs.astro.build/en/guides/view-transitions/
+    --><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.j56hQv-j.js"></script><!--
+      Theme init — must run before Alpine boots and before first paint to
+      prevent a flash of the wrong theme. Reads localStorage, then falls back
+      to the OS color-scheme preference, then defaults to 'light'.
+      is:inline keeps this script un-bundled so it executes immediately.
+    --><script>
+      (function () {
+        const stored = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = stored || (prefersDark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script><!-- Google tag (gtag.js) --><script async src="https://www.googletagmanager.com/gtag/js?id=G-48J9E1212D"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      
+      document.addEventListener('astro:page-load', () => {
+        gtag('js', new Date());
+        gtag('config', 'G-48J9E1212D');
+      });
+    </script><script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Ron Sweeney",
+      "jobTitle": "Named Technical Interoperability Engineer",
+      "url": "https://www.integrationrequired.com",
+      "email": "hi@integrationrequired.com",
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Integration Required, LLC"
+      },
+      "knowsAbout": ["HL7 FHIR", "DICOM", "OHDSI", "InterSystems IRIS", "Google Cloud", "Kubernetes", "Healthcare Interoperability"],
+      "sameAs": [
+        "https://community.intersystems.com/user/sween",
+        "https://openprofile.dev/profile/ronsween",
+        "https://www.credly.com/users/sween"
+      ]
+    }
+    </script><link rel="stylesheet" href="/_astro/Layout.ChMMV8rZ.css"><script type="module" src="/_astro/page.CQhogMj7.js"></script></head> <body> <!-- Skip-to-content: first focusable element on the page.
+         Hidden until keyboard-focused so sighted users never see it.
+         Screen readers and keyboard users tab to it and jump past the nav. --> <a href="#main-content" class="skip-to-content">Skip to content</a> <div x-data="{ open: false }" x-on:astro:page-load.document="open = false" @keydown.escape.window="open = false" data-astro-cid-ri6uxye2> <header class="border-b border-base-300 bg-base-100" data-astro-cid-ri6uxye2> <div class="max-w-screen-xl mx-auto px-5">  <nav class="navbar min-h-20 px-0" data-astro-cid-ri6uxye2> <div class="navbar-start" data-astro-cid-ri6uxye2> <a href="/" class="btn btn-ghost px-0 hover:bg-transparent" data-astro-cid-ri6uxye2> <img src="/logo_black.png" alt="Integration Required | Named Technical Interoperability Engineer" class="h-[60px] w-auto object-contain transition-transform duration-300 hover:scale-105 logo-light" data-astro-cid-ri6uxye2> <img src="/logo_white.png" alt="Integration Required | Named Technical Interoperability Engineer" class="h-[60px] w-auto object-contain transition-transform duration-300 hover:scale-105 logo-dark" data-astro-cid-ri6uxye2> </a> </div>  <div class="navbar-end gap-2" data-astro-cid-ri6uxye2> <div class="hidden md:flex gap-2 items-center" data-astro-cid-ri6uxye2> <a class="btn btn-sm bg-[#003A9B] border-[#003A9B] text-white hover:bg-[#002b75] hover:border-[#002b75] flex items-center gap-2" href="https://www.indeed.com/employers/login" target="_blank" rel="noopener noreferrer" data-astro-cid-ri6uxye2> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" data-astro-cid-ri6uxye2><path d="M11.566 21.5633v-8.762c.2553.0231.5009.0346.758.0346 1.2225 0 2.3739-.3206 3.3506-.8928v9.6182c0 .8219-.1957 1.4287-.5757 1.8338-.378.4033-.8808.6049-1.491.6049-.6007 0-1.0766-.2016-1.468-.6183-.3781-.4032-.5739-1.01-.5739-1.8184zM11.589.5659c2.5447-.8929 5.4424-.8449 7.6186.987.405.3687.8673.8334 1.0515 1.3806.2207.6913-.7695-.073-.9057-.167-.71-.4532-1.4182-.8334-2.2127-1.0946C12.8614.3873 8.8122 2.709 6.2945 6.315c-1.0516 1.5939-1.7367 3.2721-2.299 5.1174-.0614.2017-.1094.4647-.2207.6413-.1113.2036-.048-.5453-.048-.5702.0845-.7623.2438-1.4997.4414-2.237C5.3292 5.3375 7.897 2.0655 11.5891.5658zm4.9281 7.0587c0 1.6686-1.353 3.0224-3.0205 3.0224-1.6677 0-3.0186-1.3538-3.0186-3.0224 0-1.6687 1.351-3.0224 3.0186-3.0224 1.6676 0 3.0205 1.3518 3.0205 3.0224Z" data-astro-cid-ri6uxye2></path></svg>
+Indeed
+</a> <a class="btn btn-sm btn-primary flex items-center gap-2" href="https://www.linkedin.com/in/ronsweeney/" target="_blank" rel="noopener noreferrer" data-astro-cid-ri6uxye2> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" data-astro-cid-ri6uxye2><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" data-astro-cid-ri6uxye2></path></svg>
+LinkedIn
+</a> <a class="btn btn-sm btn-outline flex items-center gap-2" href="https://github.com/sween/" target="_blank" rel="noopener noreferrer" data-astro-cid-ri6uxye2> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" data-astro-cid-ri6uxye2><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" data-astro-cid-ri6uxye2></path></svg>
+Github
+</a> <a class="btn btn-sm bg-[#f57c00] border-[#f57c00] text-white hover:bg-[#e65100] hover:border-[#e65100] flex items-center gap-2" href="https://www.brightstreetgroup.com" target="_blank" rel="noopener noreferrer" data-astro-cid-ri6uxye2> <img src="/bsg-favicon.png" alt="BSG Logo" class="w-4 h-4 rounded-sm brightness-0 invert" data-astro-cid-ri6uxye2>
+Brightstreet Group
+</a> </div> <button x-data="{
+    theme: document.documentElement.getAttribute('data-theme') || 'light',
+    toggle() {
+      this.theme = this.theme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', this.theme);
+      localStorage.setItem('theme', this.theme);
+    }
+  }" @click="toggle()" :aria-label="theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'" class="btn btn-ghost btn-square"> <!-- Sun — shown when dark mode is active --> <svg x-show="theme === 'dark'" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5" aria-hidden="true"> <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"></path> </svg> <!-- Moon — shown when light mode is active --> <svg x-show="theme === 'light'" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5" aria-hidden="true"> <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"></path> </svg> </button> <button @click="open = !open" class="btn btn-square btn-ghost md:hidden" aria-label="Open menu" data-astro-cid-ri6uxye2> <svg width="1em" height="1em" data-astro-cid-ri6uxye2="true" data-icon="nav">   <symbol id="ai:local:nav" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></symbol><use href="#ai:local:nav"></use>  </svg> </button> </div> </nav>  </div> </header> <!-- Dedicated mobile overlay layer; kept outside the header/container so it fully covers the viewport. --> <div x-cloak x-show="open" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 z-50 bg-primary md:hidden" data-astro-cid-ri6uxye2> <button @click="open = false" class="btn btn-square btn-ghost absolute top-6 right-6 text-primary-content hover:bg-primary-content/10" aria-label="Close menu" data-astro-cid-ri6uxye2>
+✕
+</button> <div class="flex min-h-full flex-col items-center justify-center gap-6 px-6 text-center" data-astro-cid-ri6uxye2> <a class="btn bg-[#003A9B] border-[#003A9B] text-white hover:bg-[#002b75] hover:border-[#002b75] w-full flex items-center gap-2" href="https://www.indeed.com/employers/login" target="_blank" rel="noopener noreferrer" @click="open = false" data-astro-cid-ri6uxye2> <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" data-astro-cid-ri6uxye2><path d="M11.566 21.5633v-8.762c.2553.0231.5009.0346.758.0346 1.2225 0 2.3739-.3206 3.3506-.8928v9.6182c0 .8219-.1957 1.4287-.5757 1.8338-.378.4033-.8808.6049-1.491.6049-.6007 0-1.0766-.2016-1.468-.6183-.3781-.4032-.5739-1.01-.5739-1.8184zM11.589.5659c2.5447-.8929 5.4424-.8449 7.6186.987.405.3687.8673.8334 1.0515 1.3806.2207.6913-.7695-.073-.9057-.167-.71-.4532-1.4182-.8334-2.2127-1.0946C12.8614.3873 8.8122 2.709 6.2945 6.315c-1.0516 1.5939-1.7367 3.2721-2.299 5.1174-.0614.2017-.1094.4647-.2207.6413-.1113.2036-.048-.5453-.048-.5702.0845-.7623.2438-1.4997.4414-2.237C5.3292 5.3375 7.897 2.0655 11.5891.5658zm4.9281 7.0587c0 1.6686-1.353 3.0224-3.0205 3.0224-1.6677 0-3.0186-1.3538-3.0186-3.0224 0-1.6687 1.351-3.0224 3.0186-3.0224 1.6676 0 3.0205 1.3518 3.0205 3.0224Z" data-astro-cid-ri6uxye2></path></svg>
+Indeed
+</a> <a class="btn btn-primary w-full flex items-center gap-2" href="https://www.linkedin.com/in/ronsweeney/" target="_blank" rel="noopener noreferrer" @click="open = false" data-astro-cid-ri6uxye2> <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" data-astro-cid-ri6uxye2><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" data-astro-cid-ri6uxye2></path></svg>
+LinkedIn
+</a> <a class="btn btn-outline w-full flex items-center gap-2 bg-base-100" href="https://github.com/sween/" target="_blank" rel="noopener noreferrer" @click="open = false" data-astro-cid-ri6uxye2> <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" data-astro-cid-ri6uxye2><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" data-astro-cid-ri6uxye2></path></svg>
+Github
+</a> <a class="btn bg-[#f57c00] border-[#f57c00] text-white hover:bg-[#e65100] hover:border-[#e65100] w-full flex items-center gap-2" href="https://www.brightstreetgroup.com" target="_blank" rel="noopener noreferrer" @click="open = false" data-astro-cid-ri6uxye2> <img src="/bsg-favicon.png" alt="BSG Logo" class="w-5 h-5 rounded-sm brightness-0 invert" data-astro-cid-ri6uxye2>
+Brightstreet Group
+</a> </div> </div> </div> <main id="main-content">  <div class="max-w-screen-xl mx-auto px-5 pt-6 sm:pt-8 lg:pt-12 pb-12 sm:pb-16 lg:pb-24">  <article class="max-w-3xl"> <header class="space-y-4"> <a href="/blog" class="link link-hover text-sm text-base-content/60">← All posts</a> <div class="mt-2 overflow-hidden rounded-box"> <img src="https://community.intersystems.com/sites/default/files/inline-images/image_334.png" alt="IKO Plus: Multi-Cluster, Cross-Regional ECP Database Access with Cilium Cluster Mesh on Google Cloud Platform" loading="lazy" decoding="async" width="1200" height="600" class="w-full object-cover"> </div> <div class="space-y-2"> <h1 class="text-2xl font-bold tracking-tight sm:text-3xl">IKO Plus: Multi-Cluster, Cross-Regional ECP Database Access with Cilium Cluster Mesh on Google Cloud Platform</h1> <div class="flex flex-wrap items-center gap-3"> <p class="text-sm text-base-content/60"> <time datetime="2026-06-11T00:00:00.000Z"> June 10, 2026 </time>  </p> <div class="flex flex-wrap gap-1"> <span class="badge badge-primary badge-sm badge-outline">iko</span><span class="badge badge-primary badge-sm badge-outline">InterSystems IRIS</span><span class="badge badge-primary badge-sm badge-outline">Kubernetes</span><span class="badge badge-primary badge-sm badge-outline">GCP</span><span class="badge badge-primary badge-sm badge-outline">Cilium</span><span class="badge badge-primary badge-sm badge-outline">ECP</span> </div> <a href="https://community.intersystems.com/post/iko-plus-multi-cluster-cross-regional-ecp-database-access-cilium-cluster-mesh-google-cloud" target="_blank" rel="noopener noreferrer" class="badge badge-secondary badge-sm badge-outline link-hover flex items-center gap-1">
+Community
+<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> </a> </div> </div> </header> <!--
+      daisyUI recommends using Tailwind utilities for layout and the Typography
+      plugin for rich text. `prose` gives Markdown content predictable defaults
+      without maintaining a custom article stylesheet in the starter.
+    --> <div class="prose prose-neutral mt-10 max-w-none prose-a:link prose-img:rounded-box"> <h2 id="virginias-got-bigdata-in-iris-and-iowa-wants-it">Virginia’s got BIGDATA in IRIS and Iowa wants it</h2>
+<p>This distraction, “Meshing IrisClusters” with Cilium ClusterMesh, provides database access using the Enterprise Cache Protocol (ECP) from the Eastern Seaboard of the United States to the MidWest on Google Cloud Platform.  Ridiculously powerful setup for national/multi-national setups and though the use cases are a plenty, this particular one is a simple example on how to send ETL/ELT the unemployment office.</p>
+<p><img src="https://community.intersystems.com/sites/default/files/inline-images/image_332.png" alt="Architecture Diagram"/></p>
+<h3 id="toybox-shout-outs">Toybox Shout Outs</h3>
+<p>There is some grown up stuff going on here, so lets call them out.</p>
+<p><a href="https://cloud.google.com/"><strong>Google Cloud Platform</strong></a> - Most Powerful Software Defined Network on the Planet</p>
+<p><a href="https://documentation.ubuntu.com/canonical-kubernetes/latest/snap/howto/install/snap/"><strong>Kubernetes</strong></a>- Using Canonical k8s, its a <code>snap</code>.</p>
+<p><a href="https://cilium.io/"><strong>Cilium</strong></a>- Calling this “just” a CNI should be a crime</p>
+<p><a href="https://docs.intersystems.com/components/csp/docbook/DocBook.UI.Page.cls?KEY=PAGE_iko"><strong>InterSystems Kubernetes Operator</strong></a> - Complex IrisCluster topologies done right.</p>
+<p><a href="https://docs.intersystems.com/iris20261/csp/docbook/Doc.View.cls?KEY=GSCALE_ecp_oview#GSCALE_ecp_oview_features"><strong>InterSystems Enterprise Cache Protocol (ECP)</strong></a> - Real-time data across a network with minimal network overhead.</p>
+<h3 id="implementation">Implementation</h3>
+<p>Procedurally, we will implement in the following in order.</p>
+<h4 id="google-cloud-network">Google Cloud Network</h4>
+<p>Here we need to create a custom vpc, a pair of non-overlapping subnets, and a firewall rule to allow traffic between them.</p>
+<p>A Custom VPC</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">gcloud</span><span style="color:#9ECBFF"> compute</span><span style="color:#9ECBFF"> networks</span><span style="color:#9ECBFF"> create</span><span style="color:#9ECBFF"> ikoplus-mesh-vpc</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --subnet-mode=custom</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --bgp-routing-mode=global</span></span></code></pre>
+<p>A Pair of Subnets, <strong>Regional</strong>!</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># Subnet for Iowa</span></span>
+<span class="line"><span style="color:#B392F0">gcloud</span><span style="color:#9ECBFF"> compute</span><span style="color:#9ECBFF"> networks</span><span style="color:#9ECBFF"> subnets</span><span style="color:#9ECBFF"> create</span><span style="color:#9ECBFF"> ikoplus-iowa-subnet</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --network=ikoplus-mesh-vpc</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --region=us-central1</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --range=10.0.1.0/24</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Subnet for Virginia</span></span>
+<span class="line"><span style="color:#B392F0">gcloud</span><span style="color:#9ECBFF"> compute</span><span style="color:#9ECBFF"> networks</span><span style="color:#9ECBFF"> subnets</span><span style="color:#9ECBFF"> create</span><span style="color:#9ECBFF"> ikoplus-virginia-subnet</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --network=ikoplus-mesh-vpc</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --region=us-east4</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --range=10.0.2.0/24</span></span></code></pre>
+<p>Firewall Rule Enables Traffic between the Two</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">gcloud</span><span style="color:#9ECBFF"> compute</span><span style="color:#9ECBFF"> firewall-rules</span><span style="color:#9ECBFF"> create</span><span style="color:#9ECBFF"> ikoplus-allow-internal-mesh</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --network=ikoplus-mesh-vpc</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --allow=tcp,udp,icmp,esp,ah</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --source-ranges=10.0.1.0/24,10.0.2.0/24</span></span></code></pre>
+<p><img src="https://community.intersystems.com/sites/default/files/inline-images/Clipboard_2026-06-11-07-44-42.png" alt="Subnets Created"/>
+<img src="https://community.intersystems.com/sites/default/files/inline-images/Clipboard_2026-06-11-07-46-26.png" alt="Firewall Rule Created"/></p>
+<h4 id="google-cloud-compute">Google Cloud Compute</h4>
+<p>We need some nodes, going with two single node clusters, so lets back two and launch them into the respective regional subnets.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># Create the Iowa Node</span></span>
+<span class="line"><span style="color:#B392F0">gcloud</span><span style="color:#9ECBFF"> compute</span><span style="color:#9ECBFF"> instances</span><span style="color:#9ECBFF"> create</span><span style="color:#9ECBFF"> ikoecpmesh-iowa-node</span><span style="color:#79B8FF"> --zone=us-central1-a</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --machine-type=c2-standard-4</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --image=ubuntu-2404-noble-amd64-v20250530</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --image-project=ubuntu-os-cloud</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --boot-disk-size=100GB</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --network=ikoplus-mesh-vpc</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --subnet=ikoplus-iowa-subnet</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Create the Virginia Node</span></span>
+<span class="line"><span style="color:#B392F0">gcloud</span><span style="color:#9ECBFF"> compute</span><span style="color:#9ECBFF"> instances</span><span style="color:#9ECBFF"> create</span><span style="color:#9ECBFF"> ikoecpmesh-virginia-node</span><span style="color:#79B8FF"> --zone=us-east4-a</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --machine-type=c2-standard-4</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --image=ubuntu-2404-noble-amd64-v20250530</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --image-project=ubuntu-os-cloud</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --boot-disk-size=100GB</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --network=ikoplus-mesh-vpc</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --subnet=ikoplus-virginia-subnet</span></span></code></pre>
+<p><img src="https://community.intersystems.com/sites/default/files/inline-images/Clipboard_2026-06-11-07-49-03.png" alt="Compute Instances"/></p>
+<p>Lets confirm connectiity between those boxen before we move on…
+<img src="https://community.intersystems.com/sites/default/files/inline-images/Clipboard_2026-06-11-08-05-08.png" alt="Ping Test"/></p>
+<h4 id="kubernetes">Kubernetes</h4>
+<p>Onward here with Kubernetes install, for this we want to deploy it without a CNI and add Cilium later, even though Canonical k8s ships with it (as most do now).</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> snap</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> k8s</span><span style="color:#79B8FF"> --classic</span></span></code></pre>
+<p>iowa.yaml</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">cluster-config</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  network</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    enabled</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">false</span></span>
+<span class="line"><span style="color:#85E89D">  gateway</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">     enabled</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">false</span></span>
+<span class="line"><span style="color:#85E89D">  ingress</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">     enabled</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">false</span></span>
+<span class="line"><span style="color:#85E89D"> pod-cidr</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;10.10.0.0/16&quot;</span></span>
+<span class="line"><span style="color:#85E89D"> service-cidr</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;10.152.183.0/24&quot;</span></span></code></pre>
+<p>virginia.yaml</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">cluster-config</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  network</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    enabled</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">false</span></span>
+<span class="line"><span style="color:#85E89D">  gateway</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    enabled</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">false</span></span>
+<span class="line"><span style="color:#85E89D">  ingress</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    enabled</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">false</span></span>
+<span class="line"><span style="color:#85E89D"> pod-cidr</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;10.11.0.0/16&quot;</span></span>
+<span class="line"><span style="color:#85E89D"> service-cidr</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;10.152.184.0/24&quot;</span></span></code></pre>
+<p>The boostraps…</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> k8s</span><span style="color:#9ECBFF"> bootstrap</span><span style="color:#79B8FF"> --file</span><span style="color:#9ECBFF"> iowa.yaml</span></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> k8s</span><span style="color:#9ECBFF"> bootstrap</span><span style="color:#79B8FF"> --file</span><span style="color:#9ECBFF"> virginia.yaml</span></span></code></pre>
+<p><img src="https://community.intersystems.com/sites/default/files/inline-images/Clipboard_2026-06-11-08-03-22.png" alt="Bootstrap Output"/></p>
+<p>Two clusters, zero CNI’s.</p>
+<h4 id="cilium">Cilium</h4>
+<p>Cilium is our CNI, and we want to enable the ClusterMesh capability right out of the gate, so for this, its a good time to get our kubeconfigs in order and merged into a single one so we can use context variables.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">kubectl</span><span style="color:#9ECBFF"> config</span><span style="color:#9ECBFF"> get-contexts</span></span>
+<span class="line"><span style="color:#B392F0">CURRENT</span><span style="color:#9ECBFF">   NAME</span><span style="color:#9ECBFF">               CLUSTER</span><span style="color:#9ECBFF">   AUTHINFO</span><span style="color:#9ECBFF">   NAMESPACE</span></span>
+<span class="line"><span style="color:#F97583">*</span><span style="color:#E1E4E8">         iowa-cluster       k8s       k8s-user   </span></span>
+<span class="line"><span style="color:#B392F0">          virginia-cluster</span><span style="color:#9ECBFF">   k8s</span><span style="color:#9ECBFF">       k8s-user</span><span style="color:#E1E4E8"> </span></span></code></pre>
+<p>We will be deploying Cilium via helm, so here is the respective values files for the install on each cluster.</p>
+<blockquote>
+<p>❗Important cilium clustername and id need to be unique across the mesh!</p>
+</blockquote>
+<p>cilium-iowa.yaml</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">cluster</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">iowa-cluster</span></span>
+<span class="line"><span style="color:#85E89D">  id</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">1</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Tell Cilium to use the Pod CIDR assigned to the Kubernetes Node</span></span>
+<span class="line"><span style="color:#85E89D">ipam</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  mode</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">kubernetes</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#85E89D">clustermesh</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  useAPIServer</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span>
+<span class="line"><span style="color:#85E89D">  apiserver</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    service</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">      type</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">NodePort</span></span></code></pre>
+<p>cilium-virginia.yaml</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">cluster</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">virginia-cluster</span></span>
+<span class="line"><span style="color:#85E89D">  id</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">2</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Tell Cilium to use the Pod CIDR assigned to the Kubernetes Node</span></span>
+<span class="line"><span style="color:#85E89D">ipam</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  mode</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">kubernetes</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#85E89D">clustermesh</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  useAPIServer</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span>
+<span class="line"><span style="color:#85E89D">  apiserver</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    service</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">      type</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">NodePort</span></span></code></pre>
+<p><img src="https://community.intersystems.com/sites/default/files/inline-images/Clipboard_2026-06-11-08-32-28.png" alt="Helm Repos"/></p>
+<p>Now install the chart on each cluster, referencing the respective cilium values.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">helm</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> cilium</span><span style="color:#9ECBFF"> cilium/cilium</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  --version</span><span style="color:#79B8FF"> 1.16.0</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  -n</span><span style="color:#9ECBFF"> kube-system</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  -f</span><span style="color:#9ECBFF"> cilium-iowa.yaml</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">helm</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> cilium</span><span style="color:#9ECBFF"> cilium/cilium</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  --version</span><span style="color:#79B8FF"> 1.16.0</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  -n</span><span style="color:#9ECBFF"> kube-system</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  -f</span><span style="color:#9ECBFF"> cilium-virginia.yaml</span></span></code></pre>
+<p><img src="https://community.intersystems.com/sites/default/files/inline-images/Clipboard_2026-06-11-08-43-55.png" alt="Helm Install"/></p>
+<p>Now, lets check out our work…
+✅ Pods look good</p>
+<p><img src="https://community.intersystems.com/sites/default/files/inline-images/Clipboard_2026-06-11-09-20-47.png" alt="Pods Output"/></p>
+<p>✅ Cilium looking good too!</p>
+<p><img src="https://community.intersystems.com/sites/default/files/inline-images/Clipboard_2026-06-11-09-24-37.png" alt="Cilium Status"/></p>
+<h3 id="connect-clusters">⭐Connect Clusters!</h3>
+<p>This is the slight of hand Cilium provides to make a service span across clusters, and its a single command.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">cilium</span><span style="color:#9ECBFF"> clustermesh</span><span style="color:#9ECBFF"> connect</span><span style="color:#79B8FF"> --context</span><span style="color:#9ECBFF"> iowa-cluster</span><span style="color:#79B8FF"> --destination-context</span><span style="color:#9ECBFF"> virginia-cluster</span><span style="color:#79B8FF"> --allow-mismatching-ca</span></span></code></pre>
+<p><img src="https://community.intersystems.com/sites/default/files/inline-images/Clipboard_2026-06-11-09-48-23.png" alt="Connect mesh"/></p>
+<p>✅ Connected?
+<img src="https://community.intersystems.com/sites/default/files/inline-images/Clipboard_2026-06-11-14-09-17.png" alt="Connected mesh"/></p>
+<p><em>Totally Rad!</em></p>
+<p>Here is the snapshot of CIDR’s now that we have completed the groundwork to deploy the workload.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th><strong>Network Layer</strong></th><th><strong>Cluster 1</strong></th><th><strong>Cluster 2</strong></th><th><strong>Managed By</strong></th></tr></thead><tbody><tr><td><strong>Node / VM IP</strong></td><td><code>10.0.1.x</code></td><td><code>10.0.2.x</code></td><td>GCP VPC Subnets</td></tr><tr><td><strong>Pod CIDR</strong></td><td><code>10.10.0.0/16</code></td><td><code>10.11.0.0/16</code></td><td>K8s Installer (<code>bootstrap.yaml</code>)</td></tr><tr><td><strong>Service CIDR</strong></td><td><code>10.152.183.0/24</code></td><td><code>10.152.184.0/24</code></td><td>K8s Installer (<code>bootstrap.yaml</code>)</td></tr></tbody></table>
+<h3 id="workload">Workload</h3>
+<p>So we are finally at the InterSystems IRIS Implementation, we need the operator and a pair of IrisClusters.</p>
+<h4 id="iko">IKO</h4>
+<p>Straight forward vanilla deploy of the Operator</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">helm</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> iko</span><span style="color:#9ECBFF"> .</span><span style="color:#79B8FF"> -f</span><span style="color:#9ECBFF"> values.yaml</span></span></code></pre>
+<p><img src="https://community.intersystems.com/sites/default/files/inline-images/Clipboard_2026-06-11-11-27-28.png" alt="Helm iko"/></p>
+<h4 id="irisclusters">IrisClusters</h4>
+<p>Lets put a Simple IrisCluster in each region/cluster.</p>
+<p>iowa</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#6A737D"># full IKO documentation: </span></span>
+<span class="line"><span style="color:#6A737D"># https://docs.intersystems.com/irislatest/csp/docbook/Doc.View.cls?KEY=PAGE_deployment_iko </span></span>
+<span class="line"><span style="color:#85E89D">apiVersion</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">intersystems.com/v1beta1</span><span style="color:#E1E4E8"> </span></span>
+<span class="line"><span style="color:#85E89D">kind</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">IrisCluster</span><span style="color:#E1E4E8"> </span></span>
+<span class="line"><span style="color:#85E89D">metadata</span><span style="color:#E1E4E8">: </span></span>
+<span class="line"><span style="color:#85E89D">  name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">iriscluster-iowa</span><span style="color:#E1E4E8"> </span></span>
+<span class="line"><span style="color:#85E89D">spec</span><span style="color:#E1E4E8">: </span></span>
+<span class="line"><span style="color:#85E89D">  topology</span><span style="color:#E1E4E8">: </span></span>
+<span class="line"><span style="color:#85E89D">    data</span><span style="color:#E1E4E8">: </span></span>
+<span class="line"><span style="color:#85E89D">      image</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">containers.intersystems.com/intersystems/irishealth:2026.1</span><span style="color:#E1E4E8"> </span></span>
+<span class="line"><span style="color:#85E89D">      webgateway</span><span style="color:#E1E4E8">: </span></span>
+<span class="line"><span style="color:#85E89D">        image</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">containers.intersystems.com/intersystems/webgateway-lockeddown:2026.1</span><span style="color:#E1E4E8"> </span></span>
+<span class="line"><span style="color:#85E89D">        type</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">apache-lockeddown</span><span style="color:#E1E4E8"> </span></span>
+<span class="line"><span style="color:#85E89D">        alternativeServers</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">LoadBalancing</span><span style="color:#E1E4E8"> </span></span>
+<span class="line"><span style="color:#85E89D">        applicationPaths</span><span style="color:#E1E4E8">: </span></span>
+<span class="line"><span style="color:#E1E4E8">          - </span><span style="color:#9ECBFF">/csp/sys</span><span style="color:#E1E4E8"> </span></span>
+<span class="line"><span style="color:#85E89D">        loginSecret</span><span style="color:#E1E4E8">: </span></span>
+<span class="line"><span style="color:#85E89D">          name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">webgateway-login</span><span style="color:#E1E4E8"> </span></span>
+<span class="line"><span style="color:#85E89D">  licenseKeySecret</span><span style="color:#E1E4E8">: </span></span>
+<span class="line"><span style="color:#85E89D">    name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">iris-license-secret</span><span style="color:#E1E4E8"> </span></span>
+<span class="line"><span style="color:#85E89D">  imagePullSecrets</span><span style="color:#E1E4E8">: </span></span>
+<span class="line"><span style="color:#E1E4E8">    - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">containers-pull-secret</span><span style="color:#E1E4E8"> </span></span>
+<span class="line"><span style="color:#85E89D">  serviceTemplate</span><span style="color:#E1E4E8">: </span></span>
+<span class="line"><span style="color:#85E89D">    spec</span><span style="color:#E1E4E8">: </span></span>
+<span class="line"><span style="color:#85E89D">      type</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">LoadBalancer</span><span style="color:#E1E4E8"> </span></span>
+<span class="line"><span style="color:#85E89D">      externalTrafficPolicy</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">Local</span><span style="color:#E1E4E8"> </span></span></code></pre>
+<p>virginia</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#6A737D"># full IKO documentation:</span></span>
+<span class="line"><span style="color:#6A737D"># https://docs.intersystems.com/irislatest/csp/docbook/Doc.View.cls?KEY=PAGE_deployment_iko</span></span>
+<span class="line"><span style="color:#85E89D">apiVersion</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">intersystems.com/v1beta1</span></span>
+<span class="line"><span style="color:#85E89D">kind</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">IrisCluster</span></span>
+<span class="line"><span style="color:#85E89D">metadata</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">iriscluster-virginia</span></span>
+<span class="line"><span style="color:#85E89D">spec</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  topology</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    data</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">      image</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">containers.intersystems.com/intersystems/irishealth:2026.1</span></span>
+<span class="line"><span style="color:#85E89D">      webgateway</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">        image</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">containers.intersystems.com/intersystems/webgateway-lockeddown:2026.1</span></span>
+<span class="line"><span style="color:#85E89D">        type</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">apache-lockeddown</span></span>
+<span class="line"><span style="color:#85E89D">        alternativeServers</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">LoadBalancing</span></span>
+<span class="line"><span style="color:#85E89D">        applicationPaths</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">          - </span><span style="color:#9ECBFF">/csp/sys</span></span>
+<span class="line"><span style="color:#85E89D">        loginSecret</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">          name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">webgateway-login</span></span>
+<span class="line"><span style="color:#85E89D">      irisDatabases</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">      - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">BIGDATA</span></span>
+<span class="line"><span style="color:#85E89D">        ecp</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span>
+<span class="line"><span style="color:#85E89D">        directory</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">/irissys/data/IRIS/mgr/bigdata</span></span>
+<span class="line"><span style="color:#85E89D">      irisNamespaces</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">      - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">BIGDATA</span></span>
+<span class="line"><span style="color:#85E89D">        routines</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">BIGDATA</span></span>
+<span class="line"><span style="color:#85E89D">        globals</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">BIGDATA</span></span>
+<span class="line"><span style="color:#85E89D">        interop</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">false</span></span>
+<span class="line"><span style="color:#85E89D">  licenseKeySecret</span><span style="color:#E1E4E8">: </span></span>
+<span class="line"><span style="color:#85E89D">    name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">iris-license-secret</span></span>
+<span class="line"><span style="color:#85E89D">  imagePullSecrets</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">    - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">containers-pull-secret</span></span>
+<span class="line"><span style="color:#85E89D">  serviceTemplate</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    spec</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">      type</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">LoadBalancer</span></span>
+<span class="line"><span style="color:#85E89D">      externalTrafficPolicy</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">Local</span></span></code></pre>
+<p>These are simple, but the thing that is different Id like to call out is that Virginia is creating the BIGDATA database and namespace, where as Iowas is not.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">      irisDatabases</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">      - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">BIGDATA</span></span>
+<span class="line"><span style="color:#85E89D">        ecp</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span>
+<span class="line"><span style="color:#85E89D">        directory</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">/irissys/data/IRIS/mgr/bigdata</span></span>
+<span class="line"><span style="color:#85E89D">      irisNamespaces</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">      - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">BIGDATA</span></span>
+<span class="line"><span style="color:#85E89D">        routines</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">BIGDATA</span></span>
+<span class="line"><span style="color:#85E89D">        globals</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">BIGDATA</span></span>
+<span class="line"><span style="color:#85E89D">        interop</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">false</span></span></code></pre>
+<p>We now have an IrisCluster running in each of the regions/clusters.</p>
+<p><img src="https://community.intersystems.com/sites/default/files/inline-images/Clipboard_2026-06-11-12-32-41.png" alt="IrisCluster output"/></p>
+<h4 id="-cilium-global-service">⭐ Cilium Global Service</h4>
+<blockquote>
+<p>This is the magic! The thing to understand here, you need to create the same service, in both clusters, with the same name, and decorate it with the magic cilium annotations. Additionally, these need to be ClusterIP’s and target their own instance.</p>
+</blockquote>
+<p>iowa</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">apiVersion</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">v1</span></span>
+<span class="line"><span style="color:#85E89D">kind</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">Service</span></span>
+<span class="line"><span style="color:#85E89D">metadata</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">iriscluster-ecp-service</span></span>
+<span class="line"><span style="color:#85E89D">  annotations</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    service.cilium.io/global</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;true&quot;</span></span>
+<span class="line"><span style="color:#85E89D">    service.cilium.io/shared</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;true&quot;</span></span>
+<span class="line"><span style="color:#85E89D">    service.cilium.io/affinity</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;remote&quot;</span></span>
+<span class="line"><span style="color:#85E89D">spec</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  type</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">ClusterIP</span><span style="color:#E1E4E8"> </span></span>
+<span class="line"><span style="color:#85E89D">  selector</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    app.kubernetes.io/instance</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">iriscluster-iowa</span><span style="color:#E1E4E8"> </span></span>
+<span class="line"><span style="color:#85E89D">  ports</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">    - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">superserver</span></span>
+<span class="line"><span style="color:#85E89D">      port</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">1972</span></span>
+<span class="line"><span style="color:#85E89D">      targetPort</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">1972</span></span></code></pre>
+<p>virginia</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">apiVersion</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">v1</span></span>
+<span class="line"><span style="color:#85E89D">kind</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">Service</span></span>
+<span class="line"><span style="color:#85E89D">metadata</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">iriscluster-ecp-service</span></span>
+<span class="line"><span style="color:#85E89D">  annotations</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    service.cilium.io/global</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;true&quot;</span></span>
+<span class="line"><span style="color:#85E89D">    service.cilium.io/shared</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;true&quot;</span></span>
+<span class="line"><span style="color:#85E89D">    service.cilium.io/affinity</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;remote&quot;</span></span>
+<span class="line"><span style="color:#85E89D">spec</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  type</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">ClusterIP</span><span style="color:#E1E4E8"> </span></span>
+<span class="line"><span style="color:#85E89D">  selector</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    app.kubernetes.io/instance</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">iriscluster-virginia</span></span>
+<span class="line"><span style="color:#85E89D">  ports</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">    - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">superserver</span></span>
+<span class="line"><span style="color:#85E89D">      port</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">1972</span></span>
+<span class="line"><span style="color:#85E89D">      targetPort</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">1972</span></span></code></pre>
+<p>Apply those services into their respective clusters and lets start talking across the cluster mesh.</p>
+<p><img src="https://community.intersystems.com/sites/default/files/inline-images/Clipboard_2026-06-11-12-44-30.png" alt="Global Service"/></p>
+<p>“iriscluster-ecp-service” is available for communication in each cluster now and can communicate over the mesh.</p>
+<h3 id="ecp">ECP</h3>
+<p>Now, for ECP, you do have to ensure that ECP is enabled in services on each IrisCluster.
+<img src="https://community.intersystems.com/sites/default/files/inline-images/Clipboard_2026-06-11-13-10-07.png" alt="ECP Config"/></p>
+<p>For Virginia, there is not much to do after that, but for IOWA, we are going to establish the remote database connectivity over ECP with a cpf merge file that mounts database BIGDATA across regions, and clusters, then creates a remote database in IOWA and slaps a namespace on it.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="ini"><code><span class="line"><span style="color:#B392F0">[ECPServers]</span></span>
+<span class="line"><span style="color:#F97583">VIRGINIADATASERVER</span><span style="color:#E1E4E8">=iriscluster-ecp-service.default.svc.cluster.local,1972</span></span>
+<span class="line"><span style="color:#B392F0">[Actions]</span></span>
+<span class="line"><span style="color:#E1E4E8">CreateDatabase:</span><span style="color:#F97583">Name</span><span style="color:#E1E4E8">=BIGDATAIOWA,</span><span style="color:#F97583">Directory</span><span style="color:#E1E4E8">=/irissys/data/IRIS/mgr/bigdata,</span><span style="color:#F97583">Server</span><span style="color:#E1E4E8">=VIRGINIADATASERVER,</span><span style="color:#F97583">LogicalOnly</span><span style="color:#E1E4E8">=1</span></span>
+<span class="line"><span style="color:#E1E4E8">CreateNamespace:</span><span style="color:#F97583">Name</span><span style="color:#E1E4E8">=BIGNS,</span><span style="color:#F97583">Globals</span><span style="color:#E1E4E8">=BIGDATAIOWA,</span><span style="color:#F97583">Routines</span><span style="color:#E1E4E8">=BIGDATAIOWA,</span><span style="color:#F97583">SysGlobals</span><span style="color:#E1E4E8">=IRISSYS,</span><span style="color:#F97583">SysRoutines</span><span style="color:#E1E4E8">=IRISSYS</span></span></code></pre>
+<p>Running the merge in IOWA…</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">irisowner@iriscluster-iowa-data-0:~$</span><span style="color:#9ECBFF"> iris</span><span style="color:#9ECBFF"> merge</span><span style="color:#9ECBFF"> IRIS</span><span style="color:#9ECBFF"> gar.cpf</span><span style="color:#E1E4E8"> </span></span>
+<span class="line"><span style="color:#B392F0">IRIS</span><span style="color:#9ECBFF"> Merge</span><span style="color:#9ECBFF"> of</span><span style="color:#9ECBFF"> /home/irisowner/gar.cpf</span><span style="color:#9ECBFF"> into</span><span style="color:#9ECBFF"> /irissys/data/IRIS/iris.cpf</span></span>
+<span class="line"><span style="color:#B392F0">IRIS</span><span style="color:#9ECBFF"> Merge</span><span style="color:#9ECBFF"> completed</span><span style="color:#9ECBFF"> successfully</span></span></code></pre>
+<p><img src="https://community.intersystems.com/sites/default/files/inline-images/Clipboard_2026-06-11-15-21-44.png" alt="Merge output"/></p>
+<h3 id="attestation">Attestation</h3>
+<p>Lets see if we can load up some data in the BIGDATA database and BIGDATA namespace in Virginia using a simple routine.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="plaintext"><code><span class="line"><span>ROUTINE ZECPTEST</span></span>
+<span class="line"><span>ZECPTEST ; Test routine for ECP Job execution</span></span>
+<span class="line"><span>    ; This routine logs the time it was executed</span></span>
+<span class="line"><span>    SET ^ZECPLog($HOROLOG) = &quot;Executed at &quot; _ $ZDATETIME($HOROLOG,3) _ &quot; &quot; _ $SYSTEM.INetInfo.LocalHostName()</span></span>
+<span class="line"><span>    QUIT</span></span></code></pre>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="plaintext"><code><span class="line"><span>Node: iriscluster-virginia-data-0, Instance: IRIS</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>USER&gt;zn &quot;BIGDATA&quot;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>BIGDATA&gt;Do ^ZECPTEST</span></span>
+<span class="line"><span>BIGDATA&gt;ZWRITE ^ZECPLog</span></span>
+<span class="line"><span>^ZECPLog(&quot;67732,70690&quot;)=&quot;Executed at 2026-06-11 19:38:10 iriscluster-virginia-data-0&quot;</span></span></code></pre>
+<p>Not earth shattering, I know, but now, lets fly back to IOWA and see if we can execute and read the same data in namespace BIGNS and the remote database in virginia BIGDATA.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">irisowner@iriscluster-iowa-data-0:~$</span><span style="color:#9ECBFF"> irissession</span><span style="color:#9ECBFF"> IRIS</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">Node:</span><span style="color:#9ECBFF"> iriscluster-iowa-data-0,</span><span style="color:#9ECBFF"> Instance:</span><span style="color:#9ECBFF"> IRIS</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">USER</span><span style="color:#E1E4E8">&gt;</span><span style="color:#9ECBFF">zn</span><span style="color:#9ECBFF"> &quot;BIGNS&quot;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">BIGNS</span><span style="color:#E1E4E8">&gt;</span><span style="color:#9ECBFF">JOB</span><span style="color:#9ECBFF"> ^ZECPTEST</span><span style="color:#F97583">|</span><span style="color:#B392F0">&quot;^VIRGINIADATASERVER^/irissys/data/IRIS/mgr/bigdata&quot;</span><span style="color:#F97583">|</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">BIGNS</span><span style="color:#E1E4E8">&gt;</span><span style="color:#9ECBFF">ZWRITE</span><span style="color:#9ECBFF"> ^ZECPLog</span></span>
+<span class="line"><span style="color:#B392F0">^ZECPLog(</span><span style="color:#B392F0">&quot;67732,70690&quot;</span><span style="color:#E1E4E8">)=</span><span style="color:#9ECBFF">&quot;Executed at 2026-06-11 19:38:10 iriscluster-virginia-data-0&quot;</span></span>
+<span class="line"><span style="color:#B392F0">^ZECPLog(</span><span style="color:#B392F0">&quot;67732,70887&quot;</span><span style="color:#E1E4E8">)=</span><span style="color:#9ECBFF">&quot;Executed at 2026-06-11 19:41:27 iriscluster-virginia-data-0&quot;</span><span style="color:#F97583"> &lt;</span><span style="color:#E1E4E8">---------- woooooo</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">BIGNS</span><span style="color:#E1E4E8">&gt;</span></span></code></pre>
+<p>🎉</p>
+<h3 id="foot-guns">Foot Guns</h3>
+<p>Stuff I had issues with for full transparency.</p>
+<ul>
+<li>No idea why, but I was missing core-dns in my setup and had to add it (<code>sudo k8s enable dns</code>) on both nodes.  I think maybe the “network” stuff in the canonical k8s setup I took a little too lightly and assumed “just cilium.”</li>
+<li>The certificates for cilium should match, though you can work around it to just accept the mismatch.  For this I dumped the cilium-ca secret from iowa and loaded in virginia and re-established the mesh.</li>
+<li>Another network thing was that I had to patch the nodes with the podCidrs, at least I think so, once I did that cilium deployment rolled out a little more smoothly.</li>
+<li>Was missing a default storage class, added local-path-provisioner from Rancher and made it the default.</li>
+<li>The design for this use case requires that the virginia iriscluster-ecp-service NEVER go the other direction, apparently you can do this by delcaring an affinity, but I kept wrecking my setup trying to get it to work.</li>
+</ul>
+<blockquote>
+<p>Thank you @Eduard Lebedyuk and @Nrusingha Charan Sahoo from ISC for the help the bots and clankers could not!</p>
+</blockquote> </div> </article>  </div>  </main> <footer class="mt-5 mb-20"> <p class="text-center text-sm text-base-content/60"> <a class="btn btn-outline btn-xs border-base-300 text-base-content/60 hover:text-primary hover:border-primary px-3 transition-all duration-300" href="/imprint">
+Legal, Tax, Insurance
+</a>  <span class="block sm:inline"> © 2015-2026 Integration Required, LLC</span> </p>  </footer> </body></html>
