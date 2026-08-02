@@ -1,0 +1,176 @@
+---
+const traits = [
+  {
+    title: "HL7 FHIR®",
+    logo: "/fhir.png",
+    text: "HL7 FHIR implementation and healthcare data standards orchestration."
+  },
+  {
+    title: "OHDSI / OMOP",
+    logo: "/svg/oHDSI.svg",
+    text: "OHDSI/OMOP common data model mapping and observational health analytics."
+  },
+  {
+    title: "Medical Imaging",
+    logo: "/dicom.gif",
+    text: "Medical Imaging integration, networking, and study appropriation at scale."
+  },
+  {
+    title: "Funding & Growth",
+    logo: "/funding.png",
+    text: "Secure your funding with rapid deployment of your transformative ideas."
+  }
+];
+---
+
+<div id="interop-scroller" class="relative rounded-box border border-base-300 bg-base-200/50 backdrop-blur-sm p-4 sm:p-5 shadow-sm transition-all duration-300 hover:shadow-md hover:border-base-300/80 overflow-hidden group">
+  <!-- Top bar with label and indicator dots -->
+  <div class="flex items-center justify-between gap-3 pb-3 mb-3 border-b border-base-200">
+    <div class="flex items-center gap-2">
+      <span class="relative flex h-2 w-2">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+      </span>
+      <span id="scroller-category-title" class="text-xs uppercase font-bold tracking-wider text-base-content/60 transition-opacity duration-300">
+        {traits[0].title}
+      </span>
+    </div>
+
+    <!-- Interactive Navigation Dots -->
+    <div class="flex items-center gap-1.5" id="scroller-dots">
+      {traits.map((_, idx) => (
+        <button
+          type="button"
+          data-index={idx}
+          aria-label={`Go to slide ${idx + 1}`}
+          class:list={[
+            "dot-btn h-2 rounded-full transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+            idx === 0 ? "w-6 bg-primary" : "w-2 bg-base-300 hover:bg-base-content/30"
+          ]}
+        />
+      ))}
+    </div>
+  </div>
+
+  <!-- Content Container with fixed min-height to prevent layout jump -->
+  <div class="relative min-h-[3.25rem] flex items-center">
+    <div id="scroller-content" class="w-full flex items-center gap-3 sm:gap-4 transition-all duration-500 opacity-100 translate-y-0">
+      <div class="relative shrink-0 flex items-center justify-center w-10 h-10 rounded-lg bg-base-200/60 p-1.5 border border-base-300/40">
+        <img
+          id="scroller-logo"
+          src={traits[0].logo}
+          alt={traits[0].title}
+          class="h-full w-full object-contain dark:invert transition-transform duration-300 group-hover:scale-105"
+        />
+      </div>
+
+      <p
+        id="scroller-text"
+        class="flex-1 text-xs sm:text-xs font-medium text-base-content/80 leading-relaxed"
+      >
+        {traits[0].text}
+      </p>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ traits }}>
+  function initInteropScroller() {
+    const root = document.getElementById('interop-scroller');
+    if (!root || !traits || traits.length === 0) return;
+
+    const content = document.getElementById('scroller-content');
+    const logo = document.getElementById('scroller-logo');
+    const text = document.getElementById('scroller-text');
+    const categoryTitle = document.getElementById('scroller-category-title');
+    const dots = root.querySelectorAll('.dot-btn');
+
+    if (!content || !logo || !text || !categoryTitle) return;
+
+    let currentIndex = 0;
+    let timer = null;
+    let isTransitioning = false;
+
+    function renderSlide(index) {
+      if (isTransitioning) return;
+      isTransitioning = true;
+      currentIndex = index;
+
+      // Update dot active state immediately
+      dots.forEach((dot, idx) => {
+        if (idx === currentIndex) {
+          dot.classList.remove('w-2', 'bg-base-300', 'hover:bg-base-content/30');
+          dot.classList.add('w-6', 'bg-primary');
+        } else {
+          dot.classList.remove('w-6', 'bg-primary');
+          dot.classList.add('w-2', 'bg-base-300', 'hover:bg-base-content/30');
+        }
+      });
+
+      // Fade out and slide slightly down
+      content.classList.add('opacity-0', 'translate-y-2');
+      categoryTitle.classList.add('opacity-0');
+
+      setTimeout(() => {
+        const item = traits[currentIndex];
+        logo.src = item.logo;
+        logo.alt = item.title;
+        text.textContent = item.text;
+        categoryTitle.textContent = item.title;
+
+        // Fade back in
+        content.classList.remove('opacity-0', 'translate-y-2');
+        categoryTitle.classList.remove('opacity-0');
+
+        setTimeout(() => {
+          isTransitioning = false;
+        }, 300);
+      }, 350);
+    }
+
+    function nextSlide() {
+      const nextIndex = (currentIndex + 1) % traits.length;
+      renderSlide(nextIndex);
+    }
+
+    function startTimer() {
+      stopTimer();
+      timer = setInterval(nextSlide, 4500);
+    }
+
+    function stopTimer() {
+      if (timer) {
+        clearInterval(timer);
+        timer = null;
+      }
+    }
+
+    // Bind click events on dot buttons
+    dots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        const idx = parseInt(dot.getAttribute('data-index') || '0', 10);
+        if (idx !== currentIndex) {
+          renderSlide(idx);
+          startTimer(); // reset timer on manual selection
+        }
+      });
+    });
+
+    // Pause cycling when user hovers over the card
+    root.addEventListener('mouseenter', stopTimer);
+    root.addEventListener('mouseleave', startTimer);
+
+    // Touch support (pause on touch)
+    root.addEventListener('touchstart', stopTimer, { passive: true });
+    root.addEventListener('touchend', startTimer, { passive: true });
+
+    startTimer();
+
+    // Cleanup on Astro view transition
+    document.addEventListener('astro:before-preparation', stopTimer, { once: true });
+  }
+
+  // Support initial page load and Astro View Transitions
+  initInteropScroller();
+  document.addEventListener('astro:page-load', initInteropScroller);
+</script>
