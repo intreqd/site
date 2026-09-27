@@ -54,9 +54,9 @@ const { items } = Astro.props;
       <div class="space-y-2">
         <div class="flex items-center justify-between gap-2">
           <div class="flex items-center gap-2">
-            <img id="slot-0-logo-left" src={items[0].logoLeft} alt="" class="h-6 w-6 object-contain dark:invert" />
+            <img id="slot-0-logo-left" src={items[0].logoLeft} alt="" class="h-6 w-6 object-contain" />
             <span class="text-xs text-base-content/40 font-mono">&rarr;</span>
-            <img id="slot-0-logo-right" src={items[0].logoRight} alt="" class="h-6 w-6 object-contain dark:invert" />
+            <img id="slot-0-logo-right" src={items[0].logoRight} alt="" class="h-6 w-6 object-contain" />
             <h3 id="slot-0-title" class="font-bold text-base text-base-content group-hover/card:text-primary transition-colors">
               {items[0].title}
             </h3>
@@ -99,9 +99,9 @@ const { items } = Astro.props;
       <div class="space-y-2">
         <div class="flex items-center justify-between gap-2">
           <div class="flex items-center gap-2">
-            <img id="slot-1-logo-left" src={items[1 % items.length].logoLeft} alt="" class="h-6 w-6 object-contain dark:invert" />
+            <img id="slot-1-logo-left" src={items[1 % items.length].logoLeft} alt="" class="h-6 w-6 object-contain" />
             <span class="text-xs text-base-content/40 font-mono">&rarr;</span>
-            <img id="slot-1-logo-right" src={items[1 % items.length].logoRight} alt="" class="h-6 w-6 object-contain dark:invert" />
+            <img id="slot-1-logo-right" src={items[1 % items.length].logoRight} alt="" class="h-6 w-6 object-contain" />
             <h3 id="slot-1-title" class="font-bold text-base text-base-content group-hover/card:text-primary transition-colors">
               {items[1 % items.length].title}
             </h3>
