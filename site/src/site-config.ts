@@ -15,7 +15,7 @@ export const siteConfig = {
 
 // Feature flags examples
 export const featureFlags = {
-  enableImprint: true,
+  enableTrustCenter: true,
   enableDataprotection: false,
   showAttribution: false, // Show starter attribution in the footer if you want it
 };

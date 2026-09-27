@@ -1,0 +1,97 @@
+---
+import Container from "@components/elements/Container.astro";
+import Sectionhead from "@components/elements/Sectionhead.astro";
+import Layout from "@layouts/Layout.astro";
+
+const starterTraits = [
+  {
+    logo: "/isc.png",
+    logoPos: "left",
+    textAlign: "right",
+    text: '<a href="https://www.credly.com/users/sween" target="_blank" rel="noopener noreferrer" class="hover:underline text-primary transition-colors">Certified</a> and battle tested on InterSystems technologies, preferred weapon of mass solution and <a href="https://community.intersystems.com/user/sween" target="_blank" rel="noopener noreferrer" class="hover:underline text-primary transition-colors">developer community expert</a>.'
+  },
+  {
+    logo: "https://raw.githubusercontent.com/cncf/artwork/main/projects/kubernetes/icon/color/kubernetes-icon-color.svg",
+    logoPos: "left",
+    textAlign: "left",
+    text: 'CNCF <a href="https://www.credly.com/users/sween" target="_blank" rel="noopener noreferrer" class="hover:underline text-primary transition-colors">Certified</a> with deep cloud-native architecture expertise, I deploy here first and maintain a <a href="https://openprofile.dev/profile/ronsween" target="_blank" rel="noopener noreferrer" class="hover:underline text-primary transition-colors">Linux Foundation Profile</a>.'
+  },
+  {
+    logo: "/svg/googleCloud.svg",
+    logoPos: "right",
+    textAlign: "left",
+    text: '<a href="https://www.credly.com/users/sween" target="_blank" rel="noopener noreferrer" class="hover:underline text-primary transition-colors">Certified</a> and steward of production workloads and public Cloud of choice.  <a href="https://developers.google.com/program/gear/" target="_blank" rel="noopener noreferrer" class="hover:underline text-primary transition-colors">GEAR</a> and <a href="https://me.developers.google.com/u/ronsweeney" target="_blank" rel="noopener noreferrer" class="hover:underline text-primary transition-colors">g.developer</a> decorated.'
+  }
+];
+---
+
+<Layout title="Trust Center">
+  <Container class="py-12 sm:py-16 lg:py-24">
+    <Sectionhead eyebrow="Legal">
+      <Fragment slot="title">Trust Center</Fragment>
+      <Fragment slot="desc">Integration Required Trust Center</Fragment>
+    </Sectionhead>
+
+    <section class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div class="card border border-base-300 bg-base-100 shadow-sm">
+        <div class="card-body gap-4">
+          <h2 class="card-title">Service provider information</h2>
+          <div class="space-y-3 text-base text-base-content/80">
+            <p><strong>Integration Required</strong></p>
+            <p>Ron Sweeney</p>
+            <p>Michigan<br />USA</p>
+            <p>
+              <strong>Tel:</strong>1-616-465-4705<br />
+              <strong>Email:</strong> <a class="link link-hover" href="mailto:hi@integrationrequired.com">hi@integrationrequired.com</a>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card border border-base-300 bg-base-100 shadow-sm">
+        <div class="card-body gap-4">
+          <h2 class="card-title">Legal Business Entity</h2>
+          <div class="space-y-3 text-base text-base-content/80">
+            <p><strong>Integration Required, LLC</strong></p>
+            <p>A Michigan Limited Liability Company</p>
+            <p>LLC ID: <a href="https://mibusinessregistry.lara.state.mi.us/search/business" target="_blank" rel="noopener noreferrer" class="link link-primary link-hover">801654297</a></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card border border-base-300 bg-base-100 shadow-sm">
+        <div class="card-body gap-4">
+          <h2 class="card-title">Insurance Information</h2>
+          <div class="space-y-3 text-base text-base-content/80">
+            <p><strong>Hiscox Insurance Company Inc.</strong></p>
+            <p>Professional Liability<br />General Liability</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Certification Tiles mirrored from front page -->
+    <section class="mt-10 sm:mt-14 pt-2">
+      <div class="grid gap-4 sm:grid-cols-3">
+        {starterTraits.map((item) => (
+          <div class="flex items-center gap-4 rounded-box border border-base-300 bg-base-100 px-5 py-4 shadow-sm">
+            {item.logoPos === "left" && (
+              <img src={item.logo} alt="" class="h-10 w-10 shrink-0 object-contain dark:invert" />
+            )}
+            <p 
+              class:list={[
+                "flex-1 text-sm font-medium text-base-content/80 leading-relaxed",
+                item.textAlign === "right" && "text-right",
+                item.textAlign === "left" && "text-left"
+              ]}
+              set:html={item.text}
+            />
+            {item.logoPos === "right" && (
+              <img src={item.logo} alt="" class="h-10 w-10 shrink-0 object-contain dark:invert" />
+            )}
+          </div>
+        ))}
+      </div>
+    </section>
+  </Container>
+</Layout>

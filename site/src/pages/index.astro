@@ -5,6 +5,7 @@ import { siteConfig } from "site-config";
 import LogoWall from "@components/logoWall.astro";
 import BlogTicker from "@components/BlogTicker.astro";
 import InteropScroller from "@components/InteropScroller.astro";
+import SidecarScroller from "@components/SidecarScroller.astro";
 
 // Keep page content data-driven so the homepage stays easy to scan and edit.
 const featureCards = [
@@ -26,7 +27,7 @@ const featureCards = [
     badges: ["OHDSI", "InterSystems OMOP"],
     buttons: [
       { text: "Join the Journey", url: "https://lifestage.health", primary: true },
-      { text: "Whitepaper", url: "/imprint", primary: false }
+      { text: "Whitepaper", url: "/trustcenter", primary: false }
     ],
     image: "lsh-white.png"
   },
@@ -61,6 +62,15 @@ const featuredUtilities = [
     badges: ["Go", "GitLab", "IRIS", "ObjectScript"],
     url: "https://git2iris.integrationrequired.com/",
     logoLeft: "/svg/git.svg",
+    logoRight: "/svg/iris.svg"
+  },
+  {
+    title: "iris-sscp",
+    subtitle: "IRIS to IRIS File Transfer",
+    description: "InterSystems IRIS file transfers over the SuperServer",
+    badges: ["Go", "IRIS", "ObjectScript"],
+    url: "https://iris-sscp.integrationrequired.com/",
+    logoLeft: "/svg/iris.svg",
     logoRight: "/svg/iris.svg"
   }
 ];
@@ -111,50 +121,9 @@ Accelerate your workload, develop your Managed Service or strategic initiative w
 
         </div>
 
-        <div class="mt-auto space-y-4">
-          <div class="grid gap-4 sm:grid-cols-2">
-            {featuredUtilities.map((util) => (
-              <div class="flex flex-col justify-between gap-3 rounded-box border border-base-300 bg-base-100 p-5 shadow-sm transition-all duration-300 hover:shadow-md hover:border-primary/40 group">
-                <div class="space-y-2">
-                  <div class="flex items-center justify-between gap-2">
-                    <div class="flex items-center gap-2">
-                      <img src={util.logoLeft} alt="" class="h-6 w-6 object-contain dark:invert" />
-                      <span class="text-xs text-base-content/40 font-mono">&rarr;</span>
-                      <img src={util.logoRight} alt="" class="h-6 w-6 object-contain dark:invert" />
-                      <h3 class="font-bold text-base text-base-content group-hover:text-primary transition-colors">
-                        {util.title}
-                      </h3>
-                    </div>
-                    <span class="badge badge-xs font-mono uppercase tracking-wider bg-base-200 border-base-300 text-base-content/70 px-2 py-1.5">
-                      Sidecar
-                    </span>
-                  </div>
-                  <p class="text-xs font-semibold text-primary">{util.subtitle}</p>
-                  <p class="text-xs text-base-content/70 leading-relaxed">
-                    {util.description}
-                  </p>
-                </div>
+        <SidecarScroller items={featuredUtilities} />
 
-                <div class="flex items-center justify-between gap-2 pt-2 border-t border-base-200 mt-1">
-                  <div class="flex flex-wrap gap-1">
-                    {util.badges.map((badge) => (
-                      <span class="badge badge-xs font-medium bg-base-200 text-base-content/80 border-0 px-2 py-1">
-                        {badge}
-                      </span>
-                    ))}
-                  </div>
-                  <a
-                    href={util.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="btn btn-sm btn-primary"
-                  >
-                    Download &rarr;
-                  </a>
-                </div>
-              </div>
-            ))}
-          </div>
+        <div class="mt-auto pt-4 sm:pt-6 space-y-4">
           <div class="grid gap-4 sm:grid-cols-3">
             {starterTraits.map((item) => (
               <div class="flex items-center gap-4 rounded-box border border-base-300 bg-base-100 px-5 py-4 shadow-sm">
@@ -195,15 +164,15 @@ Accelerate your workload, develop your Managed Service or strategic initiative w
 
     <LogoWall />
 
-    <div class="card mb-6 border-0 shadow-sm transition-all duration-300 hover:shadow-md bg-gradient-to-r from-[#FFE5E5] via-[#FFF0E5] to-[#FFF9E5]">
+    <div class="card mb-6 border border-transparent dark:border-white/10 shadow-sm transition-all duration-300 hover:shadow-md bg-gradient-to-r from-[#FFE5E5] via-[#FFF0E5] to-[#FFF9E5] dark:from-[#2d1215] dark:via-[#1e1319] dark:to-[#171522]">
       <div class="card-body flex-col sm:flex-row items-center justify-between gap-4 p-5">
         <div class="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left w-full sm:w-auto">
-          <h2 class="card-title text-base font-bold m-0 text-base-content">Analytics on FHIR&reg; with BigQuery</h2>
+          <h2 class="card-title text-base font-bold m-0 text-black dark:text-white">Analytics on FHIR&reg; with BigQuery</h2>
           <div class="flex flex-wrap justify-center sm:justify-start gap-1.5">
-            <span class="badge badge-sm font-medium bg-white/60 px-2.5 py-3 whitespace-nowrap border-base-content/10 text-base-content/80">Google Cloud</span>
-            <span class="badge badge-sm font-medium bg-white/60 px-2.5 py-3 whitespace-nowrap border-base-content/10 text-base-content/80">BigQuery</span>
-            <span class="badge badge-sm font-medium bg-white/60 px-2.5 py-3 whitespace-nowrap border-base-content/10 text-base-content/80">Schema Evolution</span>
-            <span class="badge badge-sm font-medium bg-white/60 px-2.5 py-3 whitespace-nowrap border-base-content/10 text-base-content/80">Flattening</span>
+            <span class="badge badge-sm font-medium bg-white/60 dark:bg-white/10 px-2.5 py-3 whitespace-nowrap border-black/10 dark:border-white/20 text-black/80 dark:text-white/90">Google Cloud</span>
+            <span class="badge badge-sm font-medium bg-white/60 dark:bg-white/10 px-2.5 py-3 whitespace-nowrap border-black/10 dark:border-white/20 text-black/80 dark:text-white/90">BigQuery</span>
+            <span class="badge badge-sm font-medium bg-white/60 dark:bg-white/10 px-2.5 py-3 whitespace-nowrap border-black/10 dark:border-white/20 text-black/80 dark:text-white/90">Schema Evolution</span>
+            <span class="badge badge-sm font-medium bg-white/60 dark:bg-white/10 px-2.5 py-3 whitespace-nowrap border-black/10 dark:border-white/20 text-black/80 dark:text-white/90">Flattening</span>
           </div>
         </div>
         <a href="#" class="btn btn-sm shrink-0 bg-[#e11f26] hover:bg-[#b91a1f] text-white border-0">Download</a>

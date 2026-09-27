@@ -55,6 +55,7 @@ const { title = siteConfig.title, description, image } = Astro.props;
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         const theme = stored || (prefersDark ? 'dark' : 'light');
         document.documentElement.setAttribute('data-theme', theme);
+        document.documentElement.classList.toggle('dark', theme === 'dark');
       })();
     </script>
 
