@@ -1,0 +1,280 @@
+---
+export interface Props {
+  glitchColors?: string[];
+  glitchColorsDark?: string[];
+  glitchColorsLight?: string[];
+  glitchSpeed?: number;
+  centerVignette?: boolean;
+  outerVignette?: boolean;
+  transparentBackground?: boolean;
+  smooth?: boolean;
+  overlayImage?: string;
+  overlayImageClass?: string;
+  class?: string;
+}
+
+const {
+  glitchColors,
+  glitchColorsDark = ["#3a3838ff", "#556a9b", "#2a2b30", "#101010"],
+  glitchColorsLight = ["#1e293b", "#334155", "#475569", "#64748b", "#94a3b8", "#dc2626"],
+  glitchSpeed = 98,
+  centerVignette = true,
+  outerVignette = true,
+  transparentBackground = false,
+  smooth = true,
+  overlayImage = "/isc.png",
+  overlayImageClass = "max-h-[75%] max-w-[85%] w-auto h-auto object-contain drop-shadow-[0_6px_20px_rgba(0,0,0,0.5)] dark:drop-shadow-[0_8px_24px_rgba(0,0,0,0.9)] transition-all duration-300",
+  class: className = "",
+} = Astro.props;
+---
+
+<div
+  class:list={[
+    "letter-glitch-wrapper relative w-full h-full min-h-[160px] overflow-hidden rounded-box border border-base-300/60 dark:border-white/10 transition-colors duration-300 flex-1",
+    transparentBackground ? "bg-transparent" : "bg-slate-100 dark:bg-[#0a0a0c]",
+    className
+  ]}
+  data-glitch-colors={glitchColors ? JSON.stringify(glitchColors) : ""}
+  data-glitch-colors-dark={JSON.stringify(glitchColorsDark)}
+  data-glitch-colors-light={JSON.stringify(glitchColorsLight)}
+  data-glitch-speed={glitchSpeed}
+  data-smooth={smooth ? "true" : "false"}
+>
+  <canvas class="letter-glitch-canvas absolute inset-0 block w-full h-full"></canvas>
+  
+  {outerVignette && (
+    <div class:list={[
+      "absolute inset-0 pointer-events-none transition-colors duration-300",
+      transparentBackground
+        ? "bg-[radial-gradient(circle,_rgba(0,0,0,0)_50%,_rgba(0,0,0,0.12)_100%)] dark:bg-[radial-gradient(circle,_rgba(0,0,0,0)_50%,_rgba(0,0,0,0.4)_100%)]"
+        : "bg-[radial-gradient(circle,_rgba(241,245,249,0)_50%,_rgba(241,245,249,0.95)_100%)] dark:bg-[radial-gradient(circle,_rgba(10,10,12,0)_50%,_rgba(10,10,12,1)_100%)]"
+    ]}></div>
+  )}
+  {centerVignette && (
+    <div class:list={[
+      "absolute inset-0 pointer-events-none transition-colors duration-300",
+      transparentBackground
+        ? "bg-[radial-gradient(circle,_rgba(0,0,0,0.08)_0%,_rgba(0,0,0,0)_60%)] dark:bg-[radial-gradient(circle,_rgba(0,0,0,0.5)_0%,_rgba(0,0,0,0)_60%)]"
+        : "bg-[radial-gradient(circle,_rgba(255,255,255,0.75)_0%,_rgba(255,255,255,0)_60%)] dark:bg-[radial-gradient(circle,_rgba(0,0,0,0.8)_0%,_rgba(0,0,0,0)_60%)]"
+    ]}></div>
+  )}
+
+  {overlayImage && (
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none p-4 z-10">
+      <img src={overlayImage} alt="" class={overlayImageClass} />
+    </div>
+  )}
+</div>
+
+<script>
+  function initLetterGlitch() {
+    const wrappers = document.querySelectorAll('.letter-glitch-wrapper');
+
+    wrappers.forEach((wrapper) => {
+      if ((wrapper as any)._glitchInitialized) return;
+      (wrapper as any)._glitchInitialized = true;
+
+      const canvas = wrapper.querySelector('.letter-glitch-canvas') as HTMLCanvasElement;
+      if (!canvas) return;
+
+      const customColorsRaw = wrapper.getAttribute('data-glitch-colors');
+      const darkColors: string[] = JSON.parse(wrapper.getAttribute('data-glitch-colors-dark') || '["#3a3838ff", "#556a9b", "#2a2b30", "#101010"]');
+      const lightColors: string[] = JSON.parse(wrapper.getAttribute('data-glitch-colors-light') || '["#1e293b", "#334155", "#475569", "#64748b", "#94a3b8", "#dc2626"]');
+      const customColors: string[] | null = customColorsRaw ? JSON.parse(customColorsRaw) : null;
+
+      function getActiveColors(): string[] {
+        if (customColors && customColors.length > 0) return customColors;
+        const isDark = document.documentElement.classList.contains('dark') || document.documentElement.getAttribute('data-theme') === 'dark';
+        return isDark ? darkColors : lightColors;
+      }
+
+      let activeGlitchColors = getActiveColors();
+      const glitchSpeed = parseInt(wrapper.getAttribute('data-glitch-speed') || '98', 10);
+      const smooth = wrapper.getAttribute('data-smooth') === 'true';
+
+      const lettersAndSymbols = [
+        "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+        "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
+        "!", "@", "#", "$", "&", "*", "(", ")", "-", "_", "+", "=", "/",
+        "[", "]", "{", "}", ";", ":", "<", ">", ",", "0", "1", "2", "3",
+        "4", "5", "6", "7", "8", "9"
+      ];
+
+      const fontSize = 16;
+      const charWidth = 10;
+      const charHeight = 20;
+
+      let grid = { columns: 0, rows: 0 };
+      let letters: { char: string; color: string; targetColor: string; colorProgress: number }[] = [];
+      let animationFrameId: number | null = null;
+      let lastGlitchTime = Date.now();
+      const ctx = canvas.getContext('2d');
+
+      function getRandomChar() {
+        return lettersAndSymbols[Math.floor(Math.random() * lettersAndSymbols.length)];
+      }
+
+      function getRandomColor() {
+        return activeGlitchColors[Math.floor(Math.random() * activeGlitchColors.length)];
+      }
+
+      function hexToRgb(hex: string) {
+        let cleanHex = hex.replace(/^#/, '');
+        if (cleanHex.length === 3) {
+          cleanHex = cleanHex.split('').map(c => c + c).join('');
+        }
+        if (cleanHex.length === 8) {
+          cleanHex = cleanHex.slice(0, 6);
+        }
+        const num = parseInt(cleanHex, 16);
+        return isNaN(num) ? null : { r: (num >> 16) & 255, g: (num >> 8) & 255, b: num & 255 };
+      }
+
+      function interpolateColor(start: { r: number; g: number; b: number }, end: { r: number; g: number; b: number }, factor: number) {
+        return `rgb(${Math.round(start.r + (end.r - start.r) * factor)}, ${Math.round(start.g + (end.g - start.g) * factor)}, ${Math.round(start.b + (end.b - start.b) * factor)})`;
+      }
+
+      function calculateGrid(width: number, height: number) {
+        return {
+          columns: Math.max(1, Math.ceil(width / charWidth)),
+          rows: Math.max(1, Math.ceil(height / charHeight))
+        };
+      }
+
+      function initializeLetters(columns: number, rows: number) {
+        grid = { columns, rows };
+        const total = columns * rows;
+        letters = Array.from({ length: total }, () => ({
+          char: getRandomChar(),
+          color: getRandomColor(),
+          targetColor: getRandomColor(),
+          colorProgress: 1
+        }));
+      }
+
+      function resizeCanvas() {
+        const rect = wrapper.getBoundingClientRect();
+        const width = rect.width || wrapper.clientWidth || 300;
+        const height = rect.height || wrapper.clientHeight || 200;
+        if (width === 0 || height === 0) return;
+
+        const dpr = window.devicePixelRatio || 1;
+
+        canvas.width = width * dpr;
+        canvas.height = height * dpr;
+
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
+
+        if (ctx) {
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
+
+        grid = calculateGrid(width, height);
+        initializeLetters(grid.columns, grid.rows);
+        drawLetters();
+      }
+
+      function drawLetters() {
+        if (!ctx || letters.length === 0) return;
+        const rect = wrapper.getBoundingClientRect();
+        const width = rect.width || canvas.width;
+        const height = rect.height || canvas.height;
+
+        ctx.clearRect(0, 0, width, height);
+        ctx.font = `${fontSize}px monospace`;
+        ctx.textBaseline = 'top';
+
+        letters.forEach((letter, index) => {
+          const x = (index % grid.columns) * charWidth;
+          const y = Math.floor(index / grid.columns) * charHeight;
+          ctx.fillStyle = letter.color;
+          ctx.fillText(letter.char, x, y);
+        });
+      }
+
+      function updateLetters() {
+        if (!letters || letters.length === 0) return;
+        const updateCount = Math.max(1, Math.floor(letters.length * 0.05));
+
+        for (let i = 0; i < updateCount; i++) {
+          const idx = Math.floor(Math.random() * letters.length);
+          if (!letters[idx]) continue;
+          letters[idx].char = getRandomChar();
+          letters[idx].targetColor = getRandomColor();
+          if (!smooth) {
+            letters[idx].color = letters[idx].targetColor;
+            letters[idx].colorProgress = 1;
+          } else {
+            letters[idx].colorProgress = 0;
+          }
+        }
+      }
+
+      function handleSmoothTransitions() {
+        let needsRedraw = false;
+        letters.forEach((letter) => {
+          if (letter.colorProgress < 1) {
+            letter.colorProgress += 0.05;
+            if (letter.colorProgress > 1) letter.colorProgress = 1;
+            const startRgb = hexToRgb(letter.color);
+            const endRgb = hexToRgb(letter.targetColor);
+            if (startRgb && endRgb) {
+              letter.color = interpolateColor(startRgb, endRgb, letter.colorProgress);
+              needsRedraw = true;
+            }
+          }
+        });
+        if (needsRedraw) {
+          drawLetters();
+        }
+      }
+
+      function animate() {
+        if (letters.length === 0) {
+          resizeCanvas();
+        }
+        const now = Date.now();
+        if (now - lastGlitchTime >= glitchSpeed) {
+          updateLetters();
+          drawLetters();
+          lastGlitchTime = now;
+        }
+        if (smooth) {
+          handleSmoothTransitions();
+        }
+        animationFrameId = requestAnimationFrame(animate);
+      }
+
+      const observer = new ResizeObserver(() => {
+        resizeCanvas();
+      });
+      observer.observe(wrapper);
+
+      // Listen for dark/light mode attribute changes on <html>
+      const themeObserver = new MutationObserver(() => {
+        const newColors = getActiveColors();
+        activeGlitchColors = newColors;
+        letters.forEach((letter) => {
+          letter.targetColor = getRandomColor();
+          if (!smooth) letter.color = letter.targetColor;
+        });
+        drawLetters();
+      });
+      themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'class'] });
+
+      resizeCanvas();
+      animate();
+
+      document.addEventListener('astro:before-preparation', () => {
+        if (animationFrameId) cancelAnimationFrame(animationFrameId);
+        observer.disconnect();
+        themeObserver.disconnect();
+        (wrapper as any)._glitchInitialized = false;
+      }, { once: true });
+    });
+  }
+
+  initLetterGlitch();
+  document.addEventListener('astro:page-load', initLetterGlitch);
+</script>
