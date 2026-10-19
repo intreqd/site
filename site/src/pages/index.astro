@@ -165,7 +165,7 @@ const supportCapabilities = [
     <section class="space-y-8 lg:grid lg:grid-cols-[minmax(0,1.2fr)_minmax(18rem,24rem)] lg:gap-10 lg:space-y-0">
       <div class="flex flex-col gap-6">
         <div class="badge badge-outline h-auto py-1.5 px-3 text-xs sm:text-sm font-medium max-w-fit leading-relaxed">
-          Available for short and long-term contracts &bull; Worldwide remote or on-site project cutovers
+          Short/Long Term Contracts, Remote or On-Site Projects, Worldwide
         </div>
 
         <div class="space-y-4">
@@ -190,7 +190,7 @@ Accelerate your workload, develop your Managed Service or strategic initiative w
               <Lanyard
                 frontImage="/ron.png"
                 backImage="/isc.png"
-                strapColor="#000000"
+                strapColor="#0089e9"
                 strapLength={0.18}
                 size={0.65}
               />
@@ -293,8 +293,8 @@ Accelerate your workload, develop your Managed Service or strategic initiative w
 
     <!-- Dedicated Section: Operating and Supporting Large-Scale InterSystems IRIS -->
     <section class="mt-14 sm:mt-20 space-y-8" id="operations">
-      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-base-300 pb-5">
-        <div class="space-y-2">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-base-300 pb-5">
+        <div class="space-y-2 max-w-3xl flex-1">
           <div class="flex flex-wrap items-center gap-2">
             <span class="badge badge-primary badge-outline text-xs font-semibold tracking-wider uppercase">
               Operations &amp; Systems Support
@@ -304,16 +304,26 @@ Accelerate your workload, develop your Managed Service or strategic initiative w
           <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-base-content">
             Supporting &amp; Operating Large-Scale InterSystems IRIS
           </h2>
-          <p class="max-w-3xl text-sm sm:text-base text-base-content/70">
+          <p class="text-sm sm:text-base text-base-content/70">
             Specialized contract engineering and operational leadership for mission-critical InterSystems IRIS, HealthShare, and cloud-native Kubernetes workloads. Delivering high-availability mirroring, deep-dive performance diagnostics, and zero-downtime legacy modernizations.
           </p>
         </div>
         <a 
           href="mailto:hi@integrationrequired.com?subject=InterSystems%20IRIS%20Operations%20%26%20Support"
-          class="btn btn-sm btn-primary shrink-0 self-start md:self-end flex items-center gap-2 shadow-sm"
+          class="shrink-0 self-start md:self-center flex justify-end transition-transform duration-300 hover:scale-105"
+          aria-label="Inquire for Support - InterSystems Kubernetes Operator"
+          title="Inquire for InterSystems IRIS Operations Support"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-          Inquire for Support
+          <img 
+            src="/iko_plus_black.png" 
+            alt="InterSystems Kubernetes Operator" 
+            class="h-20 sm:h-24 md:h-28 w-auto object-contain iko-logo-light block dark:hidden" 
+          />
+          <img 
+            src="/iko_plus_white.png" 
+            alt="InterSystems Kubernetes Operator" 
+            class="h-20 sm:h-24 md:h-28 w-auto object-contain iko-logo-dark hidden dark:block" 
+          />
         </a>
       </div>
 
@@ -388,5 +398,17 @@ Accelerate your workload, develop your Managed Service or strategic initiative w
     </section>
   </Container>
 </Layout>
+
+<style>
+  .iko-logo-dark {
+    display: none;
+  }
+  :global([data-theme="dark"]) .iko-logo-light {
+    display: none !important;
+  }
+  :global([data-theme="dark"]) .iko-logo-dark {
+    display: block !important;
+  }
+</style>
 
 

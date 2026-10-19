@@ -35,7 +35,7 @@ const {
   anchor = "center",
   strapLength = 0.18,
   strapImage = "",
-  strapColor = "#000000",
+  strapColor = "#0089e9",
   strapWidth = 0.65,
   metal = "silver",
   gravity = 1,
@@ -241,6 +241,11 @@ if (foilStrength > 0.0) {
 
   const parseColor = (value: string, fallback: number[]): number[] => {
     try {
+      if (value.startsWith('var(')) {
+        const varName = value.replace(/^var\(|\)$/g, '').split(',')[0].trim();
+        const computed = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+        if (computed) value = computed;
+      }
       const ctx = document.createElement('canvas').getContext('2d');
       if (!ctx) return fallback;
       ctx.fillStyle = '#000000';
@@ -252,7 +257,11 @@ if (foilStrength > 0.0) {
       }
       const parts = resolved.match(/[\d.]+/g);
       if (!parts || parts.length < 3) return fallback;
-      return [Number(parts[0]) / 255, Number(parts[1]) / 255, Number(parts[2]) / 255];
+      const nums = [Number(parts[0]), Number(parts[1]), Number(parts[2])];
+      if (nums.every(n => n <= 1.0) && (resolved.includes('color(') || nums.some(n => n > 0 && n < 1))) {
+        return nums;
+      }
+      return [nums[0] / 255, nums[1] / 255, nums[2] / 255];
     } catch {
       return fallback;
     }
@@ -809,7 +818,7 @@ if (foilStrength > 0.0) {
       const anchor = container.getAttribute('data-anchor') || 'center';
       const strapLength = parseFloat(container.getAttribute('data-strap-length') || '0.18');
       const strapImage = container.getAttribute('data-strap-image') || '';
-      const strapColor = container.getAttribute('data-strap-color') || '#000000';
+      const strapColor = container.getAttribute('data-strap-color') || '#0089e9';
       const strapWidth = parseFloat(container.getAttribute('data-strap-width') || '0.65');
       const metal = container.getAttribute('data-metal') || 'silver';
       const gravity = parseFloat(container.getAttribute('data-gravity') || '1');
