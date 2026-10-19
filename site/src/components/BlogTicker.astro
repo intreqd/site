@@ -1,34 +1,62 @@
 ---
 import { getCollection } from "astro:content";
 
-const posts = await getCollection('blog', ({ data }) => !data.draft);
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
 const postData = posts.map(p => ({
   title: p.data.title,
+  description: p.data.description || '',
   url: `/blog/${p.id}`,
-  heroImage: p.data.heroImage || ''
+  heroImage: p.data.heroImage || '',
+  category: p.data.categories && p.data.categories.length > 0 ? p.data.categories[0] : 'Insight',
+  date: p.data.pubDate ? p.data.pubDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : ''
 }));
 ---
 
-<div id="blog-ticker" class="mt-4 rounded-box border border-base-300 bg-base-200/50 backdrop-blur-sm overflow-hidden flex flex-col">
+<div id="blog-ticker" class="rounded-box border border-base-300 bg-base-100 shadow-sm overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-md hover:border-primary/40">
   <!-- Header / Divider -->
-  <div class="flex items-center justify-between gap-3 border-b border-base-300 px-4 py-2.5 bg-base-300/30">
+  <div class="flex items-center justify-between gap-3 border-b border-base-300 px-4 py-2.5 bg-base-200/50">
     <div class="flex items-center gap-2">
       <span class="flex h-2.5 w-2.5 rounded-full bg-primary animate-pulse"></span>
-      <span class="text-xs uppercase tracking-wide font-bold text-base-content/60">INSIGHTS</span>
+      <span class="text-xs uppercase tracking-wide font-bold text-base-content/70">INSIGHTS</span>
+      <span class="text-[11px] text-base-content/50 hidden sm:inline">&bull; Architecture &amp; Field Notes</span>
     </div>
-    <a href="/blog" class="btn btn-sm btn-primary">BLOG</a>
+    <a href="/blog" class="btn btn-xs btn-primary font-semibold">VIEW ALL BLOGS &rarr;</a>
   </div>
   
   <!-- Content -->
-  <div class="px-4 py-3.5">
-    <div id="ticker-container" class="relative overflow-hidden min-h-[2.5rem] flex items-center">
-      <div id="ticker-content" class="w-full flex items-center gap-3 transition-all duration-1000 opacity-0 translate-y-1">
-        <div id="ticker-img-wrapper" class="shrink-0 w-10 h-10 rounded-lg overflow-hidden border border-base-300/50 bg-base-300/40 hidden">
-          <img id="ticker-img" src="" alt="" class="w-full h-full object-cover" />
-        </div>
-        <a href="#" id="ticker-link" class="text-xs font-medium text-base-content/80 hover:text-primary transition-colors line-clamp-2 block flex-1">
-          Loading...
+  <div class="p-4 sm:p-5">
+    <div id="ticker-container" class="relative overflow-hidden min-h-[140px] flex items-center">
+      <div id="ticker-content" class="w-full flex flex-col sm:flex-row items-center gap-4 sm:gap-6 transition-all duration-500 opacity-0 translate-y-1">
+        
+        <!-- Image Frame: object-contain allows the full diagram/image to fit without cropping -->
+        <a id="ticker-img-link" href="#" class="shrink-0 w-full sm:w-[220px] md:w-[260px] h-[130px] sm:h-[140px] rounded-lg overflow-hidden border border-base-300/80 bg-base-200/60 p-2 flex items-center justify-center transition-transform hover:scale-[1.02]">
+          <img id="ticker-img" src="" alt="" class="w-full h-full object-contain" />
         </a>
+
+        <!-- Content details -->
+        <div class="flex-1 min-w-0 space-y-2 text-left w-full">
+          <div class="flex items-center gap-2">
+            <span id="ticker-category" class="badge badge-primary badge-outline badge-xs text-[10px] font-semibold tracking-wider uppercase"></span>
+            <span id="ticker-date" class="text-[11px] text-base-content/60 font-medium"></span>
+          </div>
+          
+          <h3 class="m-0 leading-snug">
+            <a href="#" id="ticker-link" class="text-sm sm:text-base font-bold text-base-content hover:text-primary transition-colors line-clamp-2 block">
+              Loading...
+            </a>
+          </h3>
+
+          <p id="ticker-desc" class="text-xs text-base-content/70 line-clamp-2 leading-relaxed m-0">
+          </p>
+
+          <div class="pt-0.5">
+            <a id="ticker-read-more" href="#" class="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline">
+              Read article &rarr;
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -36,17 +64,30 @@ const postData = posts.map(p => ({
 
 <script define:vars={{ postData }}>
   function initTicker() {
+    const ticker = document.getElementById('blog-ticker');
     const content = document.getElementById('ticker-content');
     const link = document.getElementById('ticker-link');
-    const imgWrapper = document.getElementById('ticker-img-wrapper');
+    const desc = document.getElementById('ticker-desc');
+    const imgLink = document.getElementById('ticker-img-link');
     const img = document.getElementById('ticker-img');
+    const category = document.getElementById('ticker-category');
+    const date = document.getElementById('ticker-date');
+    const readMore = document.getElementById('ticker-read-more');
     
     if (!content || !link || !postData || postData.length === 0) return;
 
     let currentIdx = -1;
+    let isHovered = false;
+
+    if (ticker) {
+      ticker.addEventListener('mouseenter', () => { isHovered = true; });
+      ticker.addEventListener('mouseleave', () => { isHovered = false; });
+    }
     
     function updateTicker() {
-      // Fade out and move down slightly
+      if (isHovered) return;
+
+      // Fade out
       content.classList.add('opacity-0', 'translate-y-1');
       
       setTimeout(() => {
@@ -63,29 +104,50 @@ const postData = posts.map(p => ({
         const post = postData[currentIdx];
         link.textContent = post.title;
         link.href = post.url;
+        
+        if (imgLink) imgLink.href = post.url;
+        if (readMore) readMore.href = post.url;
+        if (desc) desc.textContent = post.description;
+        if (category) category.textContent = post.category;
+        if (date) date.textContent = post.date;
 
-        if (img && imgWrapper) {
+        if (img) {
           if (post.heroImage) {
             img.src = post.heroImage;
             img.alt = post.title;
-            imgWrapper.classList.remove('hidden');
+            img.style.display = 'block';
           } else {
-            imgWrapper.classList.add('hidden');
+            img.style.display = 'none';
           }
         }
         
-        // Fade in and move to position
+        // Fade in
         content.classList.remove('opacity-0', 'translate-y-1');
-      }, 1000);
+      }, 500);
     }
     
-    // Initial run
-    updateTicker();
+    // Initial render immediately without transition delay
+    if (postData.length > 0) {
+      currentIdx = Math.floor(Math.random() * postData.length);
+      const post = postData[currentIdx];
+      link.textContent = post.title;
+      link.href = post.url;
+      if (imgLink) imgLink.href = post.url;
+      if (readMore) readMore.href = post.url;
+      if (desc) desc.textContent = post.description;
+      if (category) category.textContent = post.category;
+      if (date) date.textContent = post.date;
+      if (img && post.heroImage) {
+        img.src = post.heroImage;
+        img.alt = post.title;
+      }
+      content.classList.remove('opacity-0', 'translate-y-1');
+    }
     
-    // Set interval for cycling
+    // Interval matching current speed (6000ms)
     const interval = setInterval(updateTicker, 6000);
 
-    // Cleanup
+    // Cleanup on Astro view navigation
     document.addEventListener('astro:before-preparation', () => clearInterval(interval), { once: true });
   }
 

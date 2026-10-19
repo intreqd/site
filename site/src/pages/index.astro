@@ -6,7 +6,7 @@ import LogoWall from "@components/logoWall.astro";
 import BlogTicker from "@components/BlogTicker.astro";
 import InteropScroller from "@components/InteropScroller.astro";
 import SidecarScroller from "@components/SidecarScroller.astro";
-import LetterGlitch from "@components/LetterGlitch.astro";
+import Lanyard from "@components/Lanyard.astro";
 
 // Keep page content data-driven so the homepage stays easy to scan and edit.
 const featureCards = [
@@ -76,24 +76,78 @@ const featuredUtilities = [
   }
 ];
 
-const starterTraits = [
+
+const operationsPillars = [
   {
-    logo: "/isc.png",
-    logoPos: "left",
-    textAlign: "right",
-    text: '<a href="https://www.credly.com/users/sween" target="_blank" rel="noopener noreferrer" class="hover:underline text-primary transition-colors">Certified</a> and battle tested on InterSystems technologies, preferred weapon of mass solution and <a href="https://community.intersystems.com/user/sween" target="_blank" rel="noopener noreferrer" class="hover:underline text-primary transition-colors">developer community expert</a>.'
+    title: "InterSystems Kubernetes Operator (IKO)",
+    badge: "Cloud-Native & IKO",
+    badgeClass: "badge-primary",
+    description: "Automated topology deployment, rolling upgrades, and cluster lifecycle management using custom IrisCluster resources.",
+    points: [
+      "Declarative multi-node cluster topologies: mirrored data nodes, distributed caching via Enterprise Cache Protocol (ECP), and sharded analytics engines.",
+      "GitOps continuous delivery with zero-downtime rolling upgrades and containerized maintenance workflows across any Kubernetes platform.",
+      "Dynamic persistent volume management, CSI multi-volume storage layouts, and non-disruptive volume resizing.",
+      "Enterprise Kubernetes orchestration on Google Cloud (GKE), AWS (EKS), Azure (AKS), and on-premise OpenShift/Kubernetes."
+    ],
+    tags: ["IKO", "IrisCluster", "ECP", "Sharding", "Kubernetes"]
   },
   {
-    logo: "https://raw.githubusercontent.com/cncf/artwork/main/projects/kubernetes/icon/color/kubernetes-icon-color.svg",
-    logoPos: "left",
-    textAlign: "left",
-    text: 'CNCF <a href="https://www.credly.com/users/sween" target="_blank" rel="noopener noreferrer" class="hover:underline text-primary transition-colors">Certified</a> with deep cloud-native architecture expertise, I deploy here first and maintain a <a href="https://openprofile.dev/profile/ronsween" target="_blank" rel="noopener noreferrer" class="hover:underline text-primary transition-colors">Linux Foundation Profile</a>.'
+    title: "High Availability & Data Protection",
+    badge: "HA & Mirroring",
+    badgeClass: "badge-primary",
+    description: "Architected for continuous 24/7 database availability, split-brain protection, and zero data loss recovery.",
+    points: [
+      "Synchronous failover mirroring paired with ISCAgent Arbiter for instant, automated failover without split-brain risk.",
+      "Disaster recovery (DR) async nodes and reporting async members to offload heavy analytical queries from OLTP primary.",
+      "Storage-grade zero-impact backups utilizing external Freeze/Thaw APIs (SYS.Database.Freeze/Thaw) for storage snapshot integration.",
+      "Write Image Journal (WIJ) health monitoring, primary/alternate journal directory failover, and crash recovery safety."
+    ],
+    tags: ["Mirroring", "Arbiter", "Freeze/Thaw", "WIJ & Journals"]
   },
   {
-    logo: "/svg/googleCloud.svg",
-    logoPos: "right",
-    textAlign: "left",
-    text: '<a href="https://www.credly.com/users/sween" target="_blank" rel="noopener noreferrer" class="hover:underline text-primary transition-colors">Certified</a> and steward of production workloads and public Cloud of choice.  <a href="https://developers.google.com/program/gear/" target="_blank" rel="noopener noreferrer" class="hover:underline text-primary transition-colors">GEAR</a> and <a href="https://me.developers.google.com/u/ronsweeney" target="_blank" rel="noopener noreferrer" class="hover:underline text-primary transition-colors">g.developer</a> decorated.'
+    title: "Performance Tuning & Diagnostics",
+    badge: "System Administration",
+    badgeClass: "badge-primary",
+    description: "Deep-dive diagnostic analysis and configuration tuning to maximize throughput and resolve resource contention.",
+    points: [
+      "Diagnostic profiling and bottleneck isolation using ^SystemPerformance (pButtons), ^PERFMON, and messages.log telemetry.",
+      "Configuration Parameter File (iris.cpf) optimization: tuning global buffers (globals), routine buffers, locks, and shared memory (gmheap).",
+      "Process contention and concurrency management: lock table deadlock resolution (^LOCKTAB) and semaphore optimization.",
+      "Scheduled database integrity audits (^Integrity), block allocation checks, and enterprise security hardening (RBAC & TLS)."
+    ],
+    tags: ["^SystemPerformance", "iris.cpf", "Buffer Tuning", "^Integrity"]
+  },
+  {
+    title: "Legacy Modernization & Support",
+    badge: "Staff Augmentation",
+    badgeClass: "badge-primary",
+    description: "Bridging technical talent gaps with senior operational leadership for mission-critical healthcare and enterprise IT.",
+    points: [
+      "Low-risk migrations from legacy Caché, Ensemble, and MUMPS to modern InterSystems IRIS Data Platform & IRIS for Health.",
+      "Production cutover planning, data reconciliation, interface verification (HealthShare & Health Connect), and go-live leadership.",
+      "Fractional systems leadership: augmenting internal teams during high-stakes implementations, upgrades, and platform scaling.",
+      "Rapid incident triage, 24/7 on-call escalation support, and root-cause remediation for production outages."
+    ],
+    tags: ["Caché Migration", "HealthShare", "Fractional DBA", "24/7 Reliability"]
+  }
+];
+
+const supportCapabilities = [
+  {
+    role: "Fractional / Contract Systems Operator",
+    detail: "Dedicated senior operational lead embedded with your engineering team to manage, monitor, and maintain enterprise IRIS clusters."
+  },
+  {
+    role: "IKO & Cloud Migration Architect",
+    detail: "Modernizing legacy on-premises workloads into automated, scalable Kubernetes topologies with GitOps CI/CD."
+  },
+  {
+    role: "Emergency Performance & Diagnostic Triage",
+    detail: "Deep-dive pButtons health audits to resolve locking deadlocks, buffer thrashing, and high-concurrency database stalls."
+  },
+  {
+    role: "Zero-Downtime Migration & Cutover Lead",
+    detail: "End-to-end execution of platform upgrades from Caché/Ensemble to IRIS for Health with zero data loss."
   }
 ];
 ---
@@ -110,7 +164,10 @@ const starterTraits = [
     -->
     <section class="space-y-8 lg:grid lg:grid-cols-[minmax(0,1.2fr)_minmax(18rem,24rem)] lg:gap-10 lg:space-y-0">
       <div class="flex flex-col gap-6">
-        <p class="badge badge-outline">Independent Contractor</p>
+        <div class="badge badge-outline h-auto py-1.5 px-3 text-xs sm:text-sm font-medium gap-2 max-w-fit leading-relaxed">
+          <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
+          <span>Available for short and long-term contracts &bull; Worldwide remote or on-site project cutovers</span>
+        </div>
 
         <div class="space-y-4">
           <h1 class="max-w-3xl text-2xl font-bold tracking-tight sm:text-3xl">
@@ -122,48 +179,25 @@ Accelerate your workload, develop your Managed Service or strategic initiative w
 
         </div>
 
-        <SidecarScroller items={featuredUtilities} />
+        <BlogTicker />
 
-        <div class="mt-auto pt-4 sm:pt-6 space-y-4">
-          <div class="grid gap-4 sm:grid-cols-3">
-            {starterTraits.map((item) => (
-              <div class="flex items-center gap-4 rounded-box border border-base-300 bg-base-100 px-5 py-4 shadow-sm">
-                {item.logoPos === "left" && (
-                  <img src={item.logo} alt="" class="h-10 w-10 shrink-0 object-contain" />
-                )}
-                <p 
-                  class:list={[
-                    "flex-1 text-sm font-medium text-base-content/80 leading-relaxed",
-                    item.textAlign === "right" && "text-right",
-                    item.textAlign === "left" && "text-left"
-                  ]}
-                  set:html={item.text}
-                />
-                {item.logoPos === "right" && (
-                  <img src={item.logo} alt="" class="h-10 w-10 shrink-0 object-contain" />
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
+        <SidecarScroller items={featuredUtilities} />
       </div>
 
       <aside class="card border border-base-300 bg-base-100 shadow-sm">
         <div class="card-body gap-4">
           <div class="mt-2 space-y-3">
-            <div class="w-full aspect-4/3 overflow-hidden rounded-box">
-              <LetterGlitch
-                glitchSpeed={98}
-                centerVignette={true}
-                outerVignette={true}
-                transparentBackground={true}
-                smooth={true}
-                overlayImage="/isc.png"
+            <div class="w-full h-[400px] sm:h-[440px] overflow-hidden rounded-box">
+              <Lanyard
+                frontImage="/ron.png"
+                backImage="/isc.png"
+                strapColor="#000000"
+                strapLength={0.18}
+                size={0.65}
               />
             </div>
           </div>
           <InteropScroller />
-          <BlogTicker />
         </div>
       </aside>
     </section>
@@ -256,6 +290,102 @@ Accelerate your workload, develop your Managed Service or strategic initiative w
           <img src={card.image || "https://placehold.co/100x300"} alt="" class:list={["absolute bottom-0.5 right-0.5 w-auto pointer-events-none", card.image ? "opacity-100" : "opacity-10", card.title === "PID^TOO||" ? "h-40" : "h-32"]} />
         </div>
       ))}
+    </section>
+
+    <!-- Dedicated Section: Operating and Supporting Large-Scale InterSystems IRIS -->
+    <section class="mt-14 sm:mt-20 space-y-8" id="operations">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-base-300 pb-5">
+        <div class="space-y-2">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="badge badge-primary badge-outline text-xs font-semibold tracking-wider uppercase">
+              Operations &amp; Systems Support
+            </span>
+            <span class="badge badge-neutral text-xs font-medium">Large-Scale Deployments</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-base-content">
+            Supporting &amp; Operating Large-Scale InterSystems IRIS
+          </h2>
+          <p class="max-w-3xl text-sm sm:text-base text-base-content/70">
+            Specialized contract engineering and operational leadership for mission-critical InterSystems IRIS, HealthShare, and cloud-native Kubernetes workloads. Delivering high-availability mirroring, deep-dive performance diagnostics, and zero-downtime legacy modernizations.
+          </p>
+        </div>
+        <a 
+          href="mailto:hi@integrationrequired.com?subject=InterSystems%20IRIS%20Operations%20%26%20Support"
+          class="btn btn-sm btn-primary shrink-0 self-start md:self-end flex items-center gap-2 shadow-sm"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          Inquire for Support
+        </a>
+      </div>
+
+      <!-- 4 Operational Pillars Grid -->
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {operationsPillars.map((pillar) => (
+          <div class="card border border-base-300 bg-base-100 shadow-sm transition-all duration-300 hover:shadow-md hover:border-primary/40 flex flex-col justify-between">
+            <div class="card-body p-5 gap-0">
+              <div class="space-y-1.5">
+                <span class:list={["badge badge-sm font-semibold uppercase tracking-wider text-[10px]", pillar.badgeClass]}>
+                  {pillar.badge}
+                </span>
+                <h3 class="card-title text-base font-bold leading-snug text-base-content">
+                  {pillar.title}
+                </h3>
+                <p class="text-xs text-base-content/70 leading-relaxed">
+                  {pillar.description}
+                </p>
+              </div>
+
+              <div class="border-t border-base-300 my-2.5"></div>
+
+              <ul class="space-y-1.5 text-xs text-base-content/80">
+                {pillar.points.map((pt) => (
+                  <li class="flex items-start gap-2">
+                    <span class="text-primary font-bold shrink-0 mt-0.5">&bull;</span>
+                    <span class="leading-relaxed">{pt}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div class="px-5 pb-5 pt-0 mt-auto">
+              <div class="flex flex-wrap gap-1">
+                {pillar.tags.map((tag) => (
+                  <span class="badge badge-xs badge-ghost text-[10px] text-base-content/70">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <!-- Engagement Models Strip (Henry Elliott inspired opportunities & staffing) -->
+      <div class="rounded-box border border-base-300 bg-base-100 p-6 sm:p-8 shadow-sm">
+        <div class="space-y-6">
+          <div class="max-w-3xl space-y-2">
+            <h3 class="text-lg sm:text-xl font-bold tracking-tight text-base-content">
+              Flexible Operational Engagement Models
+            </h3>
+            <p class="text-xs sm:text-sm text-base-content/70">
+              Whether augmenting an internal engineering team during a high-stakes cutover, migrating legacy environments, or providing ongoing fractional platform operations, engagements are structured for maximum technical impact and zero business disruption.
+            </p>
+          </div>
+
+          <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {supportCapabilities.map((cap) => (
+              <div class="rounded-lg border border-base-300/80 bg-base-200/40 p-4 space-y-1.5 transition-all duration-300 hover:border-primary/30">
+                <h4 class="text-xs sm:text-sm font-bold text-base-content">
+                  {cap.role}
+                </h4>
+                <p class="text-xs text-base-content/70 leading-relaxed">
+                  {cap.detail}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </section>
   </Container>
 </Layout>
