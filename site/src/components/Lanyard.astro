@@ -1263,6 +1263,13 @@ if (foilStrength > 0.0) {
         toPointer(event);
         const hit = pickCard();
         if (!hit) return;
+        if (typeof (window as any).gtag === 'function' && !(window as any).__lanyardInteractionTracked) {
+          (window as any).__lanyardInteractionTracked = true;
+          (window as any).gtag('event', 'interactive_badge_drag', {
+            event_category: 'engagement',
+            event_label: 'Lanyard 3D Badge Drag',
+          });
+        }
         sim.grab = {
           local: hit.point.clone().sub(sim.body.position).applyQuaternion(sim.body.quaternion.clone().invert()),
           rotation: sim.body.quaternion.clone(),
@@ -1304,7 +1311,16 @@ if (foilStrength > 0.0) {
       const onTouchStart = (event: TouchEvent) => {
         if (!interactive || event.touches.length !== 1) return;
         toPointer(event.touches[0]);
-        if (pickCard()) event.preventDefault();
+        if (pickCard()) {
+          if (typeof (window as any).gtag === 'function' && !(window as any).__lanyardInteractionTracked) {
+            (window as any).__lanyardInteractionTracked = true;
+            (window as any).gtag('event', 'interactive_badge_drag', {
+              event_category: 'engagement',
+              event_label: 'Lanyard 3D Badge Drag',
+            });
+          }
+          event.preventDefault();
+        }
       };
 
       canvas.addEventListener('pointerdown', onPointerDown);

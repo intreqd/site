@@ -1,6 +1,8 @@
 export const siteConfig = {
-  title: "Integration Required | Named Technical Interoperability Engineer",
-  description: "Ron Sweeney — Named Technical Interoperability Engineer specializing in FHIR, DICOM, OHDSI/OMOP, and cloud-native healthcare data platforms on InterSystems IRIS and Google Cloud.",
+  title: "Integration Required | Named Technical Interoperability Engineer & InterSystems IRIS Specialist",
+  description: "Ron Sweeney — Named Technical Interoperability Engineer & InterSystems Implementation Partner. Providing contract engineering, InterSystems Kubernetes Operator (IKO), HA mirroring, performance tuning, and cloud-native healthcare data platforms (FHIR, DICOM, OHDSI/OMOP, BigQuery).",
+  author: "Ron Sweeney",
+  keywords: "InterSystems IRIS, Healthcare Interoperability, InterSystems Kubernetes Operator, IKO, FHIR, HL7 FHIR, DICOM, DIMSE Cloud, OHDSI, OMOP, BigQuery, iris2bq, git2iris, iris-sscp, HealthShare, Caché migration, High Availability Mirroring, System Performance, pButtons, contract interoperability engineer, Ron Sweeney",
   githubRepo: "sween/iris-certified-agents",
   // Astro validates these public env vars in astro.config.mjs.
   site: import.meta.env.PUBLIC_SITE_URL,

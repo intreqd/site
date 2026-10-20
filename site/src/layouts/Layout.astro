@@ -12,9 +12,10 @@ export interface Props {
   title?: string;
   description?: string;
   image?: string;
+  keywords?: string;
 }
 
-const { title = siteConfig.title, description, image } = Astro.props;
+const { title = siteConfig.title, description, image, keywords } = Astro.props;
 ---
 
 <!doctype html>
@@ -26,7 +27,7 @@ const { title = siteConfig.title, description, image } = Astro.props;
     <link rel="sitemap" href="/sitemap-index.xml" />
     <meta name="generator" content={Astro.generator} />
 
-    <SEOmeta title={title} description={description} image={image} />
+    <SEOmeta title={title} description={description} image={image} keywords={keywords} />
     <!--
       Fonts flow:
       1. astro.config.mjs registers the font and exposes `--font-inter`.
@@ -65,28 +66,254 @@ const { title = siteConfig.title, description, image } = Astro.props;
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       
+      // Initialize GA4
+      gtag('js', new Date());
+
+      // Track pageviews on initial load and on every Astro ViewTransition client navigation
       document.addEventListener('astro:page-load', () => {
-        gtag('js', new Date());
-        gtag('config', 'G-48J9E1212D');
+        gtag('config', 'G-48J9E1212D', {
+          page_path: window.location.pathname,
+          page_location: window.location.href,
+          page_title: document.title,
+        });
+      });
+
+      // Delegated event listener for key conversion actions and interactions
+      document.addEventListener('click', (event) => {
+        const target = event.target && event.target.closest ? event.target.closest('a, button') : null;
+        if (!target) return;
+
+        const href = target.getAttribute('href') || '';
+        const text = (target.textContent || '').trim();
+
+        // 1. Inquire for Support / Contact (Mailto)
+        if (href.startsWith('mailto:') || target.matches('[aria-label*="Inquire for Support"], [title*="Inquire for Support"]')) {
+          gtag('event', 'generate_lead', {
+            event_category: 'engagement',
+            event_label: 'IKO Operations Support Inquiry',
+            method: 'mailto',
+            destination: href,
+          });
+          return;
+        }
+
+        // 2. Featured Sidecars (iris2bq, git2iris, iris-sscp)
+        if (href.includes('iris2bq.integrationrequired.com')) {
+          gtag('event', 'select_content', {
+            content_type: 'sidecar_utility',
+            item_id: 'iris2bq',
+            destination: href,
+          });
+          return;
+        }
+        if (href.includes('git2iris.integrationrequired.com')) {
+          gtag('event', 'select_content', {
+            content_type: 'sidecar_utility',
+            item_id: 'git2iris',
+            destination: href,
+          });
+          return;
+        }
+        if (href.includes('iris-sscp.integrationrequired.com')) {
+          gtag('event', 'select_content', {
+            content_type: 'sidecar_utility',
+            item_id: 'iris-sscp',
+            destination: href,
+          });
+          return;
+        }
+
+        // 3. Featured Products & Live Platforms
+        if (href.includes('dimsecloud.com')) {
+          gtag('event', 'select_content', {
+            content_type: 'product_showcase',
+            item_id: 'DIMSE Cloud',
+            destination: href,
+          });
+          return;
+        }
+        if (href.includes('lifestage.health')) {
+          gtag('event', 'select_content', {
+            content_type: 'product_showcase',
+            item_id: 'lifestage.health',
+            destination: href,
+          });
+          return;
+        }
+        if (href.includes('pidtoo.com')) {
+          gtag('event', 'select_content', {
+            content_type: 'product_showcase',
+            item_id: 'PID^TOO',
+            destination: href,
+          });
+          return;
+        }
+
+        // 4. Whitepaper / Guide Downloads (e.g. Analytics on FHIR with BigQuery)
+        if (target.dataset.gaEvent === 'whitepaper_download' || (text === 'Download' && href === '#')) {
+          gtag('event', 'file_download', {
+            file_name: 'Analytics on FHIR with BigQuery',
+            event_category: 'whitepaper',
+          });
+          return;
+        }
+
+        // 5. Outbound Authority & Credential Verification
+        if (href.includes('credly.com')) {
+          gtag('event', 'outbound_verification', {
+            event_category: 'credentials',
+            item_id: 'Credly',
+            destination: href,
+          });
+          return;
+        }
+        if (href.includes('openprofile.dev')) {
+          gtag('event', 'outbound_verification', {
+            event_category: 'credentials',
+            item_id: 'OpenProfile',
+            destination: href,
+          });
+          return;
+        }
+        if (href.includes('community.intersystems.com')) {
+          gtag('event', 'outbound_verification', {
+            event_category: 'community',
+            item_id: 'InterSystems Community',
+            destination: href,
+          });
+        }
       });
     </script>
     <script type="application/ld+json" is:inline>
     {
       "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Ron Sweeney",
-      "jobTitle": "Named Technical Interoperability Engineer",
-      "url": "https://www.integrationrequired.com",
-      "email": "hi@integrationrequired.com",
-      "worksFor": {
-        "@type": "Organization",
-        "name": "Integration Required, LLC"
-      },
-      "knowsAbout": ["HL7 FHIR", "DICOM", "OHDSI", "InterSystems IRIS", "Google Cloud", "Kubernetes", "Healthcare Interoperability"],
-      "sameAs": [
-        "https://community.intersystems.com/user/sween",
-        "https://openprofile.dev/profile/ronsween",
-        "https://www.credly.com/users/sween"
+      "@graph": [
+        {
+          "@type": "Person",
+          "@id": "https://www.integrationrequired.com/#person",
+          "name": "Ron Sweeney",
+          "jobTitle": "Named Technical Interoperability Engineer",
+          "honorificSuffix": "InterSystems Implementation Partner",
+          "description": "Contract healthcare interoperability engineer and InterSystems Implementation Partner specializing in InterSystems Kubernetes Operator (IKO), HA mirroring, performance diagnostics, and cloud-native healthcare data platforms.",
+          "url": "https://www.integrationrequired.com",
+          "image": "https://www.integrationrequired.com/badge2.png",
+          "email": "hi@integrationrequired.com",
+          "telephone": "+1-616-465-4705",
+          "worksFor": {
+            "@id": "https://www.integrationrequired.com/#organization"
+          },
+          "knowsAbout": [
+            "InterSystems IRIS",
+            "InterSystems IRIS for Health",
+            "InterSystems Kubernetes Operator (IKO)",
+            "IrisCluster Custom Resources",
+            "High Availability Mirroring & Arbiter",
+            "Enterprise Cache Protocol (ECP)",
+            "Performance Diagnostics (^SystemPerformance, pButtons)",
+            "HL7 FHIR",
+            "DICOM",
+            "OHDSI OMOP Common Data Model",
+            "Google Cloud Healthcare API",
+            "Google Cloud BigQuery",
+            "Kubernetes & Cilium CNI",
+            "Go (Golang)",
+            "Caché and Ensemble Migration",
+            "HealthShare"
+          ],
+          "sameAs": [
+            "https://community.intersystems.com/user/sween",
+            "https://openprofile.dev/profile/ronsween",
+            "https://www.credly.com/users/sween",
+            "https://github.com/sween"
+          ]
+        },
+        {
+          "@type": "ProfessionalService",
+          "@id": "https://www.integrationrequired.com/#organization",
+          "name": "Integration Required, LLC",
+          "url": "https://www.integrationrequired.com",
+          "logo": "https://www.integrationrequired.com/logo_black.png",
+          "image": "https://www.integrationrequired.com/opengraph.jpg",
+          "email": "hi@integrationrequired.com",
+          "telephone": "+1-616-465-4705",
+          "priceRange": "$$$$",
+          "address": {
+            "@type": "PostalAddress",
+            "addressRegion": "MI",
+            "addressCountry": "US"
+          },
+          "areaServed": {
+            "@type": "AdministrativeArea",
+            "name": "Worldwide"
+          },
+          "founder": {
+            "@id": "https://www.integrationrequired.com/#person"
+          },
+          "knowsAbout": [
+            "InterSystems IRIS Data Platform",
+            "InterSystems Kubernetes Operator (IKO)",
+            "Healthcare Interoperability",
+            "HL7 FHIR and DICOM Integration",
+            "OMOP CDM Analytics",
+            "BigQuery Healthcare Analytics"
+          ],
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "InterSystems IRIS Operations & Interoperability Services",
+            "itemListElement": [
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Supporting & Operating Large-Scale InterSystems IRIS",
+                  "description": "Automated topology deployment, rolling upgrades, and cluster lifecycle management using the InterSystems Kubernetes Operator (IKO)."
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "High Availability & Data Protection",
+                  "description": "Synchronous failover mirroring paired with ISCAgent Arbiter, Freeze/Thaw snapshot backups, and zero data loss recovery."
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Performance Tuning & Diagnostics",
+                  "description": "Diagnostic profiling (^SystemPerformance / pButtons), lock deadlock resolution, and shared memory/buffer tuning for InterSystems IRIS."
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Legacy Modernization & Fractional Support",
+                  "description": "Zero-downtime platform upgrades from Caché and Ensemble to IRIS for Health, cutover leadership, and fractional platform operations."
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Healthcare Interoperability & Cloud Data Platforms",
+                  "description": "Contract engineering for HL7 FHIR®, DICOM routing at scale, OHDSI OMOP evidence generation, and Analytics on FHIR with BigQuery."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://www.integrationrequired.com/#website",
+          "url": "https://www.integrationrequired.com",
+          "name": "Integration Required",
+          "description": "Ron Sweeney — Named Technical Interoperability Engineer and InterSystems Implementation Partner specializing in InterSystems Kubernetes Operator (IKO), HA mirroring, and cloud-native healthcare data platforms.",
+          "publisher": {
+            "@id": "https://www.integrationrequired.com/#organization"
+          }
+        }
       ]
     }
     </script>

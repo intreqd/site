@@ -12,7 +12,10 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 ---
 
-<Layout title="Blog" description="All posts">
+<Layout
+  title="Insights & Technical Field Notes | Integration Required"
+  description="Architecture deep dives, field notes, and technical benchmarks covering InterSystems IRIS, IKO, Kubernetes, eBPF, and FHIR data pipelines."
+>
   <Container class="pt-6 sm:pt-8 lg:pt-12 pb-12 sm:pb-16 lg:pb-24">
     <Sectionhead eyebrow="Content">
       <Fragment slot="title">Blog</Fragment>

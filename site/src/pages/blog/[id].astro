@@ -22,7 +22,12 @@ const { post } = Astro.props;
 const { Content } = await render(post);
 ---
 
-<Layout title={post.data.title} description={post.data.description}>
+<Layout
+  title={`${post.data.title} | Integration Required`}
+  description={post.data.description}
+  image={post.data.heroImage}
+  keywords={post.data.categories && post.data.categories.length > 0 ? post.data.categories.join(", ") : undefined}
+>
   <Container class="pt-6 sm:pt-8 lg:pt-12 pb-12 sm:pb-16 lg:pb-24">
     <article class="max-w-3xl">
       <header class="space-y-4">

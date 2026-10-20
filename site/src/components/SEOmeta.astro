@@ -7,16 +7,36 @@ export interface Props {
   description?: string;
   image?: string;
   canonical?: string;
+  keywords?: string;
+  type?: string;
 }
 
-const { title = siteConfig.title, description, image, canonical } = Astro.props;
-const canonicalURL = canonical ?? new URL(Astro.url.pathname, Astro.site).toString();
-const resolvedImage = image ?? new URL("/opengraph.jpg", Astro.site).toString();
+const {
+  title = siteConfig.title,
+  description = siteConfig.description,
+  image,
+  canonical,
+  keywords = siteConfig.keywords,
+  type = "website",
+} = Astro.props;
+
+const siteBase = Astro.site ?? siteConfig.site ?? "https://www.integrationrequired.com";
+const canonicalURL = canonical ?? new URL(Astro.url.pathname, siteBase).toString();
+
+// Resolve image URL to absolute URL
+let resolvedImage = new URL("/opengraph.jpg", siteBase).toString();
+if (image) {
+  try {
+    resolvedImage = image.startsWith("http") ? image : new URL(image, siteBase).toString();
+  } catch {
+    resolvedImage = image;
+  }
+}
 ---
 
 <SEO
   title={title}
-  description={description ?? siteConfig.description}
+  description={description}
   canonical={canonicalURL}
   twitter={{
     creator: siteConfig.seo.twitterHandle,
@@ -26,12 +46,26 @@ const resolvedImage = image ?? new URL("/opengraph.jpg", Astro.site).toString();
   openGraph={{
     basic: {
       url: canonicalURL,
-      type: "website",
+      type: type,
       title: title,
       image: resolvedImage,
+    },
+    optional: {
+      siteName: "Integration Required",
+      locale: "en_US",
+      description: description,
     },
     image: {
       alt: title,
     },
   }}
+  extend={{
+    meta: [
+      { name: "keywords", content: keywords },
+      { name: "author", content: siteConfig.author },
+      { name: "robots", content: "index, follow" },
+      { name: "theme-color", content: "#0089e9" },
+    ],
+  }}
 />
+
