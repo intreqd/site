@@ -24,7 +24,7 @@ export interface Props {
 }
 
 const {
-  frontImage = "/ron.png",
+  frontImage = "/badge2.png",
   backImage = "/isc.png",
   imageFit = "cover",
   cardColor = "#ffffff",
@@ -807,7 +807,7 @@ if (foilStrength > 0.0) {
       if ((container as any)._lanyardInitialized) return;
       (container as any)._lanyardInitialized = true;
 
-      const frontImage = container.getAttribute('data-front-image') || '/ron.png';
+      const frontImage = container.getAttribute('data-front-image') || '/badge2.png';
       const backImage = container.getAttribute('data-back-image') || '/isc.png';
       const imageFit = container.getAttribute('data-image-fit') || 'cover';
       const cardColor = container.getAttribute('data-card-color') || '#ffffff';
